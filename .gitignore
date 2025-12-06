@@ -1,0 +1,19 @@
+# Dependencies for both projects
+/node_modules
+
+# Folders inside specific project directories
+/frontend/node_modules
+/backend/node_modules
+
+# Build output
+/frontend/build
+/frontend/dist
+
+# Security/Environment Files (CRITICAL for security)
+.env
+/backend/.env
+/frontend/.env.local
+
+# IDE/OS files
+.DS_Store
+.vscode
