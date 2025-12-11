@@ -8,6 +8,7 @@ interface UserAttributes {
   email: string;
   password: string;
   refreshToken: string | null;
+  googleId: string | null;
 }
 
 // When creating a user, "id" is optional because it's auto-increment
@@ -22,6 +23,7 @@ class User
   public email!: string;
   public password!: string;
   public refreshToken!: string | null;
+  public googleId!: string | null;
 }
 
 User.init(
@@ -46,6 +48,11 @@ User.init(
     },
     refreshToken: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    googleId: {
+      type: DataTypes.STRING,
+      unique: true,
       allowNull: true,
     },
   },

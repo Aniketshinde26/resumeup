@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library"; // <-- NEW IMPORT
 
 // Helper to generate tokens
 const generateAccessToken = (user: any) => {
@@ -19,6 +20,8 @@ const generateRefreshToken = (user: any) => {
     { expiresIn: "7d" }
   );
 };
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -94,6 +97,84 @@ export const loginUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("LOGIN ERROR:", error);
     res.status(500).json({ message: "Error logging in", error });
+  }
+};
+
+export const googleLogin = async (req: Request, res: Response) => {
+  const { id_token } = req.body;
+
+  if (!id_token) {
+    return res.status(400).json({ message: "Missing Google ID Token" });
+  }
+
+  try {
+    // 1. VERIFY THE GOOGLE ID TOKEN (CRITICAL SECURITY STEP)
+    const ticket = await client.verifyIdToken({
+      idToken: id_token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email || !payload.sub) {
+      return res.status(401).json({ message: "Invalid Google Token Payload" });
+    }
+
+    const { sub: googleId, email, name: fullname, picture } = payload;
+
+    // 2. USER PROVISIONING & DATABASE CHECK
+    let user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      // New user registration (Sign-Up)
+      user = await User.create({
+        fullname: fullname || "Google User", // Use name from Google, or a default
+        email,
+        googleId,
+        password: "", // Null/empty password since they use Google
+      } as any); // Use 'as any' since password is now optional in UserCreationAttributes
+      console.log(`New user registered via Google: ${email}`);
+    } else if (!user.googleId) {
+      // Existing user, but first time logging in with Google (Account Linking)
+      await user.update({ googleId });
+      console.log(`Existing user linked with Google ID: ${email}`);
+    }
+
+    // 3. ISSUE YOUR OWN JWTs (PLUG INTO YOUR EXISTING FLOW)
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    // Save refresh token in DB
+    await user.update({ refreshToken });
+
+    // 4. SAVE COOKIES & SEND RESPONSE (Using your existing logic from loginUser)
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: false, // Set to true in production with HTTPS
+      sameSite: "lax",
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false, // Set to true in production with HTTPS
+      sameSite: "lax",
+    });
+
+    return res.json({
+      message: "Google login successful",
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+        picture,
+      },
+    });
+  } catch (error) {
+    console.error("GOOGLE LOGIN ERROR:", error);
+    res
+      .status(401)
+      .json({ message: "Failed to authenticate with Google", error });
   }
 };
 
