@@ -1,18 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/db";
-
-// Define which fields are required and which are optional
-interface UserAttributes {
-  id: number;
-  fullname: string;
-  email: string;
-  password: string;
-  refreshToken: string | null;
-  googleId: string | null;
-}
-
-// When creating a user, "id" is optional because it's auto-increment
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+import { UserAttributes, UserCreationAttributes } from "../types/UserTypes";
 
 class User
   extends Model<UserAttributes, UserCreationAttributes>
@@ -24,6 +12,8 @@ class User
   public password!: string;
   public refreshToken!: string | null;
   public googleId!: string | null;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 User.init(

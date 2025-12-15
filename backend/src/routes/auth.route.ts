@@ -2,15 +2,17 @@ import { Router } from "express";
 import {
   registerUser,
   loginUser,
+  logoutUser,
   refreshAccessToken,
   googleLogin,
-} from "../controllers/authcontrollers";
+} from "../controllers/authControllers";
 import { verifyToken } from "../middleware/authmiddleware";
-import { getMe } from "../controllers/usercontroller";
+import { getMe } from "../controllers/userController";
 const router = Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.post("/logout", logoutUser);
 router.post("/google", googleLogin);
 router.get("/me", verifyToken, getMe);
 router.post("/refresh", refreshAccessToken);
