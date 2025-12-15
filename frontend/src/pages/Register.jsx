@@ -1,6 +1,7 @@
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import PasswordInput from "../components/PasswordInput";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -12,14 +13,14 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await api.post("/auth/register", {
+      await api.post("/auth/register", {
         fullname,
         email,
         password,
       });
 
-      alert("Registered successfully!");
-      navigate("/"); // go to login
+      alert("Registered successfully");
+      navigate("/");
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
     }
@@ -31,32 +32,38 @@ export default function Register() {
         onSubmit={handleRegister}
         className="bg-white p-8 rounded-xl shadow-lg w-96"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Create Account
+        </h2>
 
         <input
           type="text"
-          placeholder="Full Name"
-          className="w-full p-2 border rounded mb-4"
+          placeholder="Full name"
+          className="w-full p-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
           onChange={(e) => setFullname(e.target.value)}
+          required
         />
 
         <input
           type="email"
-          placeholder="Email"
-          className="w-full p-2 border rounded mb-4"
+          placeholder="Email address"
+          className="w-full p-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded mb-4"
+        {/* Password field */}
+        <PasswordInput
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+          className="mb-4"
         />
 
         <button
           type="submit"
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+          className="w-full bg-green-600 text-white py-2 rounded font-medium hover:bg-green-700 transition"
         >
           Register
         </button>

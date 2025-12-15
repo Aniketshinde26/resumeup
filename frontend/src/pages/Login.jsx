@@ -1,9 +1,12 @@
+// src/pages/Login.jsx (Updated)
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import GoogleAuthButton from "../components/GoogleAuthButton"; // <-- 🌟 IMPORT IT HERE
+import PasswordInput from "../components/PasswordInput";
 
 export default function Login() {
-  const navigate = useNavigate(); // <-- FIXED HERE ✔
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,18 +37,33 @@ export default function Login() {
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
+        {/* ========================================================
+          🌟 NEW: GOOGLE SIGN-IN BUTTON PLACEMENT
+          ======================================================== */}
+        <GoogleAuthButton />
+
+        {/* Optional: Add a visual divider */}
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="flex-shrink mx-4 text-gray-500 text-sm">OR</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        {/* Traditional Form Starts Here */}
         <input
           type="email"
           placeholder="Email"
           className="w-full p-2 border rounded mb-4"
           onChange={(e) => setEmail(e.target.value)}
+          required // Added required for better UX
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded mb-4"
+        <PasswordInput
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+          className="mb-4"
         />
 
         <button

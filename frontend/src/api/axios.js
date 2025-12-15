@@ -53,7 +53,7 @@ api.interceptors.response.use(
       try {
         // 2. Call the backend refresh endpoint
         // The browser automatically sends the expired refresh token cookie
-        const res = await api.post("/auth/refresh");
+        // const res = await api.post("/auth/refresh");
 
         // 3. Refresh successful: Update queue and retry failed requests
         isRefreshing = false;
