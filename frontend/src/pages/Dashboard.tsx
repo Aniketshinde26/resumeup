@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import type { User } from "../types/user"; // 🔥 Import the User type
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null); // 🔥 Use the imported type
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -13,7 +14,7 @@ export default function Dashboard() {
         const res = await api.get("/auth/me");
         setUser(res.data.user);
         setMessage(res.data.message);
-      } catch (error) {
+      } catch (error: any) {
         setMessage(error.response?.data?.message || "Failed to fetch data");
       }
     };
@@ -21,15 +22,10 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  // 🔥 Logout function
   const handleLogout = async () => {
     try {
-      await api.post("/auth/logout", {}, { withCredentials: true }); // Call backend logout
-
-      // 🔥 Remove access token if stored in localStorage/sessionStorage
+      await api.post("/auth/logout", {}, { withCredentials: true });
       localStorage.removeItem("accessToken");
-
-      // Redirect to login page
       navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
@@ -42,7 +38,6 @@ export default function Dashboard() {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-        {/* 🔥 Logout Button */}
         <button
           onClick={handleLogout}
           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
@@ -58,6 +53,9 @@ export default function Dashboard() {
           <p>ID: {user.id}</p>
           <p>Email: {user.email}</p>
           <p>Name: {user.fullname}</p>
+          {user.createdAt && (
+            <p>Created: {new Date(user.createdAt).toLocaleDateString()}</p>
+          )}
         </div>
       )}
     </div>
