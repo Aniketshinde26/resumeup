@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import { useRegister } from "../hooks/useRegister"; // Verify path and case sensitivity
+
 export const useRegister = () => {
   const navigate = useNavigate();
   const [fullname, setFullname] = useState("");
