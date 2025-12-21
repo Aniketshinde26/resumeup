@@ -5,7 +5,7 @@ import {
   logoutUser,
   refreshAccessToken,
   googleLogin,
-} from "../controllers/authControllers";
+} from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
 import { getMe } from "../controllers/userController";
 const router = Router();
