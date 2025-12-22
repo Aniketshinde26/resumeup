@@ -2,28 +2,21 @@ import { useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
-// 1. Vite uses import.meta.env instead of process.env
-// Ensure your .env file variable starts with VITE_
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 export default function GoogleAuthButton() {
-  // 2. Add type for the ref
   const buttonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const handleCredentialResponse = useCallback(
     async (response: any) => {
-      // You can type this properly later
       try {
-        const idToken = response.credential;
-
-        const res = await api.post("/auth/google", {
-          id_token: idToken,
+        const { data } = await api.post("/auth/google", {
+          id_token: response.credential,
         });
-
-        console.log("Google login success:", res.data);
+        localStorage.setItem("token", data.accessToken);
         navigate("/dashboard");
       } catch (error: any) {
-        console.error(error);
         alert(error.response?.data?.message || "Google login failed.");
       }
     },
@@ -31,44 +24,51 @@ export default function GoogleAuthButton() {
   );
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
+    // Function to render the button
+    const renderButton = () => {
+      const google = (window as any)?.google;
+      if (google && buttonRef.current) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredentialResponse,
+          ux_mode: "popup",
+        });
 
-    script.onload = () => {
-      // 3. Use 'any' cast to allow window.google access in TS
-      const google = (window as any).google;
-
-      if (!google) return;
-
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse,
-        ux_mode: "popup",
-      });
-
-      if (buttonRef.current) {
         google.accounts.id.renderButton(buttonRef.current, {
           theme: "outline",
-          size: "large",
-          text: "signin_with",
-          width: 300,
+          size: "large", // "large" is the standard height that matches py-2.5 inputs
+          shape: "rectangular",
+          text: "continue_with",
+          // 🔑 This ensures it fills the container width
+          width: buttonRef.current?.offsetWidth || 350,
         });
       }
     };
 
-    document.head.appendChild(script);
+    // Check if script already exists to avoid duplicates
+    let script = document.getElementById(
+      "google-login-script"
+    ) as HTMLScriptElement;
 
-    return () => {
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "google-login-script";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = renderButton;
+      document.head.appendChild(script);
+    } else {
+      // If script exists, just render (handles HMR/re-renders)
+      renderButton();
+    }
+
+    // Note: We REMOVED the removeChild cleanup because it breaks Google's global state
   }, [handleCredentialResponse]);
 
   return (
-    <div className="my-4 flex justify-center">
-      <div ref={buttonRef}></div>
+    <div className="mb-5 w-full flex justify-center min-h-[44px]">
+      <div ref={buttonRef} className="w-full max-w-[350px]" />
     </div>
   );
 }
