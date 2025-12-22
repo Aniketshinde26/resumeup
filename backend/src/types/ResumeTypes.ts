@@ -5,7 +5,7 @@ export interface ResumeAttributes {
   userId: number;
   title: string;
   templateId: string;
-  data: object; // flexible JSON structure
+  data: object;
   createdAt?: Date;
   updatedAt?: Date;
 }
