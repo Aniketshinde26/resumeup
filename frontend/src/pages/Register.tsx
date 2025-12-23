@@ -3,10 +3,10 @@ import { AuthFooter, ErrorMessage } from "../components/ui";
 import PasswordInput from "../components/PasswordInput";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
-  const [name, setName] = useState("");
+  const [fullname, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,8 +19,8 @@ export default function Register() {
     setError("");
 
     try {
-      await api.post("/auth/register", { name, email, password });
-      navigate("/login"); // Send them to login after successful sign up
+      await api.post("/auth/register", { fullname, email, password });
+      navigate("/login");
     } catch (err: any) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
@@ -31,34 +31,48 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 p-8">
-      <div className="w-full max-w-md bg-white border border-slate-200 rounded-lg px-8 py-10 shadow-lg">
+    /* 🛠 FIXED: Added space in 'justify-start bg-linear-to-br' */
+    <div className="min-h-screen flex items-start justify-center lg:intems-start lg:justify-start bg-linear-to-br from-brand-surface to-app-bg p-4 p-8">
+      <div
+        className="
+          w-full max-w-md
+          bg-card-bg
+          border border-border-subtle
+          rounded-lg
+          px-4 py-8
+          sm:px-8
+          shadow-lg
+          lg:mt-15
+          lg:ml-15
+        "
+      >
         {/* Brand */}
-        <div className="mb-6 text-lg font-semibold text-slate-900">
-          ResumeUp
-        </div>
 
-        <h1 className="text-2xl font-semibold text-slate-900">
+        <Link
+          to="/"
+          className="mb-6 block text-lg font-semibold text-text-main"
+        >
+          ResumeUp
+        </Link>
+        <h1 className="text-2xl font-semibold text-text-main">
           Create account
         </h1>
-        <p className="text-sm text-slate-500 mt-1 mb-6">
+        <p className="text-sm text-text-muted mt-1 mb-6">
           Join us to get started
         </p>
-
-        {/* Reuse the Google Button for consistency */}
-        <GoogleAuthButton />
-
+        <div className="mt-8 mb-6 h-[44px] w-full rounded-md bg-slate-50/50 animate-pulse">
+          <GoogleAuthButton />
+        </div>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-slate-200"></span>
+            <span className="w-full border-t border-border-subtle"></span>
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-slate-400">
+            <span className="bg-card-bg px-2 text-text-muted">
               Or use your email
             </span>
           </div>
         </div>
-
         <form onSubmit={handleRegister} className="space-y-4">
           {error && <ErrorMessage message={error} />}
 
@@ -66,10 +80,11 @@ export default function Register() {
           <input
             type="text"
             placeholder="Full Name"
-            value={name}
+            value={fullname}
             required
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+            /* 🎨 THEME UPDATE: used brand colors */
+            className="w-full rounded-md border border-border-subtle bg-slate-50 px-4 py-2.5 text-sm focus:bg-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition"
           />
 
           {/* Email Field */}
@@ -79,7 +94,7 @@ export default function Register() {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-md border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+            className="w-full rounded-md border border-border-subtle bg-slate-50 px-4 py-2.5 text-sm focus:bg-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition"
           />
 
           {/* Password Field */}
@@ -91,13 +106,13 @@ export default function Register() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded-md bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition disabled:opacity-60 shadow-md shadow-indigo-200"
+            /* 🎨 THEME UPDATE: used brand-primary and shadow-sm */
+            className="w-full rounded-md bg-brand-primary py-2.5 text-sm font-semibold text-white hover:bg-brand-hover transition disabled:opacity-60 shadow-sm"
           >
             {isLoading ? "Creating account..." : "Create account"}
           </button>
         </form>
-
-        <div className="mt-8 pt-4 border-t border-slate-200">
+        <div className="mt-10 pt-6 border-t border-border-subtle flex justify-center">
           <AuthFooter
             label="Already have an account?"
             linkText="Sign in"
