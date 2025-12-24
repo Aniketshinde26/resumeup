@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom"; // Remove BrowserRou
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 export default function App() {
   return (
     // No <BrowserRouter> here! It's already in index.tsx
@@ -10,8 +10,10 @@ export default function App() {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      {/* Good practice: Redirect unknown paths to login */}
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -21,10 +21,13 @@ export const useLogin = () => {
         email,
         password,
       });
-      if (res.data.token) {
-        localStorage.setItem("accessToken", res.data.token);
+
+      if (res.data.accessToken) {
+        // 1. Save the token
+        localStorage.setItem("accessToken", res.data.accessToken);
+
+        navigate("/dashboard", { replace: true });
       }
-      navigate("/dashboard");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

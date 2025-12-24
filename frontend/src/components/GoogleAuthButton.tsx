@@ -24,7 +24,6 @@ export default function GoogleAuthButton() {
   );
 
   useEffect(() => {
-    // Function to render the button
     const renderButton = () => {
       const google = (window as any)?.google;
       if (google && buttonRef.current) {
@@ -36,16 +35,15 @@ export default function GoogleAuthButton() {
 
         google.accounts.id.renderButton(buttonRef.current, {
           theme: "outline",
-          size: "large", // "large" is the standard height that matches py-2.5 inputs
+          size: "large",
           shape: "rectangular",
           text: "continue_with",
-          // 🔑 This ensures it fills the container width
+
           width: buttonRef.current?.offsetWidth || 350,
         });
       }
     };
 
-    // Check if script already exists to avoid duplicates
     let script = document.getElementById(
       "google-login-script"
     ) as HTMLScriptElement;
@@ -59,11 +57,8 @@ export default function GoogleAuthButton() {
       script.onload = renderButton;
       document.head.appendChild(script);
     } else {
-      // If script exists, just render (handles HMR/re-renders)
       renderButton();
     }
-
-    // Note: We REMOVED the removeChild cleanup because it breaks Google's global state
   }, [handleCredentialResponse]);
 
   return (

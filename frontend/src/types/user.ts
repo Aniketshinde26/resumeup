@@ -8,6 +8,6 @@ export interface User {
 
 // You can also define your Auth state here
 export interface AuthResponse {
-  token: string;
+  accessToken: string;
   user: User;
 }

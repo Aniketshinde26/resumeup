@@ -15,7 +15,6 @@ export default function Login() {
   } = useLogin();
 
   return (
-    /* 🎨 THEME UPDATE: Added bg-gradient and used brand-surface/app-bg */
     <div className="min-h-screen flex items-start justify-start bg-linear-to-br from-brand-surface to-app-bg p-8">
       <div
         className="

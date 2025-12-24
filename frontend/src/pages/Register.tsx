@@ -4,34 +4,38 @@ import PasswordInput from "../components/PasswordInput";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 import api from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
-
+import { useRegister } from "../hooks/useRegister";
 export default function Register() {
-  const [fullname, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const {
+    fullname,
+    setFullname,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoading,
+    error,
+    handleRegister,
+  } = useRegister();
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+  // const handleRegister = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   setError("");
 
-    try {
-      await api.post("/auth/register", { fullname, email, password });
-      navigate("/login");
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message || "Registration failed. Try again."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //   try {
+  //     await api.post("/auth/register", { fullname, email, password });
+  //     navigate("/login");
+  //   } catch (err: any) {
+  //     setError(
+  //       err.response?.data?.message || "Registration failed. Try again."
+  //     );
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
-    /* 🛠 FIXED: Added space in 'justify-start bg-linear-to-br' */
     <div className="min-h-screen flex items-start justify-center lg:intems-start lg:justify-start bg-linear-to-br from-brand-surface to-app-bg p-4 p-8">
       <div
         className="
@@ -82,7 +86,7 @@ export default function Register() {
             placeholder="Full Name"
             value={fullname}
             required
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setFullname(e.target.value)}
             /* 🎨 THEME UPDATE: used brand colors */
             className="w-full rounded-md border border-border-subtle bg-slate-50 px-4 py-2.5 text-sm focus:bg-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition"
           />
