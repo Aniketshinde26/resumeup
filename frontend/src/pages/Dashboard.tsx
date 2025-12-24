@@ -8,7 +8,6 @@ import { TEMPLATE_LIST } from "../templates/templateindex";
 
 export default function Dashboard() {
   const [resumes, setResumes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [isCreating, setIsCreating] = useState(false);
