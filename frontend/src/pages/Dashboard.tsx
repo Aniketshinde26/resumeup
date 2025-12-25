@@ -1,42 +1,20 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import { TEMPLATE_LIST } from "../templates/templateindex";
 import ResumeCard from "../components/ResumeCard";
 import CreateResumeModal from "../components/CreateResumeModal";
-// 1. Import your template list
-import { TEMPLATE_LIST } from "../templates/templateindex";
+import { useDashboard } from "../hooks/useDashboard";
 
 export default function Dashboard() {
-  const [resumes, setResumes] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
-
-  const navigate = useNavigate();
-
-  // ... fetchResumes logic ...
-
-  const handleTemplateSelect = (templateId: string) => {
-    setSelectedTemplate(templateId); // Store the template ID
-    setIsModalOpen(true); // Open the name modal
-  };
-
-  const handleCreate = async (title: string) => {
-    try {
-      // 2. Send the templateId to the backend
-      const res = await api.post("/api/resumes", {
-        title,
-        templateId: selectedTemplate,
-      });
-      navigate(`/builder/${res.data.id || res.data._id}`);
-    } catch (err) {
-      console.error("Creation failed", err);
-    }
-  };
+  const {
+    resumes,
+    isModalOpen,
+    setIsModalOpen,
+    isLoading,
+    handleTemplateSelect,
+    handleCreate,
+  } = useDashboard();
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      {/* SECTION: TEMPLATE CHOICES */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-slate-800">Start New</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
@@ -46,13 +24,12 @@ export default function Dashboard() {
               onClick={() => handleTemplateSelect(tpl.id)}
               className="group cursor-pointer"
             >
-              {/* This represents the template preview */}
               <div
-                className={`aspect-[3/4] rounded-xl ${
+                className={`aspect-3/4 rounded-xl ${
                   tpl.color || "bg-slate-200"
-                } border-2 border-transparent group-hover:border-brand-primary group-hover:shadow-lg transition-all flex items-center justify-center text-white font-bold`}
+                } border-2 border-transparent group-hover:border-blue-500 transition-all flex items-center justify-center text-white font-bold`}
               >
-                {tpl.name[0]} {/* Placeholder for thumbnail */}
+                {tpl.name[0]}
               </div>
               <p className="mt-2 text-sm font-medium text-center">{tpl.name}</p>
             </div>
@@ -62,7 +39,6 @@ export default function Dashboard() {
 
       <hr className="my-10 border-slate-200" />
 
-      {/* SECTION: RECENT RESUMES */}
       <section>
         <h2 className="text-xl font-bold mb-6 text-slate-400 uppercase tracking-wider">
           Your Resumes
@@ -73,7 +49,8 @@ export default function Dashboard() {
               key={resume.id}
               title={resume.title}
               updatedAt={resume.updatedAt}
-              onClick={() => navigate(`/builder/${resume.id}`)}
+              // We can still use navigate here if needed, or move to logic
+              onClick={() => window.location.assign(`/builder/${resume.id}`)}
             />
           ))}
         </div>
@@ -83,7 +60,7 @@ export default function Dashboard() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreate={handleCreate}
-        isLoading={isCreating}
+        isLoading={isLoading}
       />
     </div>
   );

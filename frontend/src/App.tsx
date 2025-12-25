@@ -1,19 +1,25 @@
-import { Routes, Route, Navigate } from "react-router-dom"; // Remove BrowserRouter from here
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Builder from "./pages/Builder"; // Make sure this import exists!
+
 export default function App() {
   return (
-    // No <BrowserRouter> here! It's already in index.tsx
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
+      {/* Protected Routes Group */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/builder/:id" element={<Builder />} />
       </Route>
+
+      {/* Catch-all Redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

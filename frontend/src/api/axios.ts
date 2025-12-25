@@ -57,8 +57,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Un-comment this when your backend endpoint is ready
-        // await api.post("/auth/refresh");
+        await api.post("/auth/refresh");
 
         isRefreshing = false;
         processQueue(null);
