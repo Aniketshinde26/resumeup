@@ -51,7 +51,7 @@ const startServer = async () => {
   // Sync all models
 
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
     console.log("Sequelize synced successfully");
   } catch (error) {
     console.error("Sequelize sync error:", error);
