@@ -12,3 +12,33 @@ export const TEMPLATE_LIST = [
   { id: "modern", name: "Modern Executive", preview: "bg-blue-600" },
   { id: "minimal", name: "Clean Minimalist", color: "bg-slate-400" },
 ];
+
+export interface PersonalInfo {
+  fullName: string;
+  jobTitle: string;
+  email: string;
+  phone: string;
+  location: string;
+  summary: string;
+}
+
+export interface Experience {
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
+
+export interface Education {
+  school: string;
+  degree: string;
+  year: string;
+}
+
+export interface ResumeData {
+  personal: PersonalInfo;
+  experience: Experience[];
+  education: Education[];
+  skills: string[];
+}
