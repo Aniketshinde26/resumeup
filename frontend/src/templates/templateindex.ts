@@ -20,6 +20,7 @@ export interface PersonalInfo {
   phone: string;
   location: string;
   summary: string;
+  image?: string;
 }
 
 export interface Experience {

@@ -2,7 +2,6 @@ import { TEMPLATE_LIST } from "../templates/templateindex";
 import ResumeCard from "../components/ResumeCard";
 import CreateResumeModal from "../components/CreateResumeModal";
 import { useDashboard } from "../hooks/useDashboard";
-
 export default function Dashboard() {
   const {
     resumes,
@@ -11,6 +10,7 @@ export default function Dashboard() {
     isLoading,
     handleTemplateSelect,
     handleCreate,
+    handleEditReume,
   } = useDashboard();
 
   return (
@@ -50,7 +50,7 @@ export default function Dashboard() {
               title={resume.title}
               updatedAt={resume.updatedAt}
               // We can still use navigate here if needed, or move to logic
-              onClick={() => window.location.assign(`/builder/${resume.id}`)}
+              onClick={() => handleEditReume(resume.id)}
             />
           ))}
         </div>

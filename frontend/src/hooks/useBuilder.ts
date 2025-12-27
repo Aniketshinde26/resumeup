@@ -11,22 +11,48 @@ export const useBuilder = () => {
   const [saving, setSaving] = useState(false);
 
   // 1. Fetch the resume data on load
+
   const loadResume = useCallback(async () => {
+    if (!id) return;
+
     try {
       setLoading(true);
       const res = await api.get(`/resumes/${id}`);
-      setResume(res.data.resume);
+
+      // 1. Get the resume object
+      const fetchedResume = res.data.resume || res.data;
+
+      // 2. CRITICAL FIX: If 'data' is a string, turn it into an object
+      if (typeof fetchedResume.data === "string") {
+        try {
+          fetchedResume.data = JSON.parse(fetchedResume.data);
+        } catch (e) {
+          console.error("Failed to parse resume data string", e);
+          fetchedResume.data = {}; // Fallback if string is totally broken
+        }
+      }
+
+      // 3. Ensure nested objects exist so the UI doesn't crash
+      if (!fetchedResume.data) fetchedResume.data = {};
+      if (!fetchedResume.data.personal) fetchedResume.data.personal = {};
+      if (!fetchedResume.data.experience) fetchedResume.data.experience = [];
+      if (!fetchedResume.data.education) fetchedResume.data.education = [];
+      if (!fetchedResume.data.skills) fetchedResume.data.skills = [];
+
+      setResume(fetchedResume);
     } catch (err) {
-      console.error("Failed to load resume", err);
-      navigate("/dashboard"); // Redirect if resume doesn't exist
+      console.error("Failed to load resume:", err);
     } finally {
       setLoading(false);
     }
-  }, [id, navigate]);
+  }, [id]);
 
+  // 🔥 THIS WAS MISSING: The "Trigger" that runs the code on page load
   useEffect(() => {
-    loadResume();
-  }, [loadResume]);
+    if (id) {
+      loadResume();
+    }
+  }, [id, loadResume]);
 
   // 2. Update local state (when user types)
   const updateData = (newData: any) => {
@@ -52,11 +78,39 @@ export const useBuilder = () => {
     }
   };
 
+  // Helper to update nested personal data
+  const updatePersonal = (field: string, value: string) => {
+    setResume((prev: any) => ({
+      ...prev,
+      data: {
+        ...prev.data,
+        personal: { ...prev.data.personal, [field]: value },
+      },
+    }));
+  };
+  // Updated Image upload using the internal updatePersonal
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/"))
+        return alert("Please upload an image file");
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // ✅ Now it calls the helper defined above
+        updatePersonal("image", reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return {
     resume,
     loading,
     saving,
     updateData,
     handleSave,
+    handleFileChange,
+    updatePersonal,
+    loadResume,
   };
 };

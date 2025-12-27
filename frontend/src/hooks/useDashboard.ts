@@ -9,6 +9,9 @@ export const useDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const handleEditReume = (id: string) => {
+    navigate(`/builder/${id}`);
+  };
   // Fetch all resumes on load
   const fetchResumes = async () => {
     try {
@@ -54,5 +57,6 @@ export const useDashboard = () => {
     isLoading,
     handleTemplateSelect,
     handleCreate,
+    handleEditReume,
   };
 };
