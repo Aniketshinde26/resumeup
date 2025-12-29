@@ -11,10 +11,12 @@ export default function GoogleAuthButton() {
   const handleCredentialResponse = useCallback(
     async (response: any) => {
       try {
-        const { data } = await api.post("/auth/google", {
+        // We just 'await' the call. The browser handles the Set-Cookie header.
+        await api.post("/auth/google", {
           id_token: response.credential,
         });
-        localStorage.setItem("token", data.accessToken);
+
+        // No more 'data' variable needed here!
         navigate("/dashboard");
       } catch (error: any) {
         alert(error.response?.data?.message || "Google login failed.");

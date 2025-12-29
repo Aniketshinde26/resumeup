@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { AuthFooter, ErrorMessage } from "../components/ui";
 import PasswordInput from "../components/PasswordInput";
 import GoogleAuthButton from "../components/GoogleAuthButton";
-import api from "../api/axios";
-import { useNavigate, Link } from "react-router-dom";
+
+import { Link } from "react-router-dom";
 import { useRegister } from "../hooks/useRegister";
 export default function Register() {
   const {
@@ -17,23 +16,6 @@ export default function Register() {
     error,
     handleRegister,
   } = useRegister();
-
-  // const handleRegister = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   setError("");
-
-  //   try {
-  //     await api.post("/auth/register", { fullname, email, password });
-  //     navigate("/login");
-  //   } catch (err: any) {
-  //     setError(
-  //       err.response?.data?.message || "Registration failed. Try again."
-  //     );
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <div className="min-h-screen flex items-start justify-center lg:intems-start lg:justify-start bg-linear-to-br from-brand-surface to-app-bg p-4 p-8">

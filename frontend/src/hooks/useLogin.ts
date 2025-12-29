@@ -24,7 +24,7 @@ export const useLogin = () => {
 
       if (res.data.accessToken) {
         // 1. Save the token
-        localStorage.setItem("accessToken", res.data.accessToken);
+        // localStorage.setItem("accessToken", res.data.accessToken);
 
         navigate("/dashboard", { replace: true });
       }
