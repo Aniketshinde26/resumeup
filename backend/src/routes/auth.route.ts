@@ -18,7 +18,7 @@ router.get("/me", verifyToken, getMe);
 router.post("/refresh", refreshAccessToken);
 router.get("/protected", verifyToken, (req, res) => {
   res.json({
-    messsage: "Token is Valid",
+    message: "Token is Valid",
     user: req.user,
   });
 });
