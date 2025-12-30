@@ -2,6 +2,7 @@ import { TEMPLATE_LIST } from "../templates/templateindex";
 import ResumeCard from "../components/ResumeCard";
 import CreateResumeModal from "../components/CreateResumeModal";
 import { useDashboard } from "../hooks/useDashboard";
+
 export default function Dashboard() {
   const {
     resumes,
@@ -11,6 +12,7 @@ export default function Dashboard() {
     handleTemplateSelect,
     handleCreate,
     handleEditReume,
+    handleDeleteResume, // 1. Pulled from your hook
   } = useDashboard();
 
   return (
@@ -49,8 +51,9 @@ export default function Dashboard() {
               key={resume.id}
               title={resume.title}
               updatedAt={resume.updatedAt}
-              // We can still use navigate here if needed, or move to logic
               onClick={() => handleEditReume(resume.id)}
+              // 2. Added the onDelete prop here
+              onDelete={() => handleDeleteResume(resume.id)}
             />
           ))}
         </div>
