@@ -50,6 +50,16 @@ export const useDashboard = () => {
     }
   };
 
+  const handleDeleteResume = async (id: string) => {
+    try {
+      await api.delete(`/resumes/${id}`);
+      setResumes((prev) => prev.filter((resume: any) => resume.id !== id));
+      console.log("Resume deleted successfully");
+    } catch (err) {
+      console.error("Failed to delete resume", err);
+      alert;
+    }
+  };
   return {
     resumes,
     isModalOpen,
@@ -58,5 +68,6 @@ export const useDashboard = () => {
     handleTemplateSelect,
     handleCreate,
     handleEditReume,
+    handleDeleteResume,
   };
 };
