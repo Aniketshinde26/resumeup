@@ -1,14 +1,23 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import api from "../api/axios";
 
 export const useBuilder = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
   const [resume, setResume] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+
+  const updateData = (newData: any) => {
+    setIsDirty(true);
+    setResume((prev: any) => ({
+      ...prev,
+
+      data: { ...prev.data, ...(newData.data || newData) },
+    }));
+  };
 
   // 1. Fetch the resume data on load
 
@@ -38,6 +47,10 @@ export const useBuilder = () => {
       if (!fetchedResume.data.experience) fetchedResume.data.experience = [];
       if (!fetchedResume.data.education) fetchedResume.data.education = [];
       if (!fetchedResume.data.skills) fetchedResume.data.skills = [];
+      if (!fetchedResume.data.projects) fetchedResume.data.projects = [];
+      if (!fetchedResume.data.languages) fetchedResume.data.languages = [];
+      if (!fetchedResume.data.certifications)
+        fetchedResume.data.certifications = [];
 
       setResume(fetchedResume);
     } catch (err) {
@@ -54,32 +67,48 @@ export const useBuilder = () => {
     }
   }, [id, loadResume]);
 
+  useEffect(() => {
+    if (!resume || !isDirty) return;
+    const timer = setTimeout(() => {
+      handleSave();
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [resume?.data, isDirty]);
+
   // 2. Update local state (when user types)
-  const updateData = (newData: any) => {
-    setResume((prev: any) => ({
-      ...prev,
-      data: { ...prev.data, ...newData },
-    }));
-  };
 
   // 3. Save to Database
   const handleSave = async () => {
+    if (!isDirty && !saving) return;
     try {
       setSaving(true);
       await api.put(`/resumes/${id}`, {
         title: resume.title,
         data: resume.data,
       });
-      console.log("Saved successfully");
+      setIsDirty(false);
     } catch (err) {
       console.error("Save failed", err);
     } finally {
       setSaving(false);
     }
   };
+  //  The "Exit Warning" Effect
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isDirty) {
+        event.preventDefault();
 
+        (event as any).returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
   // Helper to update nested personal data
   const updatePersonal = (field: string, value: string) => {
+    setIsDirty(true);
     setResume((prev: any) => ({
       ...prev,
       data: {
@@ -112,5 +141,6 @@ export const useBuilder = () => {
     handleFileChange,
     updatePersonal,
     loadResume,
+    isDirty,
   };
 };

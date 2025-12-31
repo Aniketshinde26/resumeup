@@ -11,6 +11,7 @@ export default function Builder() {
     handleSave,
     handleFileChange,
     updatePersonal,
+    isDirty,
   } = useBuilder();
 
   if (loading) return <div className="p-10 text-center">Loading Resume...</div>;
@@ -36,6 +37,23 @@ export default function Builder() {
           >
             {saving ? "Saving..." : "Save Changes"}
           </button>
+          <div className="flex items-center gap-2 px-3 py-1 bg-white border rounded-full shadow-sm">
+            {/* The Status Dot */}
+            <div
+              className={`h-2 w-2 rounded-full transition-colors duration-500 ${
+                saving
+                  ? "bg-blue-500 animate-pulse"
+                  : isDirty
+                  ? "bg-amber-500"
+                  : "bg-emerald-500"
+              }`}
+            />
+
+            {/* The Status Text */}
+            <span className="text-[10px] font-bold uppercase text-slate-500">
+              {saving ? "Saving..." : isDirty ? "Changes Unsaved" : "Saved"}
+            </span>
+          </div>
         </div>
       </header>
 
@@ -388,18 +406,226 @@ export default function Builder() {
               ))}
             </div>
           </div>
+
+          {/* 5. PROJECTS */}
+          <div className="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <div className="flex justify-between items-center border-b pb-2">
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                🚀 Projects
+              </h2>
+              <button
+                onClick={() =>
+                  updateData({
+                    projects: [
+                      ...(resume.data.projects || []),
+                      { name: "", link: "", description: "" },
+                    ],
+                  })
+                }
+                className="text-blue-600 hover:bg-blue-50 p-1 rounded-full transition-colors"
+              >
+                <Plus size={20} />
+              </button>
+            </div>
+            {resume.data.projects?.map((proj: any, idx: number) => (
+              <div
+                key={idx}
+                className="p-4 border rounded-lg space-y-3 relative group bg-slate-50/30"
+              >
+                <button
+                  onClick={() => {
+                    const newList = [...resume.data.projects];
+                    newList.splice(idx, 1);
+                    updateData({ projects: newList });
+                  }}
+                  className="absolute top-2 right-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                >
+                  <Trash2 size={16} />
+                </button>
+                <input
+                  type="text"
+                  placeholder="Project Name"
+                  className="input-style w-full font-bold"
+                  value={proj.name}
+                  onChange={(e) => {
+                    const newList = [...resume.data.projects];
+                    newList[idx].name = e.target.value;
+                    updateData({ projects: newList });
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Project Link (Optional)"
+                  className="input-style w-full text-sm italic"
+                  value={proj.link}
+                  onChange={(e) => {
+                    const newList = [...resume.data.projects];
+                    newList[idx].link = e.target.value;
+                    updateData({ projects: newList });
+                  }}
+                />
+                <textarea
+                  placeholder="Short description of what you built..."
+                  className="input-style w-full h-16 text-sm"
+                  value={proj.description}
+                  onChange={(e) => {
+                    const newList = [...resume.data.projects];
+                    newList[idx].description = e.target.value;
+                    updateData({ projects: newList });
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* 6. LANGUAGES */}
+          <div className="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <div className="flex justify-between items-center border-b pb-2">
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                🌍 Languages
+              </h2>
+              <button
+                onClick={() =>
+                  updateData({
+                    languages: [
+                      ...(resume.data.languages || []),
+                      { name: "", level: "Fluent" },
+                    ],
+                  })
+                }
+                className="text-blue-600 hover:bg-blue-50 p-1 rounded-full transition-colors"
+              >
+                <Plus size={20} />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {resume.data.languages?.map((lang: any, idx: number) => (
+                <div key={idx} className="flex gap-2 items-center group">
+                  <input
+                    type="text"
+                    placeholder="Language"
+                    className="input-style flex-1"
+                    value={lang.name}
+                    onChange={(e) => {
+                      const newList = [...resume.data.languages];
+                      newList[idx].name = e.target.value;
+                      updateData({ languages: newList });
+                    }}
+                  />
+                  <select
+                    className="input-style text-sm"
+                    value={lang.proficiency}
+                    onChange={(e) => {
+                      const newList = [...resume.data.languages];
+                      newList[idx].proficiency = e.target.value;
+                      updateData({ languages: newList });
+                    }}
+                  >
+                    <option value="Native">Native</option>
+                    <option value="Fluent">Fluent</option>
+                    <option value="Professional">Professional</option>
+                    <option value="Beginner">Beginner</option>
+                  </select>
+                  <button
+                    onClick={() => {
+                      const newList = [...resume.data.languages];
+                      newList.splice(idx, 1);
+                      updateData({ languages: newList });
+                    }}
+                    className="text-slate-300 hover:text-red-500 transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 7. CERTIFICATIONS */}
+          <div className="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <div className="flex justify-between items-center border-b pb-2">
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                📜 Certifications
+              </h2>
+              <button
+                onClick={() =>
+                  updateData({
+                    certifications: [
+                      ...(resume.data.certifications || []),
+                      { name: "", issuer: "", date: "" },
+                    ],
+                  })
+                }
+                className="text-blue-600 hover:bg-blue-50 p-1 rounded-full transition-colors"
+              >
+                <Plus size={20} />
+              </button>
+            </div>
+            {resume.data.certifications?.map((cert: any, idx: number) => (
+              <div
+                key={idx}
+                className="grid grid-cols-2 gap-2 p-3 border rounded-lg relative group"
+              >
+                <button
+                  onClick={() => {
+                    const newList = [...resume.data.certifications];
+                    newList.splice(idx, 1);
+                    updateData({ certifications: newList });
+                  }}
+                  className="absolute -top-2 -right-2 bg-white border shadow-sm rounded-full p-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all z-10"
+                >
+                  <Trash2 size={14} />
+                </button>
+                <input
+                  type="text"
+                  placeholder="Certificate Name"
+                  className="input-style col-span-2 font-bold"
+                  value={cert.name}
+                  onChange={(e) => {
+                    const newList = [...resume.data.certifications];
+                    newList[idx].name = e.target.value;
+                    updateData({ certifications: newList });
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Issuer (e.g. AWS)"
+                  className="input-style text-xs"
+                  value={cert.issuer}
+                  onChange={(e) => {
+                    const newList = [...resume.data.certifications];
+                    newList[idx].issuer = e.target.value;
+                    updateData({ certifications: newList });
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Date"
+                  className="input-style text-xs"
+                  value={cert.date}
+                  onChange={(e) => {
+                    const newList = [...resume.data.certifications];
+                    newList[idx].date = e.target.value;
+                    updateData({ certifications: newList });
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* RIGHT SIDE: PREVIEW */}
-        <section className="w-1/2 bg-slate-200 overflow-y-auto p-12 flex justify-center">
-          <div className="origin-top scale-[0.65] xl:scale-[0.80] shadow-2xl transition-all">
-            {SelectedTemplate ? (
-              <SelectedTemplate data={resume.data} />
-            ) : (
-              <div className="w-[210mm] h-[297mm] bg-white flex items-center justify-center">
-                Template Not Found
-              </div>
-            )}
+        <section className="w-1/2 bg-slate-200 overflow-y-auto p-12 flex justify-center custom-scrollbar">
+          <div className="py-20">
+            <div className="origin-top scale-[0.65] xl:scale-[0.80] shadow-2xl transition-all">
+              {SelectedTemplate ? (
+                <SelectedTemplate data={resume.data} />
+              ) : (
+                <div className="w-[210mm] h-[297mm] bg-white flex items-center justify-center">
+                  Template Not Found
+                </div>
+              )}
+            </div>
           </div>
         </section>
       </main>
