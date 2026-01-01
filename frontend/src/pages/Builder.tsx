@@ -1,6 +1,6 @@
 import { useBuilder } from "../hooks/useBuilder";
 import { Plus, Trash2, Layout } from "lucide-react";
-import { TEMPLATES, TEMPLATE_LIST } from "../templates/templateindex"; // Using your registry
+import { TEMPLATES, TEMPLATE_LIST } from "../templates/templateindex";
 
 export default function Builder() {
   const {
@@ -9,15 +9,15 @@ export default function Builder() {
     saving,
     updateData,
     handleSave,
-    handleFileChange,
     updatePersonal,
     isDirty,
+    tempImage,
+    setTempImage,
   } = useBuilder();
 
   if (loading) return <div className="p-10 text-center">Loading Resume...</div>;
   if (!resume) return null;
 
-  // Dynamically select the template based on database ID
   const SelectedTemplate = TEMPLATES[resume.templateId || "minimal"];
 
   return (
@@ -35,7 +35,7 @@ export default function Builder() {
             disabled={saving}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-all shadow-sm"
           >
-            {saving ? "Saving..." : "Save Changes"}
+            {saving ? "Saving..." : "Save"}
           </button>
           <div className="flex items-center gap-2 px-3 py-1 bg-white border rounded-full shadow-sm">
             {/* The Status Dot */}
@@ -86,33 +86,33 @@ export default function Builder() {
             </h2>
 
             <div className="grid grid-cols-2 gap-4">
-              {/* ✅ PHOTO UPLOAD PLACED AT THE TOP OF THE GRID */}
-              <div className="col-span-2 flex items-center gap-4 p-4 bg-slate-50 rounded-lg border-2 border-dashed border-slate-200">
+              <div className="col-span-2 flex items-center gap-4 ...">
                 <label className="relative cursor-pointer group">
-                  {/* Hidden file input that triggers the hook logic */}
                   <input
                     type="file"
                     className="hidden"
                     accept="image/*"
-                    onChange={handleFileChange}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setTempImage(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
                   />
 
-                  {resume.data.personal?.image ? (
-                    <div className="relative">
-                      <img
-                        src={resume.data.personal.image}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm group-hover:opacity-80 transition-opacity"
-                        alt="Profile"
-                      />
-                      {/* Overlay showing a "change" icon on hover */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="bg-black/40 p-1 rounded-full">
-                          <Plus size={14} className="text-white" />
-                        </div>
-                      </div>
-                    </div>
+                  {/* ✅ Use tempImage instead of resume.data.personal.image */}
+                  {tempImage ? (
+                    <img
+                      src={tempImage}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm"
+                      alt="Profile"
+                    />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-slate-300 transition-colors">
+                    <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center">
                       <Plus size={24} />
                     </div>
                   )}
@@ -120,14 +120,13 @@ export default function Builder() {
 
                 <div className="flex-1">
                   <div className="flex justify-between items-center">
-                    <label className="block text-sm font-medium text-slate-700">
+                    <label className="block text-sm font-medium">
                       Profile Photo
                     </label>
-                    {resume.data.personal?.image && (
+                    {tempImage && (
                       <button
-                        type="button"
-                        onClick={() => updatePersonal("image", "")}
-                        className="text-red-500 hover:text-red-700 flex items-center gap-1 text-[10px] font-bold uppercase"
+                        onClick={() => setTempImage(null)} // Clear only local state
+                        className="text-red-500 text-[10px] font-bold"
                       >
                         <Trash2 size={12} /> Remove
                       </button>
@@ -613,13 +612,26 @@ export default function Builder() {
             ))}
           </div>
         </section>
-
         {/* RIGHT SIDE: PREVIEW */}
-        <section className="w-1/2 bg-slate-200 overflow-y-auto p-12 flex justify-center custom-scrollbar">
-          <div className="py-20">
-            <div className="origin-top scale-[0.65] xl:scale-[0.80] shadow-2xl transition-all">
+        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
+          <div className="flex justify-center items-start min-h-full w-full py-10">
+            <div
+              id="resume-preview"
+              className="origin-top scale-[0.65] xl:scale-[0.85] shadow-2xl transition-all"
+              style={{
+                marginBottom: "-15%",
+              }}
+            >
               {SelectedTemplate ? (
-                <SelectedTemplate data={resume.data} />
+                <SelectedTemplate
+                  data={{
+                    ...resume.data,
+                    personal: {
+                      ...resume.data.personal,
+                      image: tempImage,
+                    },
+                  }}
+                />
               ) : (
                 <div className="w-[210mm] h-[297mm] bg-white flex items-center justify-center">
                   Template Not Found

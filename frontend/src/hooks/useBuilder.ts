@@ -9,6 +9,8 @@ export const useBuilder = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [localImage, setLocalImage] = useState<string | null>(null);
+  const [tempImage, setTempImage] = useState<string | null>(null);
 
   const updateData = (newData: any) => {
     setIsDirty(true);
@@ -68,27 +70,39 @@ export const useBuilder = () => {
   }, [id, loadResume]);
 
   useEffect(() => {
-    if (!resume || !isDirty) return;
+    // 1. If nothing changed, or we are already saving, don't do anything
+    if ((!isDirty && !tempImage) || saving) return;
+
+    // 2. Start a timer
     const timer = setTimeout(() => {
       handleSave();
-    }, 2000);
+    }, 3000); // 3 seconds of silence triggers a save
+
     return () => clearTimeout(timer);
-  }, [resume?.data, isDirty]);
+
+    // ✅ Listen for changes in the data OR the temporary image
+  }, [isDirty, tempImage]);
 
   // 2. Update local state (when user types)
 
   // 3. Save to Database
   const handleSave = async () => {
     if (!isDirty && !saving) return;
+
     try {
       setSaving(true);
+
+      // 2. The Request
       await api.put(`/resumes/${id}`, {
         title: resume.title,
+        // Ensure we aren't sending an empty object or double-nested data
         data: resume.data,
       });
+
       setIsDirty(false);
-    } catch (err) {
-      console.error("Save failed", err);
+    } catch (err: any) {
+      // 3. Detailed Error Logging
+      console.error("Save failed details:", err.response?.data || err.message);
     } finally {
       setSaving(false);
     }
@@ -121,17 +135,73 @@ export const useBuilder = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!file.type.startsWith("image/"))
-        return alert("Please upload an image file");
-
       const reader = new FileReader();
       reader.onloadend = () => {
-        // ✅ Now it calls the helper defined above
-        updatePersonal("image", reader.result as string);
+        setLocalImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
+
+  // const downloadpdf = async () => {
+  //   const element = document.getElementById("resume-preview");
+  //   if (!element) return;
+
+  //   // 1. Create a hidden iframe
+  //   const iframe = document.createElement("iframe");
+  //   iframe.style.position = "fixed";
+  //   iframe.style.right = "100%";
+  //   iframe.style.bottom = "100%";
+  //   iframe.style.width = "210mm"; // A4 Width
+  //   document.body.appendChild(iframe);
+
+  //   const iframeDoc = iframe.contentWindow?.document;
+  //   if (!iframeDoc) return;
+
+  //   // 2. Inject ONLY the necessary styles (No Tailwind v4 Globals)
+  //   // We manually define basic styles so html2canvas doesn't find oklch
+  //   iframeDoc.write(`
+  //   <html>
+  //     <head>
+  //       <style>
+  //         body { font-family: sans-serif; background: white; color: black; margin: 0; }
+  //         * { box-sizing: border-box; }
+  //         /* Manually add any critical CSS your template needs here */
+  //       </style>
+  //     </head>
+  //     <body>
+  //       <div id="capture-area">${element.innerHTML}</div>
+  //     </body>
+  //   </html>
+  // `);
+  //   iframeDoc.close();
+
+  //   // Give images/styles a moment to settle
+  //   await new Promise((resolve) => setTimeout(resolve, 500));
+
+  //   try {
+  //     const html2canvas = (await import("html2canvas")).default;
+  //     const captureArea = iframeDoc.getElementById("capture-area");
+
+  //     if (captureArea) {
+  //       const canvas = await html2canvas(captureArea, {
+  //         scale: 2,
+  //         useCORS: true,
+  //         backgroundColor: "#ffffff",
+  //       });
+
+  //       const { jsPDF } = await import("jspdf");
+  //       const pdf = new jsPDF("p", "mm", "a4");
+  //       pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 210, 297);
+  //       pdf.save("resume.pdf");
+  //     }
+  //   } catch (err) {
+  //     console.error("PDF Export failed:", err);
+  //   } finally {
+  //     document.body.removeChild(iframe); // Cleanup
+  //   }
+  // };
+
   return {
     resume,
     loading,
@@ -142,5 +212,7 @@ export const useBuilder = () => {
     updatePersonal,
     loadResume,
     isDirty,
+    tempImage,
+    setTempImage,
   };
 };
