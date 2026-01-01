@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library"; // <-- NEW IMPORT
+import { OAuth2Client } from "google-auth-library";
 
 // Helper to generate tokens
 const generateAccessToken = (user: any) => {
@@ -27,23 +27,32 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const { fullname, email, password } = req.body;
 
-    if (!fullname || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
     const existingUser = await User.findOne({ where: { email } });
+
     if (existingUser) {
+      // LINKING LOGIC: If they signed up with Google but now want a password
+      if (
+        existingUser.googleId &&
+        (!existingUser.password || existingUser.password === "")
+      ) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await existingUser.update({ password: hashedPassword, fullname });
+        return res
+          .status(200)
+          .json({
+            message: "Password added to your Google account!",
+            user: existingUser,
+          });
+      }
       return res.status(400).json({ message: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = await User.create({
       fullname,
       email,
       password: hashedPassword,
     });
-
     return res.status(201).json({ message: "User registered", user: newUser });
   } catch (error) {
     res.status(500).json({ message: "Error registering user" });
@@ -64,6 +73,13 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "User not found" });
     }
 
+    if (!user.password || user.password === "") {
+      return res.status(400).json({
+        message:
+          "This account was created via Google Login. Please use the 'Sign in with Google' button.",
+      });
+    }
+
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(400).json({ message: "Invalid password" });
@@ -79,13 +95,13 @@ export const loginUser = async (req: Request, res: Response) => {
     // Save both cookies
     res.cookie("token", accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production", // Better practice
       sameSite: "lax",
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
 
@@ -93,10 +109,11 @@ export const loginUser = async (req: Request, res: Response) => {
       message: "Login successful",
       accessToken,
       refreshToken,
+      user: { id: user.id, email: user.email, fullname: user.fullname }, // Helpful for frontend
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
-    res.status(500).json({ message: "Error logging in", error });
+    res.status(500).json({ message: "Error logging in" });
   }
 };
 
