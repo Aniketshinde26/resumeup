@@ -1,37 +1,19 @@
 @import "tailwindcss";
-/* Hide the default eye icon in Edge/Chrome/Safari */
 
 @theme {
-  /* Primary Brand Colors */
-  --color-brand-primary: var(--color-indigo-600);
-  --color-brand-hover: var(--color-indigo-700);
-  --color-brand-surface: var(--color-indigo-50);
-
-  /* Layout Colors */
-  --color-app-bg: var(--color-slate-50);
-  --color-card-bg: #ffffff;
-  --color-border-subtle: var(--color-slate-200);
-
-  /* Text Colors */
-  --color-text-main: var(--color-slate-900);
-  --color-text-muted: var(--color-slate-500);
-
-  /* Status Colors */
-  --color-success: var(--color-emerald-600);
-  --color-success-bg: var(--color-emerald-50);
-  --color-warning: var(--color-amber-600);
-  --color-error: var(--color-red-600);
-  --color-error-bg: var(--color-red-50);
+  /* Your existing theme variables here... */
 }
+
+/* --- YOUR UTILITY STYLES --- */
 input::-ms-clear {
   display: none;
 }
+/* ... (the rest of your input styles) ... */
 
-/* For some versions of Chrome/Safari */
-input::-webkit-contacts-auto-fill-button,
-input::-webkit-credentials-auto-fill-button {
-  visibility: hidden;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
+/* --- MINIMAL PRINT SETUP --- */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }

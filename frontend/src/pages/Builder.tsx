@@ -1,7 +1,7 @@
 import { useBuilder } from "../hooks/useBuilder";
-import { Plus, Trash2, Layout } from "lucide-react";
-import { TEMPLATES, TEMPLATE_LIST } from "../templates/templateindex";
-
+import { Plus, Trash2, Download } from "lucide-react";
+import { TEMPLATES } from "../templates/templateindex";
+import "../print.css";
 export default function Builder() {
   const {
     resume,
@@ -23,13 +23,21 @@ export default function Builder() {
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-900">
       {/* TOOLBAR */}
-      <header className="h-16 bg-white border-b px-8 flex items-center justify-between sticky top-0 z-10">
+      <header className="h-16 bg-white border-b px-8 flex items-center justify-between sticky top-0 z-10 no-print">
         <div className="flex items-center gap-4">
           <span className="text-blue-600 font-bold text-xl">ResumeUp</span>
           <div className="h-6 w-px bg-slate-200" />
           <h1 className="font-medium text-slate-600">{resume.title}</h1>
         </div>
         <div className="flex items-center gap-4">
+          {/* Download PDF Button */}
+          <button
+            onClick={() => window.print()}
+            className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-all shadow-sm flex items-center gap-2"
+          >
+            <Download size={18} />
+            Download PDF
+          </button>
           <button
             onClick={handleSave}
             disabled={saving}
@@ -59,26 +67,7 @@ export default function Builder() {
 
       <main className="flex-1 flex overflow-hidden">
         {/* LEFT SIDE: INPUT FORMS */}
-        <section className="w-1/2 overflow-y-auto p-8 border-r space-y-10 custom-scrollbar">
-          {/* 0. TEMPLATE PICKER */}
-          <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-blue-800 font-bold">
-              <Layout size={18} />
-              <span>Active Template:</span>
-            </div>
-            <select
-              className="bg-white border border-blue-200 rounded p-1 text-sm outline-none"
-              value={resume.templateId || "minimal"}
-              onChange={(e) => updateData({ templateId: e.target.value })}
-            >
-              {TEMPLATE_LIST.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
+        <section className="w-1/2 overflow-y-auto p-8 border-r space-y-10 custom-scrollbar no-print">
           {/* 1. PERSONAL INFO */}
           <div className="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
             <h2 className="text-lg font-bold flex items-center gap-2 border-b pb-2">
