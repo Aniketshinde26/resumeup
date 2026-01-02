@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
-// Helper to generate tokens
 const generateAccessToken = (user: any) => {
   return jwt.sign(
     { id: user.id, email: user.email },
@@ -30,19 +29,16 @@ export const registerUser = async (req: Request, res: Response) => {
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser) {
-      // LINKING LOGIC: If they signed up with Google but now want a password
       if (
         existingUser.googleId &&
         (!existingUser.password || existingUser.password === "")
       ) {
         const hashedPassword = await bcrypt.hash(password, 10);
         await existingUser.update({ password: hashedPassword, fullname });
-        return res
-          .status(200)
-          .json({
-            message: "Password added to your Google account!",
-            user: existingUser,
-          });
+        return res.status(200).json({
+          message: "Password added to your Google account!",
+          user: existingUser,
+        });
       }
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -85,17 +81,15 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    // Create tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // Save refresh token in DB
     await user.update({ refreshToken });
 
     // Save both cookies
     res.cookie("token", accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Better practice
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
 
@@ -109,7 +103,7 @@ export const loginUser = async (req: Request, res: Response) => {
       message: "Login successful",
       accessToken,
       refreshToken,
-      user: { id: user.id, email: user.email, fullname: user.fullname }, // Helpful for frontend
+      user: { id: user.id, email: user.email, fullname: user.fullname },
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
@@ -125,7 +119,6 @@ export const googleLogin = async (req: Request, res: Response) => {
   }
 
   try {
-    // 1. VERIFY THE GOOGLE ID TOKEN (CRITICAL SECURITY STEP)
     const ticket = await client.verifyIdToken({
       idToken: id_token,
       audience: GOOGLE_CLIENT_ID,
@@ -138,41 +131,35 @@ export const googleLogin = async (req: Request, res: Response) => {
 
     const { sub: googleId, email, name: fullname, picture } = payload;
 
-    // 2. USER PROVISIONING & DATABASE CHECK
     let user = await User.findOne({ where: { email } });
 
     if (!user) {
-      // New user registration (Sign-Up)
       user = await User.create({
-        fullname: fullname || "Google User", // Use name from Google, or a default
+        fullname: fullname || "Google User",
         email,
         googleId,
-        password: "", // Null/empty password since they use Google
-      } as any); // Use 'as any' since password is now optional in UserCreationAttributes
+        password: "",
+      } as any);
       console.log(`New user registered via Google: ${email}`);
     } else if (!user.googleId) {
-      // Existing user, but first time logging in with Google (Account Linking)
       await user.update({ googleId });
       console.log(`Existing user linked with Google ID: ${email}`);
     }
 
-    // 3. ISSUE YOUR OWN JWTs (PLUG INTO YOUR EXISTING FLOW)
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // Save refresh token in DB
     await user.update({ refreshToken });
 
-    // 4. SAVE COOKIES & SEND RESPONSE (Using your existing logic from loginUser)
     res.cookie("token", accessToken, {
       httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
+      secure: false,
       sameSite: "lax",
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
+      secure: false,
       sameSite: "lax",
     });
 
@@ -195,7 +182,6 @@ export const googleLogin = async (req: Request, res: Response) => {
   }
 };
 
-// ⚡ NEW: REFRESH TOKEN ENDPOINT
 export const refreshAccessToken = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
@@ -204,7 +190,6 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "No refresh token provided" });
     }
 
-    // Validate refresh token
     const decoded = jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET as string
@@ -216,7 +201,6 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 
-    // Create new access token
     const newAccessToken = generateAccessToken(user);
 
     res.cookie("token", newAccessToken, {
