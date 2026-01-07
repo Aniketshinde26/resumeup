@@ -602,13 +602,18 @@ export default function Builder() {
           </div>
         </section>
         {/* RIGHT SIDE: PREVIEW */}
-        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
-          <div className="flex justify-center items-start min-h-full w-full py-10">
+        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full no-print p-0">
+          {/* This wrapper now centers the page without scaling it */}
+          <div className="flex justify-center items-start min-h-full w-full py-10 no-print bg-slate-300">
             <div
               id="resume-preview"
-              className="origin-top scale-[0.65] xl:scale-[0.85] shadow-2xl transition-all"
+              className="bg-white shadow-2xl"
               style={{
-                marginBottom: "-15%",
+                width: "210mm",
+                height: "297mm",
+                minWidth: "210mm",
+                minHeight: "297mm",
+                margin: "0 auto",
               }}
             >
               {SelectedTemplate ? (
@@ -622,7 +627,7 @@ export default function Builder() {
                   }}
                 />
               ) : (
-                <div className="w-[210mm] h-[297mm] bg-white flex items-center justify-center">
+                <div className="w-full h-full flex items-center justify-center">
                   Template Not Found
                 </div>
               )}
