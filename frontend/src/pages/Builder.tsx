@@ -30,9 +30,80 @@ export default function Builder() {
           <h1 className="font-medium text-slate-600">{resume.title}</h1>
         </div>
         <div className="flex items-center gap-4">
-          {/* Download PDF Button */}
           <button
-            onClick={() => window.print()}
+            onClick={() => {
+              const template = document.getElementById("resume-template");
+              if (!template) return;
+
+              // 1. Create a hidden iframe instead of window.open
+              const iframe = document.createElement("iframe");
+              iframe.style.position = "fixed";
+              iframe.style.right = "100vw"; // Keep it off-screen
+              iframe.style.bottom = "100vh";
+              iframe.style.width = "0";
+              iframe.style.height = "0";
+              iframe.style.border = "0";
+              document.body.appendChild(iframe);
+
+              const iframeDoc = iframe.contentWindow?.document;
+              if (!iframeDoc) return;
+
+              // 2. Write your content just like you did before
+              iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Resume</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+          <style>
+            @page {
+              size: A4 portrait;
+              margin: 0;
+            }
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            body {
+              width: 210mm;
+              margin: 0;
+              padding: 0;
+            }
+            #resume-template {
+              width: 210mm;
+              min-height: 297mm;
+            }
+          </style>
+        </head>
+        <body>
+          ${template.outerHTML}
+          <script>
+            // This waits for the Tailwind CDN and images to load inside the iframe
+            window.onload = () => {
+              setTimeout(() => {
+                window.focus();
+                window.print();
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+
+              iframeDoc.close();
+
+              // 3. Cleanup: Remove the invisible iframe after the print dialog closes
+              // We use a longer timeout to give the browser time to finish the print handoff
+              setTimeout(() => {
+                if (document.body.contains(iframe)) {
+                  document.body.removeChild(iframe);
+                }
+              }, 3000);
+            }}
             className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-all shadow-sm flex items-center gap-2"
           >
             <Download size={18} />
@@ -602,9 +673,9 @@ export default function Builder() {
           </div>
         </section>
         {/* RIGHT SIDE: PREVIEW */}
-        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full no-print p-0">
+        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full p-0">
           {/* This wrapper now centers the page without scaling it */}
-          <div className="flex justify-center items-start min-h-full w-full py-10 no-print bg-slate-300">
+          <div className="flex justify-center items-start min-h-full w-full py-10  bg-slate-300">
             <div
               id="resume-preview"
               className="bg-white shadow-2xl"

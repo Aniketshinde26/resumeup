@@ -1,7 +1,11 @@
+/* App.css */
+
+/* Remove text-align: center so your forms align correctly */
 .App {
-  text-align: center;
+  width: 100%;
 }
 
+/* Keep the logo animation only if you are actually using the React logo somewhere */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -13,21 +17,6 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +25,5 @@
     transform: rotate(360deg);
   }
 }
+
+/* Remove .App-header entirely if you are using Tailwind for your page layouts */

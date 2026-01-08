@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  /* Your existing theme variables here... */
+  --color-brand-primary: #2563eb; /* Or your specific blue */
+  --color-brand-hover: #1d4ed8;
+  --color-brand-surface: #f8fafc;
+  --color-card-bg: #ffffff;
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border-subtle: #e2e8f0;
 }
 
-/* --- YOUR UTILITY STYLES --- */
+/* Add ONLY non-layout utilities here */
 input::-ms-clear {
   display: none;
 }
-/* ... (the rest of your input styles) ... */
 
-/* --- MINIMAL PRINT SETUP --- */
-@media print {
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+/* Ensure the body doesn't force a layout on your Login/Signup pages */
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
