@@ -1,3 +1,5 @@
+import ArchitectTemplate from "./Architect";
+import CorporateTemplate from "./MinimalistCorporate";
 import MinimalTemplate from "./MinimalTemplate";
 import ModernTemplate from "./ModernTemplate";
 
@@ -5,12 +7,20 @@ import ModernTemplate from "./ModernTemplate";
 export const TEMPLATES: Record<string, React.FC<any>> = {
   modern: ModernTemplate,
   minimal: MinimalTemplate,
+  minimalcorporate: CorporateTemplate,
+  architect: ArchitectTemplate,
 };
 
 // This helps the Dashboard show the list
 export const TEMPLATE_LIST = [
   { id: "modern", name: "Modern Executive", preview: "bg-blue-600" },
   { id: "minimal", name: "Clean Minimalist", color: "bg-slate-400" },
+  {
+    id: "minimalcorporate",
+    name: "Minimalist Corporate",
+    color: "bg-gray-700",
+  },
+  { id: "architect", name: "Architect Style", color: "bg-indigo-600" },
 ];
 
 export interface PersonalInfo {
