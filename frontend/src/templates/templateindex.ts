@@ -11,16 +11,11 @@ export const TEMPLATES: Record<string, React.FC<any>> = {
   architect: ArchitectTemplate,
 };
 
-// This helps the Dashboard show the list
 export const TEMPLATE_LIST = [
-  { id: "modern", name: "Modern Executive", preview: "bg-blue-600" },
-  { id: "minimal", name: "Clean Minimalist", color: "bg-slate-400" },
-  {
-    id: "minimalcorporate",
-    name: "Minimalist Corporate",
-    color: "bg-gray-700",
-  },
-  { id: "architect", name: "Architect Style", color: "bg-indigo-600" },
+  { id: "modern", name: "Modern Executive" },
+  { id: "minimal", name: "Clean Minimalist" },
+  { id: "minimalcorporate", name: "Minimalist Corporate" },
+  { id: "architect", name: "Architect Style" },
 ];
 
 export interface PersonalInfo {

@@ -1,26 +1,44 @@
+//
+
 interface ResumeCardProps {
   title: string;
   updatedAt: string;
+  preview?: string; // New: added to pass the screenshot path
   onClick?: () => void;
-  onDelete?: () => void; // Add this prop to the interface
+  onDelete?: () => void;
 }
 
 export default function ResumeCard({
   title,
   updatedAt,
+  preview, // Destructure the new prop
   onClick,
-  onDelete, // Destructure it here
+  onDelete,
 }: ResumeCardProps) {
   return (
     <div
       onClick={onClick}
       className="bg-card-bg border border-border-subtle rounded-xl p-4 hover:border-brand-primary/50 transition-all hover:shadow-md cursor-pointer group relative"
     >
-      {/* Decorative Resume Preview Placeholder */}
-      <div className="bg-slate-50 rounded-lg h-40 mb-4 border border-slate-100 overflow-hidden relative">
-        <div className="absolute top-4 left-4 right-4 h-2 bg-slate-200 rounded" />
-        <div className="absolute top-8 left-4 w-1/2 h-2 bg-slate-200 rounded" />
-        <div className="absolute top-16 left-4 right-4 h-20 bg-slate-100 rounded border border-slate-200/50" />
+      {/* SHOWCASE CONTAINER */}
+      <div className="bg-white rounded-lg h-52 mb-4 border border-slate-200 overflow-hidden relative shadow-sm group-hover:shadow-inner transition-all">
+        {preview ? (
+          <img
+            src={preview}
+            alt={title}
+            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          /* Keep your old bars as a fallback if no image is provided */
+          <div className="p-4 opacity-40">
+            <div className="w-1/2 h-2 bg-slate-200 rounded mb-2" />
+            <div className="w-full h-1 bg-slate-100 rounded mb-1" />
+            <div className="w-full h-1 bg-slate-100 rounded mb-1" />
+          </div>
+        )}
+
+        {/* Subtle overlay for better feel on hover */}
+        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
 
       <div className="flex justify-between items-start">
@@ -33,10 +51,9 @@ export default function ResumeCard({
           </p>
         </div>
 
-        {/* --- DELETE BUTTON --- */}
         <button
           onClick={(e) => {
-            e.stopPropagation(); // Prevents the card's onClick from firing
+            e.stopPropagation();
             onDelete?.();
           }}
           className="ml-2 p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"

@@ -143,65 +143,6 @@ export const useBuilder = () => {
     }
   };
 
-  // const downloadpdf = async () => {
-  //   const element = document.getElementById("resume-preview");
-  //   if (!element) return;
-
-  //   // 1. Create a hidden iframe
-  //   const iframe = document.createElement("iframe");
-  //   iframe.style.position = "fixed";
-  //   iframe.style.right = "100%";
-  //   iframe.style.bottom = "100%";
-  //   iframe.style.width = "210mm"; // A4 Width
-  //   document.body.appendChild(iframe);
-
-  //   const iframeDoc = iframe.contentWindow?.document;
-  //   if (!iframeDoc) return;
-
-  //   // 2. Inject ONLY the necessary styles (No Tailwind v4 Globals)
-  //   // We manually define basic styles so html2canvas doesn't find oklch
-  //   iframeDoc.write(`
-  //   <html>
-  //     <head>
-  //       <style>
-  //         body { font-family: sans-serif; background: white; color: black; margin: 0; }
-  //         * { box-sizing: border-box; }
-  //         /* Manually add any critical CSS your template needs here */
-  //       </style>
-  //     </head>
-  //     <body>
-  //       <div id="capture-area">${element.innerHTML}</div>
-  //     </body>
-  //   </html>
-  // `);
-  //   iframeDoc.close();
-
-  //   // Give images/styles a moment to settle
-  //   await new Promise((resolve) => setTimeout(resolve, 500));
-
-  //   try {
-  //     const html2canvas = (await import("html2canvas")).default;
-  //     const captureArea = iframeDoc.getElementById("capture-area");
-
-  //     if (captureArea) {
-  //       const canvas = await html2canvas(captureArea, {
-  //         scale: 2,
-  //         useCORS: true,
-  //         backgroundColor: "#ffffff",
-  //       });
-
-  //       const { jsPDF } = await import("jspdf");
-  //       const pdf = new jsPDF("p", "mm", "a4");
-  //       pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 210, 297);
-  //       pdf.save("resume.pdf");
-  //     }
-  //   } catch (err) {
-  //     console.error("PDF Export failed:", err);
-  //   } finally {
-  //     document.body.removeChild(iframe); // Cleanup
-  //   }
-  // };
-
   return {
     resume,
     loading,

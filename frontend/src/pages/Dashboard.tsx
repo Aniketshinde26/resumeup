@@ -26,14 +26,22 @@ export default function Dashboard() {
               onClick={() => handleTemplateSelect(tpl.id)}
               className="group cursor-pointer"
             >
-              <div
-                className={`aspect-3/4 rounded-xl ${
-                  tpl.color || "bg-slate-200"
-                } border-2 border-transparent group-hover:border-blue-500 transition-all flex items-center justify-center text-white font-bold`}
-              >
-                {tpl.name[0]}
+              <div className="aspect-[1/1.41] rounded-xl border-2 border-slate-100 group-hover:border-blue-500 transition-all overflow-hidden bg-white shadow-sm">
+                <img
+                  // Logic: Always look in previews folder for [id].png
+                  src={`/previews/${tpl.id}.png`}
+                  alt={tpl.name}
+                  className="w-full h-full object-cover object-top transition-transform group-hover:scale-105"
+                  // Fallback: If you haven't taken the screenshot yet, show a nice colored box
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/300x424/f1f5f9/64748b?text=Template+Preview";
+                  }}
+                />
               </div>
-              <p className="mt-2 text-sm font-medium text-center">{tpl.name}</p>
+              <p className="mt-2 text-sm font-medium text-center text-slate-700">
+                {tpl.name}
+              </p>
             </div>
           ))}
         </div>
@@ -51,8 +59,13 @@ export default function Dashboard() {
               key={resume.id}
               title={resume.title}
               updatedAt={resume.updatedAt}
+              // Logic: If it's a minimal template, show the screenshot you took
+              preview={
+                resume.templateId === "minimal"
+                  ? "/previews/minimal.png"
+                  : "/previews/other.png"
+              }
               onClick={() => handleEditReume(resume.id)}
-              // 2. Added the onDelete prop here
               onDelete={() => handleDeleteResume(resume.id)}
             />
           ))}
