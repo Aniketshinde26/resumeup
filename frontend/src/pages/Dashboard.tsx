@@ -59,12 +59,11 @@ export default function Dashboard() {
               key={resume.id}
               title={resume.title}
               updatedAt={resume.updatedAt}
-              // Logic: If it's a minimal template, show the screenshot you took
-              preview={
-                resume.templateId === "minimal"
-                  ? "/previews/minimal.png"
-                  : "/previews/other.png"
-              }
+              /* DYNAMIC LOGIC: 
+         It will look for /previews/modern.png, /previews/creative.png, etc.
+         based on whatever ID is saved in the database.
+      */
+              preview={`/previews/${resume.templateId}.png`}
               onClick={() => handleEditReume(resume.id)}
               onDelete={() => handleDeleteResume(resume.id)}
             />
