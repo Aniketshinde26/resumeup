@@ -3,8 +3,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Builder from "./pages/Builder"; // Make sure this import exists!
-
+import Builder from "./pages/Builder";
+import ResumePreview from "./pages/ResumePreview";
 export default function App() {
   return (
     <Routes>
@@ -17,6 +17,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/builder/:id" element={<Builder />} />
+        <Route path="/resume/preview/:id" element={<ResumePreview />} />
       </Route>
 
       {/* Catch-all Redirect */}

@@ -70,38 +70,42 @@ export const useBuilder = () => {
   }, [id, loadResume]);
 
   useEffect(() => {
-    // 1. If nothing changed, or we are already saving, don't do anything
-    if ((!isDirty && !tempImage) || saving) return;
+    // 1. ADD THIS GUARD: If resume is null, stop here.
+    if (!resume || !resume.data) return;
 
-    // 2. Start a timer
+    // 2. Existing guards
+    if (!isDirty || saving) return;
+
     const timer = setTimeout(() => {
       handleSave();
-    }, 3000); // 3 seconds of silence triggers a save
+    }, 1000);
 
     return () => clearTimeout(timer);
 
-    // ✅ Listen for changes in the data OR the temporary image
-  }, [isDirty, tempImage]);
+    // Added resume.data to ensure we catch the latest changes
+  }, [isDirty, resume?.data, saving, resume]);
 
   // 2. Update local state (when user types)
 
   // 3. Save to Database
   const handleSave = async () => {
-    if (!isDirty && !saving) return;
+    // 1. SAFETY GUARD: If resume hasn't loaded yet, stop immediately
+    if (!resume || !resume.data) return;
+
+    // 2. LOGIC GUARD: If nothing changed or already saving, stop
+    if (!isDirty || saving) return;
 
     try {
       setSaving(true);
 
-      // 2. The Request
+      // 3. The Request
       await api.put(`/resumes/${id}`, {
         title: resume.title,
-        // Ensure we aren't sending an empty object or double-nested data
-        data: resume.data,
+        data: resume.data, // This is now safe because of the guard above
       });
 
       setIsDirty(false);
     } catch (err: any) {
-      // 3. Detailed Error Logging
       console.error("Save failed details:", err.response?.data || err.message);
     } finally {
       setSaving(false);

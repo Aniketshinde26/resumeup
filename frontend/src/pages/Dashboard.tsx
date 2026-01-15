@@ -12,7 +12,7 @@ export default function Dashboard() {
     handleTemplateSelect,
     handleCreate,
     handleEditReume,
-    handleDeleteResume, // 1. Pulled from your hook
+    handleDeleteResume,
   } = useDashboard();
 
   return (
@@ -59,10 +59,8 @@ export default function Dashboard() {
               key={resume.id}
               title={resume.title}
               updatedAt={resume.updatedAt}
-              /* DYNAMIC LOGIC: 
-         It will look for /previews/modern.png, /previews/creative.png, etc.
-         based on whatever ID is saved in the database.
-      */
+              resumeData={resume}
+              showContent={true}
               preview={`/previews/${resume.templateId}.png`}
               onClick={() => handleEditReume(resume.id)}
               onDelete={() => handleDeleteResume(resume.id)}
