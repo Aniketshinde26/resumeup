@@ -25,7 +25,6 @@ export default function ResumePreview() {
   if (loading) return null;
   if (!resume) return <div>Resume not found</div>;
 
-  // Parse the stringified 'data' field
   let parsedData = {};
   try {
     parsedData =
@@ -34,16 +33,23 @@ export default function ResumePreview() {
     console.error("Parse error", e);
   }
 
-  // LOOKUP: Get the component from the Record using the templateId (e.g., 'modern')
   const TemplateComponent = TEMPLATES[resume.templateId];
 
   return (
-    <div className="bg-white min-h-screen">
+    /* CHANGE: Removed min-h-screen and added overflow-hidden.
+       Added 'preview-mode' class in case you want to target CSS specifically for the card.
+    */
+    <div className="bg-white w-full h-full overflow-hidden preview-mode">
+      <style>{`
+        /* Force remove any scrollbars or body padding when viewed in iframe */
+        body { margin: 0; padding: 0; overflow: hidden; }
+      `}</style>
+
       {TemplateComponent ? (
         <TemplateComponent data={parsedData} />
       ) : (
         <div className="p-10 text-center">
-          <p>Template "{resume.templateId}" not found in TEMPLATES record.</p>
+          <p>Template "{resume.templateId}" not found.</p>
         </div>
       )}
     </div>
