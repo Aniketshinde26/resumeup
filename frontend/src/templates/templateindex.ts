@@ -1,5 +1,5 @@
 import ArchitectTemplate from "./Architect";
-import ExecutiveTemplate from "./ExecutiveTemplate";
+import NeoProfessionalTemplate from "./NeoPofessionalTemplate";
 import CorporateTemplate from "./MinimalistCorporate";
 import MinimalTemplate from "./MinimalTemplate";
 import ModernTech from "./ModernTech";
@@ -11,7 +11,7 @@ export const TEMPLATES: Record<string, React.FC<any>> = {
   minimal: MinimalTemplate,
   minimalcorporate: CorporateTemplate,
   architect: ArchitectTemplate,
-  executive: ExecutiveTemplate,
+  neoprofessional: NeoProfessionalTemplate,
   tech: ModernTech, // Placeholder for Modern Tech template
 };
 
@@ -20,7 +20,7 @@ export const TEMPLATE_LIST = [
   { id: "minimal", name: "Clean Minimalist" },
   { id: "minimalcorporate", name: "Minimalist Corporate" },
   { id: "architect", name: "Architect Style" },
-  { id: "executive", name: "Executive Classic" },
+  { id: "neoprofessional", name: "Neo Professional" },
   { id: "tech", name: "Modern Tech" },
 ];
 
