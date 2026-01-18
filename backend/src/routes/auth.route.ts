@@ -7,7 +7,7 @@ import {
   googleLogin,
 } from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
-import { getMe } from "../controllers/userController";
+import { getMe } from "../controllers/usercontroller";
 const router = Router();
 
 router.post("/register", registerUser);
