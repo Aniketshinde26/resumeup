@@ -74,6 +74,31 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
               </div>
             ))}
           </section>
+
+          {/* LANGUAGES - Added Section */}
+          {data.languages && data.languages.length > 0 && (
+            <section>
+              <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
+                Languages
+              </h2>
+              <div className="space-y-3">
+                {data.languages.map((lang, i) => (
+                  <div key={i} className="flex flex-col gap-1">
+                    <div className="flex justify-between items-center text-[11px]">
+                      <span className="font-bold text-white uppercase tracking-wider">{lang.name}</span>
+                      <span className="text-[9px] text-slate-400 italic lowercase">
+                        {lang.proficiency}
+                      </span>
+                    </div>
+                    {/* Visual proficiency bar (optional, matches sidebar aesthetic) */}
+                    <div className="w-full h-[2px] bg-slate-800 rounded-full">
+                      <div className="w-full h-full bg-blue-500 rounded-full opacity-50"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </aside>
 

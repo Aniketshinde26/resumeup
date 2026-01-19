@@ -21,7 +21,7 @@ export const TEMPLATE_LIST = [
   { id: "minimalcorporate", name: "Minimalist Corporate" },
   { id: "architect", name: "Architect Style" },
   { id: "neoprofessional", name: "Neo Professional" },
-  { id: "tech", name: "Modern Tech" },
+  { id: "moderntech", name: "Modern Tech" },
 ];
 
 export interface PersonalInfo {

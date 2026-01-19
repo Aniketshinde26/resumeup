@@ -2,98 +2,144 @@ import type { ResumeData } from "../templates/templateindex";
 
 export default function TechTemplate({ data }: { data: ResumeData }) {
   return (
-    <div
-      id="resume-template"
-      className="w-[210mm] min-h-[297mm] bg-white p-[15mm] font-sans overflow-hidden box-border"
-      style={{ margin: "0 auto" }}
-    >
-      {/* BOLD HEADER */}
-      <header className="flex justify-between items-center mb-12 bg-slate-50 p-8 rounded-2xl">
-        <div>
-          <h1 className="text-5xl font-black text-slate-900 tracking-tighter">
-            {data.personal?.fullName?.split(" ")[0]}
-            <span className="text-blue-600">
-              {data.personal?.fullName?.split(" ")[1]}
-            </span>
-          </h1>
-          <p className="text-xl font-medium text-slate-500 mt-1">
-            {data.personal?.jobTitle}
-          </p>
-          <div className="flex gap-4 mt-4 text-xs font-semibold text-slate-400 uppercase tracking-widest">
-            <span>{data.personal?.location}</span>
-            <span>•</span>
-            <span>{data.personal?.email}</span>
+    <div className="bg-slate-200 py-10 print:p-0 print:bg-white">
+      <div
+        id="resume-template"
+        className="mx-auto w-[210mm] h-[297mm] bg-white p-[10mm] font-sans overflow-hidden box-border relative shadow-2xl print:shadow-none"
+      >
+        {/* PRINT ENGINE OPTIMIZATION */}
+        <style>{`
+          @media print {
+            @page { size: A4; margin: 0; }
+            body { -webkit-print-color-adjust: exact; }
+            #resume-template { height: 297mm; width: 210mm; }
+          }
+          .no-break { break-inside: avoid; page-break-inside: avoid; }
+        `}</style>
+
+        {/* HEADER - Tightened margins */}
+        <header className="flex justify-between items-center mb-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+          <div>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
+              {data.personal?.fullName?.split(" ")[0]}
+              <span className="text-blue-600 ml-2">
+                {data.personal?.fullName?.split(" ").slice(1).join(" ")}
+              </span>
+            </h1>
+            <p className="text-lg font-bold text-slate-500 mt-1 uppercase tracking-tight">
+              {data.personal?.jobTitle}
+            </p>
+            <div className="flex gap-3 mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <span>{data.personal?.location}</span>
+              <span>•</span>
+              <span>{data.personal?.email}</span>
+              {data.personal?.phone && (
+                <>
+                  <span>•</span>
+                  <span>{data.personal.phone}</span>
+                </>
+              )}
+            </div>
+          </div>
+          {data.personal?.image && (
+            <img
+              src={data.personal.image}
+              className="w-20 h-20 rounded-xl rotate-2 shadow-md object-cover border-2 border-white"
+              alt="Profile"
+            />
+          )}
+        </header>
+
+        <div className="grid grid-cols-12 gap-8">
+          {/* MAIN COLUMN (Left) */}
+          <div className="col-span-8 space-y-6">
+            <section className="no-break">
+              <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                <span className="w-8 h-[2px] bg-blue-600"></span> Experience
+              </h2>
+              <div className="space-y-6 relative border-l-2 border-slate-100 ml-2 pl-6">
+                {data.experience?.map((exp, i) => (
+                  <div key={i} className="relative no-break">
+                    <div className="absolute left-[-29px] top-1 w-3 h-3 rounded-full bg-blue-600 border-2 border-white shadow-sm" />
+                    <h3 className="font-bold text-slate-900 text-sm leading-tight uppercase">
+                      {exp.position}
+                    </h3>
+                    <p className="text-[11px] text-blue-600 mt-0.5 font-bold uppercase tracking-wide">
+                      {exp.company} <span className="text-slate-300 mx-1">|</span> {exp.startDate} - {exp.endDate}
+                    </p>
+                    <p className="text-[11px] text-slate-600 mt-2 leading-relaxed italic">
+                      {exp.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {data.projects && (
+              <section className="no-break">
+                <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                  <span className="w-8 h-[2px] bg-blue-600"></span> Projects
+                </h2>
+                <div className="grid grid-cols-1 gap-3">
+                  {data.projects.map((proj, i) => (
+                    <div key={i} className="bg-slate-50 p-4 rounded-lg border border-slate-100 no-break">
+                      <div className="flex justify-between items-center mb-1">
+                        <h3 className="font-bold text-slate-800 text-[12px] uppercase">{proj.name}</h3>
+                        <span className="text-[9px] text-blue-500 font-mono">{proj.link}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 leading-snug">{proj.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+
+          {/* SIDEBAR (Right) */}
+          <div className="col-span-4 space-y-6">
+            <section className="no-break">
+              <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-4">Skills</h2>
+              <div className="space-y-3">
+                {data.skills?.map((skill, i) => (
+                  <div key={i} className="group">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-[10px] font-black text-slate-600 uppercase">{skill}</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-[90%] h-full bg-slate-800 group-hover:bg-blue-600 transition-all"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="bg-slate-900 p-5 rounded-xl text-white no-break shadow-lg">
+              <h2 className="text-blue-400 font-black text-[11px] uppercase tracking-[0.2em] mb-4">Education</h2>
+              {data.education?.map((edu, i) => (
+                <div key={i} className="mb-4 last:mb-0">
+                  <p className="text-xs font-bold leading-tight text-white uppercase">{edu.degree}</p>
+                  <p className="text-[10px] text-slate-400 mt-1">{edu.school}</p>
+                  <p className="text-[9px] text-blue-400 font-bold mt-1 tracking-widest">{edu.year}</p>
+                </div>
+              ))}
+            </section>
+
+            {data.languages && (
+              <section className="no-break">
+                <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Languages</h2>
+                <div className="flex flex-wrap gap-2">
+                  {data.languages.map((lang, i) => (
+                    <span key={i} className="text-[9px] font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded uppercase border border-slate-200">
+                      {typeof lang === 'string' ? lang : lang.name}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         </div>
-        {data.personal?.image && (
-          <img
-            src={data.personal.image}
-            className="w-24 h-24 rounded-2xl rotate-3 shadow-lg object-cover"
-            alt="Profile"
-          />
-        )}
-      </header>
 
-      <div className="grid grid-cols-12 gap-12">
-        {/* MAIN SIDE */}
-        <div className="col-span-8 space-y-10">
-          <section>
-            <h2 className="text-blue-600 font-black text-xs uppercase tracking-widest mb-4">
-              Experience
-            </h2>
-            <div className="space-y-8 relative before:absolute before:left-0 before:top-2 before:bottom-0 before:w-px before:bg-slate-200 pl-6">
-              {data.experience?.map((exp, i) => (
-                <div
-                  key={i}
-                  className="relative before:absolute before:left-[-27.5px] before:top-1.5 before:w-3 before:h-3 before:rounded-full before:bg-blue-600 before:border-4 before:border-white"
-                >
-                  <h3 className="font-bold text-slate-900 leading-none">
-                    {exp.position}
-                  </h3>
-                  <p className="text-sm text-slate-500 mt-1 font-medium">
-                    {exp.company} | {exp.startDate} - {exp.endDate}
-                  </p>
-                  <p className="text-xs text-slate-600 mt-3 leading-relaxed">
-                    {exp.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        {/* DETAILS SIDE */}
-        <div className="col-span-4 space-y-10">
-          <section>
-            <h2 className="text-slate-900 font-black text-xs uppercase tracking-widest mb-4">
-              Technical Skills
-            </h2>
-            <div className="flex flex-col gap-2">
-              {data.skills?.map((skill, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-600">
-                    {skill}
-                  </span>
-                  <div className="w-20 h-1 bg-slate-100 rounded-full">
-                    <div className="w-full h-full bg-blue-600 rounded-full"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="bg-slate-900 p-6 rounded-2xl text-white">
-            <h2 className="text-blue-400 font-black text-xs uppercase tracking-widest mb-4">
-              Education
-            </h2>
-            {data.education?.map((edu, i) => (
-              <div key={i} className="mb-4 last:mb-0">
-                <p className="text-sm font-bold">{edu.degree}</p>
-                <p className="text-[10px] text-slate-400 mt-1">{edu.school}</p>
-              </div>
-            ))}
-          </section>
-        </div>
+       
       </div>
     </div>
   );
