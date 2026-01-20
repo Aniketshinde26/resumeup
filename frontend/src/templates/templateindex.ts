@@ -12,7 +12,7 @@ export const TEMPLATES: Record<string, React.FC<any>> = {
   minimalcorporate: CorporateTemplate,
   architect: ArchitectTemplate,
   neoprofessional: NeoProfessionalTemplate,
-  tech: ModernTech, // Placeholder for Modern Tech template
+  moderntech: ModernTech, // Placeholder for Modern Tech template
 };
 
 export const TEMPLATE_LIST = [

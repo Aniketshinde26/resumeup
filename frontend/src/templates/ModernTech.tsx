@@ -1,4 +1,4 @@
-import type { ResumeData } from "../templates/templateindex";
+import type { ResumeData } from "./templateindex";
 
 export default function TechTemplate({ data }: { data: ResumeData }) {
   return (
@@ -7,17 +7,8 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
         id="resume-template"
         className="mx-auto w-[210mm] h-[297mm] bg-white p-[10mm] font-sans overflow-hidden box-border relative shadow-2xl print:shadow-none"
       >
-        {/* PRINT ENGINE OPTIMIZATION */}
-        <style>{`
-          @media print {
-            @page { size: A4; margin: 0; }
-            body { -webkit-print-color-adjust: exact; }
-            #resume-template { height: 297mm; width: 210mm; }
-          }
-          .no-break { break-inside: avoid; page-break-inside: avoid; }
-        `}</style>
 
-        {/* HEADER - Tightened margins */}
+        {/* HEADER */}
         <header className="flex justify-between items-center mb-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
           <div>
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
@@ -75,7 +66,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
               </div>
             </section>
 
-            {data.projects && (
+            {data.projects && data.projects.length > 0 && (
               <section className="no-break">
                 <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                   <span className="w-8 h-[2px] bg-blue-600"></span> Projects
@@ -124,22 +115,43 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
               ))}
             </section>
 
-            {data.languages && (
+            {/* NEW: CERTIFICATIONS SECTION */}
+            {data.certifications && data.certifications.length > 0 && (
+              <section className="no-break">
+                <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Certifications</h2>
+                <div className="space-y-3">
+                  {data.certifications.map((cert, i) => (
+                    <div key={i} className="border-l-2 border-blue-500 pl-3 py-1">
+                      <p className="text-[10px] font-bold text-slate-800 uppercase leading-tight">{cert.name}</p>
+                      <p className="text-[9px] text-slate-400 mt-0.5">{cert.date}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* UPDATED: LANGUAGES SECTION WITH PROFICIENCY */}
+            {data.languages && data.languages.length > 0 && (
               <section className="no-break">
                 <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Languages</h2>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col gap-2">
                   {data.languages.map((lang, i) => (
-                    <span key={i} className="text-[9px] font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded uppercase border border-slate-200">
-                      {typeof lang === 'string' ? lang : lang.name}
-                    </span>
+                    <div key={i} className="flex justify-between items-center bg-slate-100 px-2 py-1.5 rounded border border-slate-200">
+                      <span className="text-[9px] font-bold text-slate-700 uppercase">
+                        {typeof lang === 'string' ? lang : lang.name}
+                      </span>
+                      {typeof lang !== 'string' && lang.proficiency && (
+                        <span className="text-[8px] font-medium text-blue-600 italic">
+                          {lang.proficiency}
+                        </span>
+                      )}
+                    </div>
                   ))}
                 </div>
               </section>
             )}
           </div>
         </div>
-
-       
       </div>
     </div>
   );

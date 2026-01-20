@@ -23,7 +23,7 @@ export default function ResumeCard({
       className="bg-card-bg border border-border-subtle rounded-xl p-8 hover:border-brand-primary/50 transition-all hover:shadow-md cursor-pointer group relative"
     >
       {/* SHOWCASE CONTAINER */}
-      <div className="bg-white rounded-lg h-50 mb-10 border border-slate-200 overflow-hidden relative shadow-sm group-hover:shadow-md transition-all">
+      <div className="bg-white rounded-lg h-50 mb-10 border border-slate-300 overflow-hidden relative shadow-sm group-hover:shadow-md transition-all">
         {showContent && resumeData?.id ? (
           /* We removed aspect-[1/1.414] and set w-full h-full to fill the parent */
           <div className="relative w-full h-full pointer-events-none select-none bg-white">
@@ -37,7 +37,7 @@ export default function ResumeCard({
                 height: "1414px",
                 /* 2. We use 'inset-0' logic or manual calculation to ensure it covers */
                 /* Note: Adjust scale(0.25) or similar based on your 'h-64' height */
-                transform: "scale(0.32)",
+                transform: "scale(0.225)",
                 pointerEvents: "none",
               }}
             />
