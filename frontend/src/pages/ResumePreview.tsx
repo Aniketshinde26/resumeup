@@ -22,8 +22,7 @@ export default function ResumePreview() {
     fetchResume();
   }, [id]);
 
-  if (loading) return null;
-  if (!resume) return <div>Resume not found</div>;
+if (loading) return <div className="bg-white w-full h-full" />;  if (!resume) return <div>Resume not found</div>;
 
   let parsedData = {};
   try {
@@ -39,17 +38,19 @@ export default function ResumePreview() {
     /* CHANGE: Removed min-h-screen and added overflow-hidden.
        Added 'preview-mode' class in case you want to target CSS specifically for the card.
     */
-    <div className="bg-white w-full h-full overflow-hidden preview-mode">
-      <style>{`
-        /* Force remove any scrollbars or body padding when viewed in iframe */
-        body { margin: 0; padding: 0; overflow: hidden; }
-      `}</style>
+    <div className="bg-white w-[790px] h-[1118px] overflow-hidden preview-mode">
+  <style>{`
+    body { margin: 0; padding: 0; overflow: hidden; width: 790px; height: 1118px; }
+    /* Ensure the template component doesn't add huge padding */
+    .preview-mode > div { padding: 0 !important; margin: 0 !important; }
+  `}</style>
 
       {TemplateComponent ? (
         <TemplateComponent data={parsedData} />
       ) : (
         <div className="p-10 text-center">
-          <p>Template "{resume.templateId}" not found.</p>
+          <p>Template "{resume.templateId}" not 
+            found.</p>
         </div>
       )}
     </div>

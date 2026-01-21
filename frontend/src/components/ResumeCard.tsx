@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 interface ResumeCardProps {
   title: string;
   updatedAt: string;
@@ -17,38 +19,56 @@ export default function ResumeCard({
   onClick,
   onDelete,
 }: ResumeCardProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.28); // Fallback scale
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        // Calculate scale: Container Width / Original Iframe Width (790px)
+        const containerWidth = containerRef.current.offsetWidth;
+        const newScale = containerWidth / 790;
+        setScale(newScale);
+      }
+    };
+
+    // Calculate on mount and whenever the window resizes
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [showContent]);
+
   return (
     <div
       onClick={onClick}
       className="bg-card-bg border border-border-subtle rounded-xl p-8 hover:border-brand-primary/50 transition-all hover:shadow-md cursor-pointer group relative"
     >
       {/* SHOWCASE CONTAINER */}
-      <div className="bg-white rounded-lg h-50 mb-10 border border-slate-300 overflow-hidden relative shadow-sm group-hover:shadow-md transition-all">
+      <div 
+        ref={containerRef}
+        className="bg-white rounded-lg aspect-[1/1.41] mb-6 border border-slate-300 overflow-hidden relative shadow-sm group-hover:shadow-md transition-all flex items-center justify-center"
+      >
         {showContent && resumeData?.id ? (
-          /* We removed aspect-[1/1.414] and set w-full h-full to fill the parent */
-          <div className="relative w-full h-full pointer-events-none select-none bg-white">
+          <div className="relative w-full h-full bg-white pointer-events-none flex items-center justify-center">
             <iframe
               src={`/resume/preview/${resumeData.id}`}
               title={title}
-              className="absolute border-none origin-top-left"
+              className="absolute border-none"
               style={{
-                /* 1. We keep the internal resolution high for quality */
-                width: "1000px",
-                height: "1414px",
-                /* 2. We use 'inset-0' logic or manual calculation to ensure it covers */
-                /* Note: Adjust scale(0.25) or similar based on your 'h-64' height */
-                transform: "scale(0.225)",
+                width: "790px",
+                height: "1118px", 
+                transform: `scale(${scale})`, // Use the dynamic scale
+                transformOrigin: "center center",
                 pointerEvents: "none",
               }}
             />
-            {/* Overlay to prevent iframe interaction */}
+            {/* Overlay to prevent interaction */}
             <div className="absolute inset-0 z-10" />
           </div>
         ) : (
           <img
             src={preview}
             alt={title}
-            /* object-cover ensures it fills the entire box without gaps */
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             onError={(e) => {
               e.currentTarget.src =
@@ -57,7 +77,6 @@ export default function ResumeCard({
           />
         )}
 
-        {/* Subtle gradient overlay to make the "Edit" state feel more professional */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20" />
       </div>
 
@@ -77,7 +96,7 @@ export default function ResumeCard({
             e.stopPropagation();
             onDelete?.();
           }}
-          className="ml-2 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+          className="ml-10 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

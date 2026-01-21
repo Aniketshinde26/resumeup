@@ -13,15 +13,27 @@ export const useDashboard = () => {
     navigate(`/builder/${id}`);
   };
   // Fetch all resumes on load
-  const fetchResumes = async () => {
-    try {
-      const res = await api.get("/resumes");
-      // Adjust based on your backend response structure
-      setResumes(res.data.resume || []);
-    } catch (err) {
-      console.error("Failed to fetch resumes", err);
-    }
-  };
+const fetchResumes = async () => {
+  setIsLoading(true); // Start the skeleton animation
+  
+  try {
+    // 1. Create a "Minimum Delay" promise (e.g., 1000ms = 1 second)
+    const delay = new Promise((resolve) => setTimeout(resolve, 450));
+
+    // 2. Fetch the actual data
+    const res = await api.get("/resumes");
+
+    // 3. Wait for BOTH the data AND the timer to finish
+    // This ensures the skeleton doesn't "flicker" if the internet is too fast
+    await delay;
+
+    setResumes(res.data.resume || []);
+  } catch (err) {
+    console.error("Failed to fetch resumes", err);
+  } finally {
+    setIsLoading(false); // Stop the skeleton animation
+  }
+};
 
   useEffect(() => {
     fetchResumes();

@@ -41,6 +41,19 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
           )}
         </header>
 
+        {/* --- ADDED SUMMARY SECTION HERE --- */}
+        {data.personal?.summary && (
+          <section className="mb-8 px-2">
+            <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+              <span className="w-8 h-[2px] bg-blue-600"></span> Summary
+            </h2>
+            <p className="text-[11px] text-slate-600 leading-relaxed">
+              {data.personal.summary}
+            </p>
+          </section>
+        )}
+        {/* ---------------------------------- */}
+
         <div className="grid grid-cols-12 gap-8">
           {/* MAIN COLUMN (Left) */}
           <div className="col-span-8 space-y-6">
@@ -58,7 +71,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
                     <p className="text-[11px] text-blue-600 mt-0.5 font-bold uppercase tracking-wide">
                       {exp.company} <span className="text-slate-300 mx-1">|</span> {exp.startDate} - {exp.endDate}
                     </p>
-                    <p className="text-[11px] text-slate-600 mt-2 leading-relaxed italic">
+                    <p className="text-[11px] text-slate-600 mt-2 leading-relaxed italic whitespace-pre-line">
                       {exp.description}
                     </p>
                   </div>
@@ -78,7 +91,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
                         <h3 className="font-bold text-slate-800 text-[12px] uppercase">{proj.name}</h3>
                         <span className="text-[9px] text-blue-500 font-mono">{proj.link}</span>
                       </div>
-                      <p className="text-[11px] text-slate-500 leading-snug">{proj.description}</p>
+                      <p className="text-[11px] text-slate-500 leading-snug whitespace-pre-line">{proj.description}</p>
                     </div>
                   ))}
                 </div>
@@ -115,7 +128,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
               ))}
             </section>
 
-            {/* NEW: CERTIFICATIONS SECTION */}
+            {/* CERTIFICATIONS */}
             {data.certifications && data.certifications.length > 0 && (
               <section className="no-break">
                 <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Certifications</h2>
@@ -130,7 +143,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
               </section>
             )}
 
-            {/* UPDATED: LANGUAGES SECTION WITH PROFICIENCY */}
+            {/* LANGUAGES */}
             {data.languages && data.languages.length > 0 && (
               <section className="no-break">
                 <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Languages</h2>
