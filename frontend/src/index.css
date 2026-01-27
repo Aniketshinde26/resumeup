@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-primary: #2563eb;
+  --color-brand-primary: #30364F;
   --color-brand-hover: #1d4ed8;
   
   /* THE CHANGE: Option 1 - Slate 300 */
-  --color-brand-surface: #eeeeee; 
+  --color-brand-surface: #30364F; 
   
   --color-card-bg: #ffffff;
   --color-text-main: #0f172a;
