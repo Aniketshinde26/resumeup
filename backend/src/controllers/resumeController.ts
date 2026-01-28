@@ -38,24 +38,35 @@ export const createResume = async (
 //  Get All resumes
 
 export const getAllResumes = async (
-  req: AuthRequest,
+  req: Request, 
   res: Response
 ): Promise<Response> => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+    // 1. Check if a user is logged in (via the optionalToken middleware)
+    if (req.user) {
+      const resumes = await Resume.findAll({
+        where: { userId: req.user.id },
+        order: [["createdAt", "DESC"]],
+      });
+
+      return res.status(200).json({
+        message: "User resumes fetched successfully",
+        count: resumes.length,
+        resumes,
+        isGuest: false // Frontend uses this to show the full dashboard
+      });
     }
 
-    const resume = await Resume.findAll({
-      where: { userId: req.user.id },
-      order: [["createdAt", "DESC"]],
+    // 2. If NO user is found (Guest/Login Page access)
+    // We return a 200 OK with an empty array. 
+    // This tells the frontend: "No saved data, show the hardcoded teasers."
+    return res.status(200).json({
+      message: "Guest mode active",
+      count: 0,
+      resumes: [],
+      isGuest: true // Frontend uses this to trigger the 'Teaser' UI
     });
 
-    return res.status(200).json({
-      message: "Resume fetched successfully",
-      count: resume.length,
-      resume,
-    });
   } catch (error) {
     console.error("GET ALL RESUMES ERROR:", error);
     return res.status(500).json({ message: "Failed to fetch resumes" });

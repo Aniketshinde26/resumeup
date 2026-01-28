@@ -95,7 +95,7 @@ export default function Register() {
                 value={fullname}
                 required
                 onChange={(e) => setFullname(e.target.value)}
-                className="w-full rounded-lg bg-input-bg border border-border-subtle px-4 py-3 text-sm text-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition placeholder:text-text-muted"
+                className="w-full rounded-lg bg-input-bg border border-border-subtle px-4 py-3 text-sm focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition placeholder:text-text-muted"
               />
 
               {/* Email Input */}

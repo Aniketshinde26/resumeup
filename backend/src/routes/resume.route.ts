@@ -1,6 +1,7 @@
 // src/routes/resume.route.ts
 import { Router } from "express";
 import { verifyToken } from "../middleware/authmiddleware";
+import { optionalToken } from "../middleware/authmiddleware";
 import {
   createResume,
   getAllResumes,
@@ -12,8 +13,8 @@ import {
 const router = Router();
 
 router.post("/", verifyToken, createResume);
-router.get("/", verifyToken, getAllResumes);
-router.get("/:id", verifyToken, getResumeById);
+router.get("/", optionalToken, getAllResumes);
+router.get("/:id", optionalToken, getResumeById);
 router.put("/:id", verifyToken, updateResume);
 router.delete("/:id", verifyToken, deleteResume);
 export default router;

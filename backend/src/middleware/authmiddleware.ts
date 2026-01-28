@@ -41,3 +41,22 @@ export const verifyToken = (
     return res.status(401).json({ message: "Invalid token" });
   }
 };
+
+// src/middleware/authmiddleware.ts
+
+export const optionalToken = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.token;
+
+  // If no token, we don't throw an error, we just move to the next step
+  if (!token) {
+    return next(); 
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+    req.user = decoded; // If token is valid, we attach the user
+    next();
+  } catch (err) {
+    next(); // If token is invalid/expired, we still proceed as a guest
+  }
+};

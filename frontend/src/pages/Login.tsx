@@ -2,9 +2,10 @@ import { useLogin } from "../hooks/useLogin";
 import PasswordInput from "../components/PasswordInput";
 import { ErrorMessage } from "../components/ui";
 import GoogleAuthButton from "../components/GoogleAuthButton";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const {
     email,
     setEmail,
@@ -21,10 +22,9 @@ export default function Login() {
       {/* MAIN CONTAINER */}
       <div className="flex flex-col lg:flex-row w-full max-w-6.4xl min-h-[680px] overflow-hidden rounded-3xl bg-card-bg shadow-2xl">
         
-        {/* LEFT SECTION: Brand & Impact (Matches Register) */}
+        {/* LEFT SECTION: Brand & Impact */}
         <div className="relative hidden lg:flex lg:w-1/2 p-16 flex-col justify-between bg-slate-900/40 overflow-hidden border-r border-border-subtle/10">
           
-          {/* Abstract Background Decoration */}
           <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-brand-primary/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px]" />
 
@@ -49,24 +49,39 @@ export default function Login() {
             </p>
           </div>
 
-          {/* Bottom: Glassmorphism Card */}
-          <div className="relative z-10 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center">
-                <svg className="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-white font-semibold">Ready to go?</p>
-                <p className="text-xs text-white/60">Your last edits were saved automatically.</p>
-              </div>
+          {/* Bottom: Teaser Templates Section */}
+          <div className="relative z-10">
+            <p className="text-white/80 text-sm font-medium mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 bg-brand-primary rounded-full animate-pulse" />
+              Or try a template right now:
+            </p>
+            
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { id: 'moderntech', name: 'Modern Tech' },
+                { id: 'neoprofessional', name: 'Professional' }
+              ].map((tpl) => (
+                <div 
+                  key={tpl.id}
+                  onClick={() => navigate(`/builder/${tpl.id}`)}
+                  className="group cursor-pointer relative aspect-[1/1.41] rounded-xl overflow-hidden border border-white/10 bg-white/5 hover:border-brand-primary/50 transition-all shadow-lg"
+                >
+                  <img 
+                    src={`/previews/${tpl.id}.png`} 
+                    alt={tpl.name}
+                    className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                    <span className="text-[10px] font-bold text-white uppercase tracking-wider">Edit Template →</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* RIGHT SECTION: The "Merged" Form */}
-        <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center ">
+        {/* RIGHT SECTION: The Form */}
+        <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
           <div className="border border-border-subtle/50 rounded-2xl p-8 sm:p-10">
             <div className="mb-8 text-center lg:text-left">
               <h1 className="text-3xl font-bold text-white mb-2">Sign in</h1>
@@ -84,7 +99,7 @@ export default function Login() {
                 required
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
-                className="w-full rounded-lg bg-input-bg border border-border-subtle px-4 py-3 text-sm text-white focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition placeholder:text-text-muted"
+                className="w-full rounded-lg bg-input-bg border border-border-subtle px-4 py-3 text-sm focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none transition placeholder:text-text-muted"
               />
 
               <PasswordInput
@@ -104,7 +119,7 @@ export default function Login() {
             <div className="relative my-8 text-center">
               <span className="absolute inset-x-0 top-1/2 h-px bg-border-subtle/50"></span>
               <span className="relative bg-card-bg px-4 text-xs text-text-muted uppercase tracking-wider">
-                Or continue with email
+                Or continue with Google
               </span>
             </div>
 

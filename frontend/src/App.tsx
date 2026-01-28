@@ -12,11 +12,15 @@ export default function App() {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      
+      {/* MOVED OUTSIDE: So guests can try templates */}
+      <Route path="/builder/:id" element={<Builder />} />
 
       {/* Protected Routes Group */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/builder/:id" element={<Builder />} />
+        {/* You can keep the preview protected if you want, 
+            or move it out too if guests should see previews */}
         <Route path="/resume/preview/:id" element={<ResumePreview />} />
       </Route>
 

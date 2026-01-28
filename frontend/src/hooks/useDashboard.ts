@@ -72,6 +72,8 @@ const fetchResumes = async () => {
       alert;
     }
   };
+
+ 
   return {
     resumes,
     isModalOpen,

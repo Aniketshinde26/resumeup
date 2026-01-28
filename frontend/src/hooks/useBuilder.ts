@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
 
+const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
+
 export const useBuilder = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -16,43 +18,51 @@ export const useBuilder = () => {
     setIsDirty(true);
     setResume((prev: any) => ({
       ...prev,
-
       data: { ...prev.data, ...(newData.data || newData) },
     }));
   };
 
-  // 1. Fetch the resume data on load
-
   const loadResume = useCallback(async () => {
     if (!id) return;
+
+    // 1. Fixed the TypeScript error by casting 'id as string'
+    if (PUBLIC_TEMPLATES.includes(id as string)) {
+      console.log("Guest Mode: Loading template structure for", id);
+      const guestResume = {
+        id: id,
+        title: id === "moderntech" ? "Modern Tech Resume" : "Professional Resume",
+        templateId: id,
+        data: {
+         
+        },
+      };
+      setResume(guestResume);
+      setLoading(false);
+      return; 
+    }
 
     try {
       setLoading(true);
       const res = await api.get(`/resumes/${id}`);
-
-      // 1. Get the resume object
       const fetchedResume = res.data.resume || res.data;
 
-      // 2. CRITICAL FIX: If 'data' is a string, turn it into an object
       if (typeof fetchedResume.data === "string") {
         try {
           fetchedResume.data = JSON.parse(fetchedResume.data);
         } catch (e) {
           console.error("Failed to parse resume data string", e);
-          fetchedResume.data = {}; // Fallback if string is totally broken
+          fetchedResume.data = {};
         }
       }
 
-      // 3. Ensure nested objects exist so the UI doesn't crash
+      // Ensure nested objects exist
       if (!fetchedResume.data) fetchedResume.data = {};
-      if (!fetchedResume.data.personal) fetchedResume.data.personal = {};
-      if (!fetchedResume.data.experience) fetchedResume.data.experience = [];
-      if (!fetchedResume.data.education) fetchedResume.data.education = [];
-      if (!fetchedResume.data.skills) fetchedResume.data.skills = [];
-      if (!fetchedResume.data.projects) fetchedResume.data.projects = [];
-      if (!fetchedResume.data.languages) fetchedResume.data.languages = [];
-      if (!fetchedResume.data.certifications)
-        fetchedResume.data.certifications = [];
+      const fields = ['personal', 'experience', 'education', 'skills', 'projects', 'languages', 'certifications'];
+      fields.forEach(field => {
+        if (!fetchedResume.data[field]) {
+           fetchedResume.data[field] = field === 'personal' ? {} : [];
+        }
+      });
 
       setResume(fetchedResume);
     } catch (err) {
@@ -62,48 +72,41 @@ export const useBuilder = () => {
     }
   }, [id]);
 
-  // 🔥 THIS WAS MISSING: The "Trigger" that runs the code on page load
   useEffect(() => {
-    if (id) {
-      loadResume();
-    }
+    if (id) loadResume();
   }, [id, loadResume]);
 
+  // Auto-save logic
   useEffect(() => {
-    // 1. ADD THIS GUARD: If resume is null, stop here.
-    if (!resume || !resume.data) return;
-
-    // 2. Existing guards
+    if (!resume || !resume.data || !id) return;
     if (!isDirty || saving) return;
+    
+    // 2. Prevent auto-save for guests
+    if (PUBLIC_TEMPLATES.includes(id as string)) return;
 
     const timer = setTimeout(() => {
       handleSave();
     }, 1000);
 
     return () => clearTimeout(timer);
+  }, [isDirty, resume?.data, saving, resume, id]);
 
-    // Added resume.data to ensure we catch the latest changes
-  }, [isDirty, resume?.data, saving, resume]);
-
-  // 2. Update local state (when user types)
-
-  // 3. Save to Database
   const handleSave = async () => {
-    // 1. SAFETY GUARD: If resume hasn't loaded yet, stop immediately
-    if (!resume || !resume.data) return;
-
-    // 2. LOGIC GUARD: If nothing changed or already saving, stop
+    if (!resume || !resume.data || !id) return;
     if (!isDirty || saving) return;
+
+    // 3. Block manual save for guests
+    if (PUBLIC_TEMPLATES.includes(id as string)) {
+      console.log("Guest Mode: Save disabled");
+      return;
+    }
 
     try {
       setSaving(true);
-
-      // 3. The Request
       await api.put(`/resumes/${id}`, {
         title: resume.title,
-        data: resume.data, // This is now safe because of the guard above
+        data: resume.data,
       });
-
       setIsDirty(false);
     } catch (err: any) {
       console.error("Save failed details:", err.response?.data || err.message);
@@ -111,20 +114,8 @@ export const useBuilder = () => {
       setSaving(false);
     }
   };
-  //  The "Exit Warning" Effect
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (isDirty) {
-        event.preventDefault();
 
-        (event as any).returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [isDirty]);
-  // Helper to update nested personal data
+  // Rest of your helpers...
   const updatePersonal = (field: string, value: string) => {
     setIsDirty(true);
     setResume((prev: any) => ({
@@ -135,29 +126,19 @@ export const useBuilder = () => {
       },
     }));
   };
-  // Updated Image upload using the internal updatePersonal
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setLocalImage(reader.result as string);
-      };
+      reader.onloadend = () => setLocalImage(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
   return {
-    resume,
-    loading,
-    saving,
-    updateData,
-    handleSave,
-    handleFileChange,
-    updatePersonal,
-    loadResume,
-    isDirty,
-    tempImage,
-    setTempImage,
+    resume, loading, saving, updateData, handleSave, 
+    handleFileChange, updatePersonal, loadResume, 
+    isDirty, tempImage, setTempImage,
   };
 };
