@@ -17,7 +17,7 @@ export default function GoogleAuthButton() {
         });
 
         // No more 'data' variable needed here!
-        navigate("/dashboard");
+        navigate("/home");
       } catch (error: any) {
         alert(error.response?.data?.message || "Google login failed.");
       }

@@ -18,18 +18,18 @@ export default function PasswordInput({
   return (
     <div className="relative w-full">
       <input
-        // 🔑 "type" must stay "password" for the browser eye to appear
         type="password"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
         className={`
-          w-full rounded-md border border-slate-200
-          bg-slate-50 px-4 py-2.5 text-sm
-          focus:bg-white focus:border-indigo-500
-          focus:ring-2 focus:ring-indigo-500/20
-          outline-none transition
+          w-full rounded-xl border border-white/10
+          bg-white/[0.03] px-4 py-3 text-sm text-white
+          placeholder:text-gray-700
+          focus:bg-white/[0.05] focus:border-brand-primary/50
+          outline-none transition-all
+          disabled:opacity-50 disabled:cursor-not-allowed
           ${inputClassName}
         `}
       />

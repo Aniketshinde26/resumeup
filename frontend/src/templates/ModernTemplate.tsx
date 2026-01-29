@@ -1,6 +1,6 @@
 import type { ResumeData } from "../templates/templateindex";
 
-export default function MidnightExecutiveTemplate({ data }: { data: ResumeData }) {
+export default function Modern({ data }: { data: ResumeData }) {
   return (
     <div
       id="resume-template"
@@ -10,10 +10,13 @@ export default function MidnightExecutiveTemplate({ data }: { data: ResumeData }
       {/* DARK HEADER */}
       <header className="bg-[#1a1f2c] text-white p-[12mm] flex justify-between items-center shrink-0">
         <div className="space-y-1">
-          <h1 className="text-4xl font-light tracking-tight">
-            <span className="font-bold">{data.personal?.fullName.split(' ')[0]}</span>{' '}
-            {data.personal?.fullName.split(' ').slice(1).join(' ')}
-          </h1>
+         <h1 className="text-4xl font-light tracking-tight">
+  {/* Add "|| ''" inside the split call to prevent the crash */}
+  <span className="font-bold">
+    {(data.personal?.fullName || '').split(' ')[0]}
+  </span>{' '}
+  {(data.personal?.fullName || '').split(' ').slice(1).join(' ')}
+</h1>
           <p className="text-slate-400 text-sm font-bold uppercase tracking-[0.2em]">
             {data.personal?.jobTitle}
           </p>

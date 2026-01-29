@@ -14,6 +14,7 @@ export const useDashboard = () => {
   };
   // Fetch all resumes on load
 const fetchResumes = async () => {
+  
   setIsLoading(true); // Start the skeleton animation
   
   try {
@@ -22,12 +23,13 @@ const fetchResumes = async () => {
 
     // 2. Fetch the actual data
     const res = await api.get("/resumes");
+    
 
     // 3. Wait for BOTH the data AND the timer to finish
     // This ensures the skeleton doesn't "flicker" if the internet is too fast
     await delay;
 
-    setResumes(res.data.resume || []);
+    setResumes(res.data.resumes || []);
   } catch (err) {
     console.error("Failed to fetch resumes", err);
   } finally {

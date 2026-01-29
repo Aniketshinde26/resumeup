@@ -26,7 +26,7 @@ export const useLogin = () => {
         // 1. Save the token
         // localStorage.setItem("accessToken", res.data.accessToken);
 
-        navigate("/dashboard", { replace: true });
+        navigate("/home", { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");

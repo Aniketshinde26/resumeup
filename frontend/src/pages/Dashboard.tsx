@@ -20,7 +20,7 @@ export default function Dashboard() {
   return (
     <div className="p-8 max-w-7xl mx-auto">
      <section className="mb-12">
-  <h2 className="text-2xl font-bold mb-6 text-slate-800">Start New</h2>
+  <h2 className="text-2xl font-bold mb-6 text-slate-200">Start New</h2>
   <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
     {/* Use the Wrapper here instead of the manual ? : check */}
     <SkeletonWrapper isLoading={isLoading} count={5}>
@@ -48,7 +48,7 @@ export default function Dashboard() {
       <hr className="my-10 border-slate-200" />
 
       <section>
-        <h2 className="text-xl font-bold mb-6 text-slate-800 uppercase tracking-wider">
+        <h2 className="text-xl font-bold mb-6 text-slate-200 uppercase tracking-wider">
           Your Resumes
         </h2>
 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">  
