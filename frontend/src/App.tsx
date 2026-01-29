@@ -38,7 +38,7 @@ import SelectionPage from "./pages/SelectionPage"; // The new "Home"
 import ProtectedRoute from "./components/ProtectedRoute";
 import Builder from "./pages/Builder";
 import ResumePreview from "./pages/ResumePreview";
-import DashboardLayout from "./layouts/DashboardLayout"; // The Sidebar wrapper
+import DashboardLayout from "./layouts/Sidebar"; // The Sidebar wrapper
 
 export default function App() {
   return (
