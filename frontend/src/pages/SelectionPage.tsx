@@ -28,10 +28,16 @@ export default function SelectionPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <header className="mb-10">
-        <h1 className="text-3xl font-black text-slate-900">Welcome to ResumeUp</h1>
-        <p className="text-slate-500 mt-2">Select a tool to get started with your career journey.</p>
-      </header>
+     <header className="mb-12 relative">
+    <div className="absolute -top-10 -left-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl" />
+    <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+      Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-green-600">ResumeUp</span>
+    </h1>
+    <p className="text-slate-500 mt-3 text-lg max-w-2xl">
+      Everything you need to land your dream job, powered by smart design and AI. 
+      Select a tool below to begin.
+    </p>
+  </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {tools.map((tool) => (

@@ -101,7 +101,7 @@ export default function Register() {
 </div>
 
         {/* RIGHT SECTION: THE REGISTER FORM */}
-        <div className="lg:w-[55%] p-10 sm:p-16 flex flex-col justify-center bg-white">
+        <div className="lg:w-[50%] p-10 sm:p-16 flex flex-col justify-center bg-white">
           <div className="w-full max-w-sm mx-auto">
             <div className="mb-10">
               <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Create account</h1>

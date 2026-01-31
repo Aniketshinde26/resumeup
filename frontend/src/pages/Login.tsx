@@ -25,12 +25,12 @@ export default function Login() {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900">
       
       {/* MAIN CONTAINER */}
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[600px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
+      <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[400px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
         
         {/* LEFT SECTION: SOFT LIGHT SHOWCASE */}
-        <div className="lg:w-[100%] bg-slate-50 p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
+        <div className="lg:w-[50%] bg-slate-50 p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
           {/* Subtle Background Glow */}
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-primary/4 to-transparent pointer-events-none" />
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-primary/15 to-transparent pointer-events-none" />
           
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-8">

@@ -39,16 +39,19 @@ export default function DashboardLayout() {
       <aside className="h-full bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out group 
                         w-[80px] hover:w-[280px] shrink-0 z-[50] shadow-xl shadow-slate-200/50">
         
-        {/* LOGO SECTION */}
-        <div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
-          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
-            <span className="text-white font-bold text-xs uppercase">R</span>
-          </div>
-          {/* text-opacity-0 and group-hover:text-opacity-100 prevents flickering */}
-          <span className="ml-4 font-black text-xl text-slate-900 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            ResumeUp
-          </span>
-        </div>
+   {/* LOGO SECTION */}
+<div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
+  {/* The Icon/Symbol */}
+  <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
+    <span className="text-white font-bold text-xs uppercase">R</span>
+  </div>
+  
+  {/* The Text - Added ml-4 and transition/opacity logic */}
+  <div className="ml-4 flex items-center gap-0 tracking-tight whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <span className="text-slate-900 font-bold text-xl">Resume</span>
+    <span className="text-green-600 font-bold text-xl">Up</span>
+  </div>
+</div>
 
         {/* NAVIGATION */}
         <nav className="flex-1 px-4 space-y-2 mt-2 overflow-y-auto overflow-x-hidden">
