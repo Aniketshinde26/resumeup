@@ -151,6 +151,27 @@ export default function Modern({ data }: { data: ResumeData }) {
             </div>
           </section>
 
+          {/* LANGUAGES - NEW SECTION */}
+          {data.languages && data.languages.length > 0 && (
+            <section>
+              <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
+                Languages
+              </h2>
+              <div className="space-y-3">
+                {data.languages.map((lang, i) => (
+                  <div key={i} className="flex flex-col">
+                    <p className="text-[10px] font-bold text-slate-800 uppercase">
+                      {lang.name}
+                    </p>
+                    <p className="text-[9px] text-slate-500 italic">
+                      {lang.proficiency}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* CERTIFICATIONS */}
           {data.certifications && data.certifications.length > 0 && (
             <section>

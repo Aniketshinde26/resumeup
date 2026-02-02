@@ -2,7 +2,7 @@ import type { ResumeData } from "./templateindex";
 
 export default function TechTemplate({ data }: { data: ResumeData }) {
   return (
-    <div className="bg-slate-200 py-10 print:p-0 print:bg-white">
+
       <div
         id="resume-template"
         className="mx-auto w-[210mm] h-[297mm] bg-white p-[10mm] font-sans overflow-hidden box-border relative shadow-2xl print:shadow-none"
@@ -166,6 +166,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 }

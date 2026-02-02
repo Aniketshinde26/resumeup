@@ -41,8 +41,10 @@ export default function Register() {
       <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md shadow-brand-primary/20">
         <span className="text-white font-bold text-sm">R</span>
       </div>
-      <span className="text-lg font-bold text-slate-900 tracking-tight">ResumeUp</span>
-    </div>
+<div className="flex items-center gap-0 tracking-tight">
+  <span className="text-slate-900 font-bold text-xl">Resume</span>
+  <span className="text-green-600 font-bold text-xl">Up</span>
+</div>    </div>
     
     <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
       Build your future <br /> 

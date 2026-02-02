@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { TEMPLATES } from "../templates/templateindex"; // Import the Record
+import { TEMPLATES } from "../templates/templateindex"; 
 
 export default function ResumePreview() {
   const { id } = useParams();
@@ -35,9 +35,7 @@ if (loading) return <div className="bg-white w-full h-full" />;  if (!resume) re
   const TemplateComponent = TEMPLATES[resume.templateId];
 
   return (
-    /* CHANGE: Removed min-h-screen and added overflow-hidden.
-       Added 'preview-mode' class in case you want to target CSS specifically for the card.
-    */
+  
     <div className="bg-white w-[790px] h-[1118px] overflow-hidden preview-mode">
   <style>{`
     body { margin: 0; padding: 0; overflow: hidden; width: 790px; height: 1118px; }
@@ -56,3 +54,5 @@ if (loading) return <div className="bg-white w-full h-full" />;  if (!resume) re
     </div>
   );
 }
+
+

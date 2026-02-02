@@ -37,7 +37,10 @@ export default function Login() {
               <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md shadow-brand-primary/">
                 <span className="text-white font-bold text-sm">R</span>
               </div>
-              <span className="text-lg font-bold text-slate-900 tracking-tight">ResumeUp</span>
+              <div className="flex items-center gap-0 tracking-tight">
+  <span className="text-slate-900 font-bold text-xl">Resume</span>
+  <span className="text-green-600 font-bold text-xl">Up</span>
+</div>
             </div>
             
             <h2 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Step into your <br/> next role.</h2>
