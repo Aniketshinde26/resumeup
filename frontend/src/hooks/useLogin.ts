@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import type { AuthResponse } from "../types/user";
-
+import { initiateGithubLogin } from "../services/githubAuth";
 export const useLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -23,8 +23,7 @@ export const useLogin = () => {
       });
 
       if (res.data.accessToken) {
-        // 1. Save the token
-        // localStorage.setItem("accessToken", res.data.accessToken);
+       
 
         navigate("/home", { replace: true });
       }
@@ -43,5 +42,6 @@ export const useLogin = () => {
     isLoading,
     error,
     handleLogin,
+    initiateGithubLogin
   };
 };

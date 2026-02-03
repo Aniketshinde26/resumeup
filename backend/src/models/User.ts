@@ -14,6 +14,7 @@ class User
   public googleId!: string | null;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public githubId!: string |null; 
 }
 
 User.init(
@@ -45,12 +46,19 @@ User.init(
       unique: true,
       allowNull: true,
     },
+    githubId: { 
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
   },
   {
     sequelize,
     modelName: "User",
     tableName: "users",
-  }
+  },
+  
+
 );
 
 export default User;

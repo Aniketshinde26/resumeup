@@ -9,7 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Builder from "./pages/Builder";
 import ResumePreview from "./pages/ResumePreview";
 import DashboardLayout from "./layouts/Sidebar"; // The Sidebar wrapper
-
+import GithubCallback from "./components/GithubCallback";
 export default function App() {
   return (
     <Routes>
@@ -17,7 +17,7 @@ export default function App() {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      
+      <Route path="/auth/github/callback" element={<GithubCallback />} />
       {/* Builder: Usually kept separate so you have full-screen space to design */}
       <Route path="/builder/:id" element={<Builder />} />
           <Route path="/resume/preview/:id" element={<ResumePreview />} />

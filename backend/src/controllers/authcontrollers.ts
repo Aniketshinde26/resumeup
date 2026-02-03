@@ -3,7 +3,7 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
-
+import axios from "axios";
 const generateAccessToken = (user: any) => {
   return jwt.sign(
     { id: user.id, email: user.email },
@@ -234,4 +234,81 @@ export const logoutUser = async (req: Request, res: Response) => {
   res.clearCookie("refreshToken");
 
   res.json({ message: "Logged out successfully" });
+};
+
+
+
+export const githubLogin = async (req: Request, res: Response) => {
+  const { code } = req.body;
+
+  if (!code) return res.status(400).json({ message: "Missing GitHub Code" });
+
+  try {
+    // 1. Exchange code for access token
+    const tokenResponse = await axios.post(
+      "https://github.com/login/oauth/access_token",
+      {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+      },
+      { headers: { Accept: "application/json" } }
+    );
+
+    const accessToken = tokenResponse.data.access_token;
+    if (!accessToken) throw new Error("GitHub token exchange failed");
+
+    // 2. Fetch User Data (Parallel calls save time!)
+    const [userRes, emailRes] = await Promise.all([
+      axios.get("https://api.github.com/user", {
+        headers: { Authorization: `Bearer ${accessToken}`, "User-Agent": "ResumeUp" }
+      }),
+      axios.get("https://api.github.com/user/emails", {
+        headers: { Authorization: `Bearer ${accessToken}`, "User-Agent": "ResumeUp" }
+      })
+    ]);
+
+    const { id: githubId, name, avatar_url: picture } = userRes.data;
+    const primaryEmail = emailRes.data.find((e: any) => e.primary)?.email || emailRes.data[0].email;
+
+  // 3. Database Operations (Explicit version)
+let user = await User.findOne({ where: { email: primaryEmail } });
+
+if (!user) {
+  // CREATE new user
+  user = await User.create({
+    email: primaryEmail,
+    fullname: name || "GitHub User",
+    githubId: String(githubId),
+    password: "", 
+  } as any);
+} else if (!user.githubId) {
+  // UPDATE existing user found by email
+  await user.update({ githubId: String(githubId) });
+}
+
+    // 4. Token Generation & Cookies
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
+
+    await user.update({ refreshToken: newRefreshToken });
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax" as const,
+    };
+
+    res.cookie("token", newAccessToken, cookieOptions);
+    res.cookie("refreshToken", newRefreshToken, cookieOptions);
+
+    return res.json({
+      message: "GitHub login successful",
+      user: { id: user.id, email: user.email, fullname: user.fullname, picture },
+    });
+
+  } catch (error: any) {
+    console.error("GitHub Auth Error:", error.message);
+    res.status(401).json({ message: "Authentication failed" });
+  }
 };
