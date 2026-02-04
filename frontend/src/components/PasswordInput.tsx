@@ -24,12 +24,12 @@ export default function PasswordInput({
         placeholder={placeholder}
         disabled={disabled}
         className={`
-          w-full rounded-xl border border-white/10
-          bg-white/[0.03] px-4 py-3 text-sm text-white
+          w-full rounded-xl border border-black/10
+          bg-white px-4 py-3 text-sm
           placeholder:text-gray-700
           focus:bg-white/[0.05] focus:border-brand-primary/50
           outline-none transition-all
-          disabled:opacity-50 disabled:cursor-not-allowed
+          disabled:opacity-10 disabled:cursor-not-allowed
           ${inputClassName}
         `}
       />

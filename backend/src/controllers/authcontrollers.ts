@@ -143,7 +143,8 @@ export const googleLogin = async (req: Request, res: Response) => {
       console.log(`New user registered via Google: ${email}`);
     } else if (!user.googleId) {
       await user.update({ googleId });
-      console.log(`Existing user linked with Google ID: ${email}`);
+      
+      (`Existing user linked with Google ID: ${email}`);
     }
 
     const accessToken = generateAccessToken(user);

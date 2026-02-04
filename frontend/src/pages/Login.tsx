@@ -3,8 +3,7 @@ import PasswordInput from "../components/PasswordInput";
 import { ErrorMessage } from "../components/ui";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 import { useNavigate, Link } from "react-router-dom";
-
-import { initiateGithubLogin } from "../services/githubAuth"; 
+import { useGithubAuth } from "../hooks/useGithubAuth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,14 +17,7 @@ export default function Login() {
     handleLogin,
   } = useLogin();
 
-  // Helper to handle social clicks
-  const handleSocialClick = (platform: string) => {
-    if (platform === 'GitHub') {
-      initiateGithubLogin(); // Triggers the redirect
-    } else {
-      console.log(`${platform} coming soon`);
-    }
-  };
+  const {handleSocialClick} = useGithubAuth();
 
   const templates = [
     { id: 'moderntech', name: 'Modern Tech' },

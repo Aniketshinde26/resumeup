@@ -2,11 +2,19 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios"; // Use your configured instance
-
+import { initiateGithubLogin } from "../services/githubAuth";
 export const useGithubAuth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const hasCalled = useRef(false);
+
+  const handleSocialClick = (platform: string) => {
+    if (platform === 'GitHub') {
+      initiateGithubLogin(); // This triggers the external redirect
+    } else {
+      console.log(`${platform} coming soon`);
+    }
+  };
 
   useEffect(() => {
     const code = searchParams.get("code");
@@ -31,4 +39,6 @@ export const useGithubAuth = () => {
       handleAuth();
     }
   }, [searchParams, navigate]);
+
+  return{handleSocialClick};
 };

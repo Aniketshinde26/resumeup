@@ -9,6 +9,7 @@ import {
 } from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
 import { getMe } from "../controllers/usercontroller";
+import { sendEmail } from "../utils/sendEmail";
 const router = Router();
 
 router.post("/register", registerUser);
@@ -25,5 +26,7 @@ router.get("/protected", verifyToken, (req, res) => {
     user: req.user,
   });
 });
+
+
 
 export default router;

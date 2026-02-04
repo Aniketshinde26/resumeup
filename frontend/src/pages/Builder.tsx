@@ -23,7 +23,7 @@ export default function Builder() {
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-900">
       {/* TOOLBAR */}
-<header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/60 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">        <div className="flex items-center gap-4">
+<header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-300 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">        <div className="flex items-center gap-4">
 <div className="flex items-center gap-0 tracking-tight">
   <span className="text-slate-900 font-bold text-xl">Resume</span>
   <span className="text-green-600 font-bold text-xl">Up</span>
