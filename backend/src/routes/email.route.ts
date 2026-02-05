@@ -1,9 +1,9 @@
-// src/routes/auth.route.ts
-import { Router } from "express";
-import { testEmailController } from "../controllers/authemail";
+// // src/routes/auth.route.ts
+// import { Router } from "express";
+// import { testEmailController } from "../controllers/authemail";
 
-const router = Router();
+// const router = Router();
 
-router.post("/test-email", testEmailController);
+// router.post("/test-email", testEmailController);
 
-export default router;
+// export default router;

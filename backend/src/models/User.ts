@@ -15,6 +15,8 @@ class User
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   public githubId!: string |null; 
+  public resetPasswordToken!: string | null;
+  public resetPasswordExpires!: Date | null;
 }
 
 User.init(
@@ -50,6 +52,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
       unique: true,
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

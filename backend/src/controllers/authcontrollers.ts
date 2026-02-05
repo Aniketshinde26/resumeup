@@ -3,6 +3,8 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
+import crypto from "crypto";
+import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
 const generateAccessToken = (user: any) => {
   return jwt.sign(
@@ -311,5 +313,81 @@ if (!user) {
   } catch (error: any) {
     console.error("GitHub Auth Error:", error.message);
     res.status(401).json({ message: "Authentication failed" });
+  }
+};
+
+// --- PASSWORD RESET LOGIC ---
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      // Security: Don't confirm if user exists, just send a generic message
+      return res.status(200).json({ message: "If an account exists with that email, a reset link has been sent." });
+    }
+
+    // 1. Generate a random reset token (Plain text for email)
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    // 2. Hash the token for storage in the DB
+    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+    // 3. Save to DB with 1-hour expiry
+    await user.update({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: new Date(Date.now() + 3600000), // 1 hour from now
+    });
+
+    // 4. Send the email with the PLAIN token
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    await sendEmail({
+      email: user.email,
+      subject: "Password Reset Request - ResumeUp",
+      message: resetUrl, // This will be used in your HTML template
+    });
+
+    res.json({ message: "Reset link sent to your email!" });
+  } catch (error) {
+    console.error("FORGOT PASSWORD ERROR:", error);
+    res.status(500).json({ message: "Failed to process forgot password request" });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token } = req.params; // Token from the URL
+  const { password } = req.body; // New password from the form
+
+  try {
+    // 1. Hash the token from the URL to compare it with the DB version
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    // 2. Find user with valid token and not expired
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { [require("sequelize").Op.gt]: new Date() }, // Check if expiry > current time
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Token is invalid or has expired" });
+    }
+
+    // 3. Update password (hash it first!) and clear token fields
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    await user.update({
+      password: hashedPassword,
+      resetPasswordToken: null,
+      resetPasswordExpires: null,
+    });
+
+    res.json({ message: "Password updated successfully! You can now log in." });
+  } catch (error) {
+    console.error("RESET PASSWORD ERROR:", error);
+    res.status(500).json({ message: "Failed to reset password" });
   }
 };

@@ -9,7 +9,7 @@ import dashboardRoutes from "./routes/dashboard.route";
 import resumeRoutes from "./routes/resume.route";
 import "./models/User";
 import { sendEmail } from "./utils/sendEmail";
-import emailRoutes from "./routes/email.route";
+// import emailRoutes from "./routes/email.route";
 import e from "express";
 const app = express();
 
@@ -17,7 +17,7 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: [
@@ -42,7 +42,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
-app.use("/api/test",emailRoutes);
+// app.use("/api/test",emailRoutes);
 
 //BASIC TEST ROUTE
 app.get("/", (req, res) => {

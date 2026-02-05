@@ -10,6 +10,8 @@ export interface UserAttributes {
   githubId:string|null;
   createdAt?: Date; 
   updatedAt?: Date; 
+  resetPasswordToken?: string | null;
+  resetPasswordExpires?: Date | null;
 }
 //Giving an id to keep few fields optional
 export interface UserCreationAttributes

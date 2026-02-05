@@ -5,7 +5,9 @@ import {
   logoutUser,
   refreshAccessToken,
   googleLogin,
-  githubLogin
+  githubLogin,
+  forgotPassword,
+  resetPassword
 } from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
 import { getMe } from "../controllers/usercontroller";
@@ -18,7 +20,8 @@ router.post("/logout", logoutUser);
 router.post("/google", googleLogin);
 router.get("/me", verifyToken, getMe);
 router.post("/refresh", refreshAccessToken);
-
+router.post("/forgot-password", forgotPassword);
+router.patch("/reset-password/:token", resetPassword);
 router.post("/github", githubLogin);
 router.get("/protected", verifyToken, (req, res) => {
   res.json({
