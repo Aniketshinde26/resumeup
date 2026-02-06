@@ -10,6 +10,8 @@ import Builder from "./pages/Builder";
 import ResumePreview from "./pages/ResumePreview";
 import DashboardLayout from "./layouts/Sidebar"; // The Sidebar wrapper
 import GithubCallback from "./components/GithubCallback";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 export default function App() {
   return (
     <Routes>
@@ -18,6 +20,8 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/auth/github/callback" element={<GithubCallback />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+<Route path="/reset-password/:token" element={<ResetPassword />} />
       {/* Builder: Usually kept separate so you have full-screen space to design */}
       <Route path="/builder/:id" element={<Builder />} />
           <Route path="/resume/preview/:id" element={<ResumePreview />} />
@@ -35,6 +39,8 @@ export default function App() {
           {/* Future features can go here */}
           <Route path="/cover-letter" element={<div>Cover Letter Feature Coming Soon</div>} />
           <Route path="/ats-check" element={<div>ATS Scorer Coming Soon</div>} />
+
+
           
         </Route>
       </Route>

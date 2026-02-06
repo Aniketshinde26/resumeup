@@ -108,10 +108,14 @@ export default function Login() {
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between items-center px-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Password</label>
-                  <Link to="/forgot" className="text-[10px] text-brand-primary font-bold hover:underline">Forgot?</Link>
-                </div>
+               {/* Find this section in your Login.tsx */}
+<div className="flex justify-between items-center px-1">
+  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Password</label>
+  {/* Change /forgot to /forgot-password */}
+  <Link to="/forgot-password" className="text-[10px] text-brand-primary font-bold hover:underline">
+    Forgot?
+  </Link>
+</div>
                 <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
 
