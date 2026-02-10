@@ -43,7 +43,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         )}
       </div>
 
-      {/* Rest of your sections... */}
       {/* SUMMARY */}
       {data.personal?.summary && (
         <section className="text-left mb-10">
@@ -80,11 +79,11 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </section>
       )}
 
-      {/* PROJECTS SECTION */}
+      {/* DYNAMIC PROJECTS / RESEARCH SECTION */}
       {data.projects && data.projects.length > 0 && (
         <section className="text-left mb-10">
           <h2 className="font-bold border-b border-black mb-6 text-sm tracking-[0.2em] uppercase">
-            Key Projects
+            {data.sectionTitles?.projects || "Key Projects"}
           </h2>
           <div className="space-y-6">
             {data.projects.map((proj, idx) => (
@@ -92,12 +91,18 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="font-bold text-sm uppercase">{proj.name}</h3>
                   {proj.link && (
-                    <span className="text-[10px] text-blue-600 lowercase tracking-normal italic">
-                      {proj.link}
+                    <span className="text-[10px] text-slate-500 tracking-normal italic">
+                      {proj.link.startsWith('http') ? (
+                        <a href={proj.link} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
+                          link
+                        </a>
+                      ) : (
+                        proj.link
+                      )}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
                   {proj.description}
                 </p>
               </div>
@@ -117,7 +122,7 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
               <div key={idx}>
                 <h3 className="font-bold text-sm uppercase">{edu.school}</h3>
                 <p className="text-xs text-slate-600 italic">{edu.degree}</p>
-                <p className="text-[10px] text-slate-400 mt-1">{edu.year}</p>
+                <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{edu.year}</p>
               </div>
             ))}
           </div>
@@ -136,7 +141,7 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
                 key={idx}
                 className="flex justify-between items-center text-xs text-slate-700"
               >
-                <span className="font-semibold uppercase">{cert.name}</span>
+                <span className="font-semibold uppercase tracking-tight">{cert.name}</span>
                 <span className="text-[10px] text-slate-400">{cert.date}</span>
               </div>
             ))}
@@ -146,10 +151,10 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
 
       {/* LANGUAGES & SKILLS SIDE-BY-SIDE */}
       <div className="grid grid-cols-2 gap-10">
-        {/* SKILLS */}
+        {/* DYNAMIC SKILLS */}
         <section className="text-left">
           <h2 className="font-bold border-b border-black mb-4 text-sm tracking-[0.2em] uppercase">
-            Core Skills
+            {data.sectionTitles?.skills || "Core Skills"}
           </h2>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {data.skills?.map((skill, idx) => (

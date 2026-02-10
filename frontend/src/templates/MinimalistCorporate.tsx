@@ -4,7 +4,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
   return (
     <div
       id="resume-template"
-      className="w-[210mm] h-[297mm] bg-white flex shadow-sm font-sans text-slate-800 box-border overflow-hidden"
+      className="w-[210mm] min-h-[297mm] bg-white flex shadow-sm font-sans text-slate-800 box-border overflow-hidden"
     >
       {/* LEFT SIDEBAR (1/3 of the page) */}
       <aside className="w-[75mm] bg-slate-900 text-white p-8 flex flex-col shrink-0">
@@ -44,10 +44,10 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* SKILLS */}
+          {/* DYNAMIC SKILLS SECTION */}
           <section>
-            <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
-              Skills
+            <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1 truncate">
+              {data.sectionTitles?.skills || "Skills"}
             </h2>
             <div className="flex flex-wrap gap-2">
               {data.skills?.map((skill, i) => (
@@ -67,15 +67,15 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
               Education
             </h2>
             {data.education?.map((edu, i) => (
-              <div key={i} className="mb-4">
-                <p className="text-[11px] font-bold text-white">{edu.degree}</p>
+              <div key={i} className="mb-4 last:mb-0">
+                <p className="text-[11px] font-bold text-white leading-tight">{edu.degree}</p>
                 <p className="text-[10px] text-slate-400">{edu.school}</p>
-                <p className="text-[9px] text-slate-500 mt-1">{edu.year}</p>
+                <p className="text-[9px] text-slate-500 mt-1 uppercase tracking-tighter">{edu.year}</p>
               </div>
             ))}
           </section>
 
-          {/* LANGUAGES - Added Section */}
+          {/* LANGUAGES */}
           {data.languages && data.languages.length > 0 && (
             <section>
               <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
@@ -90,7 +90,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
                         {lang.proficiency}
                       </span>
                     </div>
-                    {/* Visual proficiency bar (optional, matches sidebar aesthetic) */}
                     <div className="w-full h-[2px] bg-slate-800 rounded-full">
                       <div className="w-full h-full bg-blue-500 rounded-full opacity-50"></div>
                     </div>
@@ -131,7 +130,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
         )}
 
         {/* EXPERIENCE */}
-        <section className="flex-1">
+        <section className="mb-8">
           <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-3">
             Experience <span className="h-[2px] bg-slate-100 flex-1"></span>
           </h2>
@@ -143,7 +142,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
               >
                 <div className="absolute -left-[9px] top-0 w-4 h-4 bg-white border-2 border-blue-600 rounded-full"></div>
                 <div className="flex justify-between items-baseline mb-1">
-                  <h3 className="font-bold text-[14px] text-slate-900">
+                  <h3 className="font-bold text-[14px] text-slate-900 uppercase tracking-tight">
                     {exp.position}
                   </h3>
                   <span className="text-[10px] font-bold text-slate-400 uppercase">
@@ -161,22 +160,33 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
           </div>
         </section>
 
-        {/* PROJECTS */}
+        {/* DYNAMIC PROJECTS / RESEARCH SECTION */}
         {data.projects && data.projects.length > 0 && (
-          <section className="mt-8">
+          <section className="mt-auto">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-3">
-              Projects <span className="h-[2px] bg-slate-100 flex-1"></span>
+              {data.sectionTitles?.projects || "Projects"} 
+              <span className="h-[2px] bg-slate-100 flex-1"></span>
             </h2>
             <div className="grid grid-cols-2 gap-4">
               {data.projects.map((proj, i) => (
                 <div
                   key={i}
-                  className="bg-slate-50 p-3 rounded-lg border border-slate-100"
+                  className="bg-slate-50 p-3 rounded-lg border border-slate-100 flex flex-col gap-1"
                 >
-                  <h3 className="font-bold text-[12px] text-slate-900 mb-1">
-                    {proj.name}
-                  </h3>
-                  <p className="text-[10px] text-slate-500 leading-tight">
+                  <div className="flex justify-between items-start gap-2">
+                    <h3 className="font-bold text-[12px] text-slate-900 leading-tight">
+                      {proj.name}
+                    </h3>
+                    {proj.link && (
+                      /* Smart Label/Link Logic */
+                      proj.link.startsWith('http') ? (
+                        <a href={proj.link} className="text-[9px] text-blue-600 font-bold uppercase shrink-0 hover:underline">Link</a>
+                      ) : (
+                        <span className="text-[9px] text-slate-400 italic shrink-0">{proj.link}</span>
+                      )
+                    )}
+                  </div>
+                  <p className="text-[10px] text-slate-600 leading-snug whitespace-pre-line">
                     {proj.description}
                   </p>
                 </div>

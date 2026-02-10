@@ -1,5 +1,5 @@
 import { useBuilder } from "../hooks/useBuilder";
-import {Award,LanguagesIcon, Rocket, LinkIcon,Wrench , X, User,Briefcase,GraduationCap, Calendar, Camera,Plus, Trash2, Download } from "lucide-react";
+import {Award,LanguagesIcon, Rocket, ChevronDown ,Wrench , X, User,Briefcase,GraduationCap, Calendar, Camera,Plus, Trash2, Download } from "lucide-react";
 import { TEMPLATES } from "../templates/templateindex";
 import "../print.css";
 export default function Builder() {
@@ -193,6 +193,7 @@ export default function Builder() {
           </div>
           {tempImage && (
             <button
+
               onClick={() => setTempImage(null)}
               className="flex items-center gap-1 text-red-500 text-[11px] font-bold hover:bg-red-50 px-2 py-1 rounded-md transition-colors"
             >
@@ -200,13 +201,7 @@ export default function Builder() {
             </button>
           )}
         </div>
-        <input
-          type="text"
-          placeholder="Or paste an image URL..."
-          className="w-full text-[11px] px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all bg-white"
-          value={resume.data.personal?.image?.startsWith("data:") ? "Local Image Uploaded" : resume.data.personal?.image || ""}
-          onChange={(e) => updatePersonal("image", e.target.value)}
-        />
+      
       </div>
     </div>
 
@@ -527,131 +522,139 @@ export default function Builder() {
   </div>
 </div>
 
-          {/* 4. SKILLS */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-  {/* Section Header */}
-  <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-    <h2 className="text-slate-800 font-bold flex items-center gap-2">
-      <div className="p-1.5 bg-amber-100 text-amber-600 rounded-lg">
-        <Wrench size={18} />
-      </div>
-      Technical Skills
-    </h2>
-    <span className="text-[10px] font-medium text-slate-400">Press Enter to add</span>
-  </div>
-
-  <div className="p-6 space-y-5">
-    {/* Input Area */}
-    <div className="relative group">
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-500 transition-colors">
-        <Plus size={16} strokeWidth={3} />
-      </div>
-      <input
-        type="text"
-        placeholder="e.g. React, TypeScript, Figma..."
-        className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all placeholder:text-slate-400"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            const val = e.currentTarget.value.trim();
-            if (val) {
-              updateData({
-                skills: [...(resume.data.skills || []), val],
-              });
-              e.currentTarget.value = "";
-            }
-          }
-        }}
-      />
+{/* 4. UNIVERSAL SKILLS */}
+<div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+<div className="bg-white px-6 py-4 border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
+  <h2 className="text-slate-800 font-bold flex items-center gap-8 w-full">
+    {/* Icon Container */}
+    <div className="p-2 bg-amber-50 text-amber-600 rounded-lg shrink-0 border border-amber-100">
+      <Wrench size={18} />
     </div>
 
-    {/* Tag Cloud */}
+    {/* Smooth Editable Input */}
+    <input 
+      className="w-full bg-transparent px-2 py-1.5 rounded-md
+                 text-slate-800 font-bold outline-none
+                 hover:bg-slate-50
+                 focus:bg-amber-50/50 focus:ring-2 focus:ring-amber-200/50
+                 transition-all duration-200"
+      value={resume.data.sectionTitles?.skills ?? ""} 
+      placeholder="Technical Skills"
+      onChange={(e) => updateData({ 
+        sectionTitles: { ...resume.data.sectionTitles, skills: e.target.value } 
+      })}
+    />
+  </h2>
+  
+  {/* Subtle hint that it's editable */}
+ 
+</div>
+
+  <div className="p-6 space-y-5">
+    <input
+      type="text"
+      placeholder="Press Enter to add (e.g. React, Surgery, Financial Analysis...)"
+      className="w-full pl-4 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 outline-none transition-all"
+      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+          const val = e.currentTarget.value.trim();
+          if (val) {
+            updateData({ skills: [...(resume.data.skills || []), val] });
+            e.currentTarget.value = "";
+          }
+        }
+      }}
+    />
+
     <div className="flex flex-wrap gap-2">
       {resume.data.skills?.map((skill: string, idx: number) => (
-        <div
-          key={idx}
-          className="group flex items-center gap-1.5 bg-white border border-slate-200 hover:border-amber-300 hover:shadow-sm px-3 py-1.5 rounded-lg transition-all"
-        >
-          <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900">
-            {skill}
-          </span>
+        <div key={idx} className="group flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg">
+          <span className="text-sm font-medium text-slate-600">{skill}</span>
           <button
             onClick={() => {
-              const newList = resume.data.skills.filter(
-                (_: string, i: number) => i !== idx
-              );
+              const newList = resume.data.skills.filter((_: string, i: number) => i !== idx);
               updateData({ skills: newList });
             }}
-            className="text-slate-300 hover:text-red-500 transition-colors ml-1"
+            className="text-slate-300 hover:text-red-500"
           >
-            <X size={14} strokeWidth={2.5} />
+            <X size={14} />
           </button>
         </div>
       ))}
-
-      {(!resume.data.skills || resume.data.skills.length === 0) && (
-        <div className="w-full py-4 text-center">
-          <p className="text-xs text-slate-400 italic">No skills added. Type a skill above and hit Enter.</p>
-        </div>
-      )}
     </div>
   </div>
 </div>
 
-          {/* 5. PROJECTS */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-  {/* Section Header */}
+{/* 5. PROJECTS / PROCEDURES / CASE STUDIES */}
+<div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6">
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-    <h2 className="text-slate-800 font-bold flex items-center gap-2">
-      <div className="p-1.5 bg-cyan-100 text-cyan-600 rounded-lg">
+    <div className="flex items-center gap-3">
+      {/* Icon Color changes based on selection to give visual feedback */}
+      <div className={`p-2 rounded-xl transition-colors ${
+        resume.data.sectionTitles?.projects === "Procedures" ? "bg-rose-100 text-rose-600" : 
+        resume.data.sectionTitles?.projects === "Case Studies" ? "bg-amber-100 text-amber-600" :
+        "bg-cyan-100 text-cyan-600"
+      }`}>
         <Rocket size={18} />
       </div>
-      Personal Projects
-    </h2>
+
+      <div className="relative group">
+        {/* Custom Styled Select */}
+        <select 
+          className="appearance-none bg-white border border-slate-200 hover:border-cyan-500 pl-3 pr-8 py-1.5 rounded-lg text-sm font-bold text-slate-700 outline-none cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-cyan-500/10"
+          value={resume.data.sectionTitles?.projects || "Projects"}
+          onChange={(e) => updateData({ 
+            sectionTitles: { ...resume.data.sectionTitles, projects: e.target.value } 
+          })}
+        >
+          <option value="Projects">Personal Projects</option>
+          <option value="Procedures">Medical Procedures</option>
+          <option value="Case Studies">Business Case Studies</option>
+          <option value="Publications">Research Publications</option>
+        </select>
+        
+        {/* Custom Chevron Arrow (prevents that "rough" default look) */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-cyan-500 transition-colors">
+          <ChevronDown size={14} strokeWidth={3} />
+        </div>
+      </div>
+    </div>
+    
     <button
-      onClick={() =>
-        updateData({
-          projects: [
-            ...(resume.data.projects || []),
-            { name: "", link: "", description: "" },
-          ],
-        })
-      }
-      className="flex items-center gap-1.5 text-xs font-bold text-cyan-600 hover:bg-cyan-50 px-3 py-1.5 rounded-lg transition-all border border-cyan-100"
+      onClick={() => updateData({
+        projects: [...(resume.data.projects || []), { name: "", link: "", description: "" }],
+      })}
+      className="flex items-center gap-1.5 text-xs font-bold bg-white text-cyan-600 hover:bg-cyan-50 border border-cyan-200 px-3 py-1.5 rounded-lg transition-all shadow-sm"
     >
-      <Plus size={14} strokeWidth={3} />
-      ADD PROJECT
+      <Plus size={14} strokeWidth={3} /> ADD ITEM
     </button>
   </div>
 
   <div className="p-6 space-y-6">
-    {resume.data.projects?.map((proj: any, idx: number) => (
-      <div
-        key={idx}
-        className="relative p-5 bg-white border border-slate-200 rounded-2xl group hover:shadow-md hover:border-cyan-200 transition-all"
-      >
-        {/* Delete Button */}
-        <button
-          onClick={() => {
-            const newList = [...resume.data.projects];
-            newList.splice(idx, 1);
-            updateData({ projects: newList });
-          }}
-          className="absolute top-4 right-4 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
-        >
-          <Trash2 size={16} />
-        </button>
+    {resume.data.projects?.map((proj: any, idx: number) => {
+      const isMedical = resume.data.sectionTitles?.projects === "Procedures";
+      
+      return (
+        <div key={idx} className="p-5 border border-slate-200 rounded-2xl group relative">
+          <button
+            onClick={() => {
+              const newList = [...resume.data.projects];
+              newList.splice(idx, 1);
+              updateData({ projects: newList });
+            }}
+            className="absolute top-4 right-4 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+          >
+            <Trash2 size={16} />
+          </button>
 
-        <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Project Name */}
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
-                Project Name
+              <label className="text-[10px] font-bold text-slate-400 uppercase">
+                {isMedical ? "Procedure / Surgery" : "Project Name"}
               </label>
-              <input
-                type="text"
-                placeholder="e.g. E-commerce Dashboard"
-                className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all font-semibold text-slate-700 placeholder:font-normal"
+              <input 
+                placeholder={isMedical ? "e.g. Laparoscopic Cholecystectomy" : "e.g. Portfolio Website"}
+                className="w-full px-4 py-2 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500/20"
                 value={proj.name}
                 onChange={(e) => {
                   const newList = [...resume.data.projects];
@@ -660,37 +663,30 @@ export default function Builder() {
                 }}
               />
             </div>
-
-            {/* Project Link */}
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
-                Project Link (URL)
+              <label className="text-[10px] font-bold text-slate-400 uppercase">
+                {isMedical ? "Hospital / Ward" : "Link / URL"}
               </label>
-              <div className="relative">
-                <LinkIcon className="absolute left-3 top-2.5 text-slate-400" size={14} />
-                <input
-                  type="text"
-                  placeholder="https://github.com/..."
-                  className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all text-sm text-slate-500 italic"
-                  value={proj.link}
-                  onChange={(e) => {
-                    const newList = [...resume.data.projects];
-                    newList[idx].link = e.target.value;
-                    updateData({ projects: newList });
-                  }}
-                />
-              </div>
+              <input 
+                placeholder={isMedical ? "e.g. General Surgery Dept" : "https://github.com..."}
+                className="w-full px-4 py-2 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500/20"
+                value={proj.link}
+                onChange={(e) => {
+                  const newList = [...resume.data.projects];
+                  newList[idx].link = e.target.value;
+                  updateData({ projects: newList });
+                }}
+              />
             </div>
           </div>
 
-          {/* Project Description */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
-              Description & Tech Stack
+          <div className="mt-4 space-y-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase">
+              {isMedical ? "Outcome & Details" : "Description & Tools"}
             </label>
-            <textarea
-              placeholder="What did you build and what tools did you use?"
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all text-sm text-slate-600 min-h-[80px] resize-none"
+            <textarea 
+              placeholder={isMedical ? "Describe your role in the procedure and the results..." : "Describe the project..."}
+              className="w-full px-4 py-3 bg-slate-50 rounded-xl min-h-[100px] outline-none focus:ring-2 focus:ring-cyan-500/20"
               value={proj.description}
               onChange={(e) => {
                 const newList = [...resume.data.projects];
@@ -700,15 +696,8 @@ export default function Builder() {
             />
           </div>
         </div>
-      </div>
-    ))}
-
-    {(!resume.data.projects || resume.data.projects.length === 0) && (
-      <div className="text-center py-10 border-2 border-dashed border-slate-100 rounded-2xl">
-        <Rocket size={32} className="mx-auto text-slate-200 mb-2" />
-        <p className="text-slate-400 text-sm">Showcase your best work by adding a project.</p>
-      </div>
-    )}
+      );
+    })}
   </div>
 </div>
 
@@ -916,38 +905,38 @@ export default function Builder() {
 </div>
         </section>
         {/* RIGHT SIDE: PREVIEW */}
-        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full p-0">
-          {/* This wrapper now centers the page without scaling it */}
-          <div className="flex justify-center items-start min-h-full w-full py-01  bg-slate-300">
-            <div
-              id="resume-preview"
-              className="bg-white shadow-2xl"
-              style={{
-                width: "210mm",
-                height: "297mm",
-                minWidth: "210mm",
-                minHeight: "297mm",
-                margin: "0 auto",
-              }}
-            >
-              {SelectedTemplate ? (
-                <SelectedTemplate
-                  data={{
-                    ...resume.data,
-                    personal: {
-                      ...resume.data.personal,
-                      image: tempImage,
-                    },
-                  }}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  Template Not Found
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
+     <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
+  <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
+    <div
+      id="resume-preview"
+     
+      className="bg-white shadow-2xl rounded-[24px] overflow-hidden ring-1 ring-black/10 shrink-0"
+      style={{
+        width: "210mm",
+        height: "297mm",
+        minWidth: "210mm",
+        minHeight: "297mm",
+        margin: "0 auto",
+      }}
+    >
+      {SelectedTemplate ? (
+        <SelectedTemplate
+          data={{
+            ...resume.data,
+            personal: {
+              ...resume.data.personal,
+              image: tempImage,
+            },
+          }}
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center text-slate-400">
+          Template Not Found
+        </div>
+      )}
+    </div>
+  </div>
+</section>
       </main>
 
       <style>{`

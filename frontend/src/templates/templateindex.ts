@@ -52,8 +52,20 @@ export interface ResumeData {
   personal: PersonalInfo;
   experience: Experience[];
   education: Education[];
+  sectionTitles?: {
+    skills: string;
+    projects: string;
+    experience?: string;
+    additionalSkills: string;
+  };
   skills: string[];
-  projects?: { name: string; description: string; link?: string }[];
-  languages?: { name: string; proficiency: string }[];
+  additionalSkills?: string[];
+projects?: { 
+    name: string; 
+    description: string; 
+    link?: string;
+    type?: 'project' | 'procedure' | 'case_study'; 
+  }[];
+    languages?: { name: string; proficiency: string }[];
   certifications?: { name: string; issuer: string; date: string }[];
 }

@@ -8,8 +8,7 @@ export default function ProfessionalSplitTemplate({
   return (
     <div
       id="resume-template"
-      className="w-[210mm] min-h-[297mm] bg-white flex shadow-sm font-sans text-slate-800"
-    >
+className="w-full h-full bg-white flex font-sans text-slate-800"    >
       {/* LEFT COLUMN - Primary Content (Experience & Projects) */}
       <main className="flex-[1.6] p-12 pr-8 bg-white">
         <header className="mb-10">
@@ -61,10 +60,12 @@ export default function ProfessionalSplitTemplate({
           </div>
         </section>
 
+        {/* DYNAMIC PROJECTS / PROCEDURES SECTION */}
         {data.projects && data.projects.length > 0 && (
           <section>
             <h2 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <span className="w-6 h-[2px] bg-indigo-600"></span> Key Projects
+              <span className="w-6 h-[2px] bg-indigo-600"></span> 
+              {data.sectionTitles?.projects || "Key Projects"}
             </h2>
             <div className="space-y-6">
               {data.projects.map((proj, i) => (
@@ -77,15 +78,24 @@ export default function ProfessionalSplitTemplate({
                       {proj.name}
                     </h3>
                     {proj.link && (
-                      <a
-                        href={proj.link}
-                        className="text-[10px] text-indigo-600 font-bold hover:underline"
-                      >
-                        Visit Site
-                      </a>
+                      /* Smart Link Logic: If it looks like a URL, make it a link. Otherwise, show as text label */
+                      proj.link.startsWith('http') ? (
+                        <a
+                          href={proj.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] text-indigo-600 font-bold hover:underline uppercase tracking-tighter"
+                        >
+                          View Work
+                        </a>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 font-bold uppercase italic">
+                          {proj.link}
+                        </span>
+                      )
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 leading-snug">
+                  <p className="text-[11px] text-slate-600 leading-snug whitespace-pre-line">
                     {proj.description}
                   </p>
                 </div>
@@ -95,7 +105,7 @@ export default function ProfessionalSplitTemplate({
         )}
       </main>
 
-      {/* RIGHT COLUMN - Meta Content (Education, Skills, Langs, Certs) */}
+      {/* RIGHT COLUMN */}
       <aside className="flex-1 bg-slate-50 border-l border-slate-100 p-10 flex flex-col gap-10">
         {data.personal?.image && (
           <img
@@ -111,7 +121,7 @@ export default function ProfessionalSplitTemplate({
           </h2>
           <div className="space-y-3 text-[11px] text-slate-600 font-medium">
             <p className="flex items-center gap-2">
-              ✉️ <span className="truncate">{data.personal?.email}</span>
+              ✉️ <span className="break-all">{data.personal?.email}</span>
             </p>
             <p className="flex items-center gap-2">📞 {data.personal?.phone}</p>
             <p className="flex items-center gap-2">
@@ -120,9 +130,10 @@ export default function ProfessionalSplitTemplate({
           </div>
         </section>
 
+        {/* DYNAMIC SKILLS SECTION */}
         <section>
           <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">
-            Expertise
+            {data.sectionTitles?.skills || "Expertise"}
           </h2>
           <div className="flex flex-wrap gap-2">
             {data.skills?.map((skill, i) => (
@@ -167,9 +178,6 @@ export default function ProfessionalSplitTemplate({
                   <p className="text-[10px] text-indigo-600 font-medium italic">
                     {lang.proficiency}
                   </p>
-                  <div className="w-full bg-slate-200 h-[2px] mt-1">
-                    <div className="bg-indigo-600 h-full w-full opacity-30"></div>
-                  </div>
                 </div>
               ))}
             </div>

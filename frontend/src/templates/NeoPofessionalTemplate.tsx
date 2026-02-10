@@ -56,11 +56,11 @@ export default function NeoProfessionalTemplate({
         <main className="flex-[1.8] p-10 overflow-hidden border-r border-slate-100">
           {/* PROFILE / SUMMARY */}
           {data.personal?.summary && (
-            <section className="mb-10">
+            <section className="mb-10 no-break">
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-4">
                 Professional Mission
               </h2>
-              <p className="text-[13px] text-slate-700 leading-relaxed font-medium">
+              <p className="text-[13px] text-slate-700 leading-relaxed font-medium whitespace-pre-line">
                 {data.personal.summary}
               </p>
             </section>
@@ -69,11 +69,11 @@ export default function NeoProfessionalTemplate({
           {/* WORK EXPERIENCE */}
           <section className="mb-10">
             <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
-              Work Experience
+              {data.sectionTitles?.experience || "Work Experience"}
             </h2>
             <div className="space-y-8">
               {data.experience?.map((exp, i) => (
-                <div key={i} className="group relative">
+                <div key={i} className="group relative no-break">
                   <div className="flex justify-between items-start mb-1">
                     <h3 className="text-sm font-black text-slate-900 uppercase">
                       {exp.position}
@@ -93,29 +93,37 @@ export default function NeoProfessionalTemplate({
             </div>
           </section>
 
-          {/* PROJECTS */}
+          {/* DYNAMIC PROJECTS / PROCEDURES */}
           {data.projects && data.projects.length > 0 && (
-            <section>
+            <section className="no-break">
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
-                Projects
+                {data.sectionTitles?.projects || "Projects"}
               </h2>
               <div className="grid grid-cols-1 gap-4">
                 {data.projects.map((proj, i) => (
                   <div
                     key={i}
-                    className="p-4 bg-slate-50 rounded-lg border-l-4 border-indigo-200"
+                    className="p-4 bg-slate-50 rounded-lg border-l-4 border-indigo-200 no-break"
                   >
-                    <h3 className="font-black text-[12px] text-slate-900 uppercase mb-1">
-                      {proj.name}
-                    </h3>
-                    <p className="text-[11px] text-slate-600 leading-snug">
+                    <div className="flex justify-between items-center mb-1">
+                      <h3 className="font-black text-[12px] text-slate-900 uppercase">
+                        {proj.name}
+                      </h3>
+                      {proj.link && (
+                        <span className="text-[10px]">
+                          {proj.link.startsWith('http') ? (
+                            <a href={proj.link} target="_blank" rel="noreferrer" className="text-indigo-600 font-bold hover:underline">
+                              VIEW LINK
+                            </a>
+                          ) : (
+                            <span className="text-slate-400 italic font-medium">{proj.link}</span>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-600 leading-snug whitespace-pre-line">
                       {proj.description}
                     </p>
-                    {proj.link && (
-                      <p className="text-[10px] text-indigo-600 mt-2 font-bold">
-                        {proj.link}
-                      </p>
-                    )}
                   </div>
                 ))}
               </div>
@@ -125,10 +133,10 @@ export default function NeoProfessionalTemplate({
 
         {/* RIGHT COLUMN - ASIDE (35%) */}
         <aside className="flex-1 bg-white p-10 flex flex-col gap-10 overflow-hidden">
-          {/* SKILLS */}
-          <section>
+          {/* DYNAMIC SKILLS */}
+          <section className="no-break">
             <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
-              Skills
+              {data.sectionTitles?.skills || "Skills"}
             </h2>
             <div className="flex flex-col gap-2">
               {data.skills?.map((skill, i) => (
@@ -143,7 +151,7 @@ export default function NeoProfessionalTemplate({
           </section>
 
           {/* EDUCATION */}
-          <section>
+          <section className="no-break">
             <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
               Education
             </h2>
@@ -166,7 +174,7 @@ export default function NeoProfessionalTemplate({
 
           {/* LANGUAGES */}
           {data.languages && data.languages.length > 0 && (
-            <section>
+            <section className="no-break">
               <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
                 Languages
               </h2>
@@ -190,7 +198,7 @@ export default function NeoProfessionalTemplate({
 
           {/* CERTIFICATIONS */}
           {data.certifications && data.certifications.length > 0 && (
-            <section>
+            <section className="no-break">
               <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
                 Certificates
               </h2>
