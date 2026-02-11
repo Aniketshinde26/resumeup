@@ -11,7 +11,7 @@ export const useBuilder = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  const [localImage, setLocalImage] = useState<string | null>(null);
+  // const [localImage, setLocalImage] = useState<string | null>(null);
   const [tempImage, setTempImage] = useState<string | null>(null);
 
   const updateData = (newData: any) => {
@@ -127,14 +127,18 @@ export const useBuilder = () => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setLocalImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
+
+
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+
+    const previewUrl = URL.createObjectURL(file);
+    
+   
+    updatePersonal("profileImage", previewUrl);
+  }
+};
 
   return {
     resume, loading, saving, updateData, handleSave, 

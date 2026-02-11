@@ -140,7 +140,7 @@ export default function Builder() {
 
       <main className="flex-1 flex overflow-hidden">
         {/* LEFT SIDE: INPUT FORMS */}
-        <section className="w-1/2 overflow-y-auto p-8 border-r space-y-10 custom-scrollbar no-print">
+<section className="w-1/2 overflow-y-auto p-8 border-r border-slate-200 space-y-10 custom-scrollbar no-print">
           {/* 1. PERSONAL INFO */}
          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
@@ -904,6 +904,15 @@ export default function Builder() {
   </div>
 </div>
         </section>
+
+<div className="absolute left-1/2 -translate-x-1/2 top-0 
+                h-full w-[1px] 
+                bg-gradient-to-b from-transparent 
+                via-slate-300/60 
+                to-transparent" />
+
+
+
         {/* RIGHT SIDE: PREVIEW */}
      <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
   <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
