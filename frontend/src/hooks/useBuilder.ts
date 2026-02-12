@@ -11,7 +11,6 @@ export const useBuilder = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  // const [localImage, setLocalImage] = useState<string | null>(null);
   const [tempImage, setTempImage] = useState<string | null>(null);
 
   const updateData = (newData: any) => {
