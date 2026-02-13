@@ -7,6 +7,7 @@ import { connectDB, sequelize } from "./config/db";
 import authRoutes from "./routes/auth.route";
 import dashboardRoutes from "./routes/dashboard.route";
 import resumeRoutes from "./routes/resume.route";
+import coverletterRoutes from "./routes/coverletter.route";
 
 // Single import - loads everything!
 import "./models";
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
+app.use("/api/coverletters", coverletterRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "ResumeUp backend is running!" });

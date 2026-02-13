@@ -2,7 +2,13 @@ import { Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
 
-// Create Resume
+
+/**
+ * @desc Create a new resume for the authenticated user
+ * @param req Authenticated request
+ * @param res Express response
+ * @returns Created resume (201)
+ */
 export const createResume = async (
   req: AuthRequest,
   res: Response
@@ -35,14 +41,18 @@ export const createResume = async (
   }
 };
 
-//  Get All resumes
+/**
+ * @desc Get all resumes for the authenticated user (or guest mode if no user)
+ * @param req Authenticated request or guest request (via optionalToken middleware)
+ * @param res Express response
+ * @returns All resumes for the authenticated user or guest mode data (200)
+ */
 
 export const getAllResumes = async (
   req: Request, 
   res: Response
 ): Promise<Response> => {
   try {
-    // 1. Check if a user is logged in (via the optionalToken middleware)
     if (req.user) {
       const resumes = await Resume.findAll({
         where: { userId: req.user.id },
@@ -53,18 +63,16 @@ export const getAllResumes = async (
         message: "User resumes fetched successfully",
         count: resumes.length,
         resumes,
-        isGuest: false // Frontend uses this to show the full dashboard
+        isGuest: false 
       });
     }
 
-    // 2. If NO user is found (Guest/Login Page access)
-    // We return a 200 OK with an empty array. 
-    // This tells the frontend: "No saved data, show the hardcoded teasers."
+   
     return res.status(200).json({
       message: "Guest mode active",
       count: 0,
       resumes: [],
-      isGuest: true // Frontend uses this to trigger the 'Teaser' UI
+      isGuest: true 
     });
 
   } catch (error) {
@@ -73,7 +81,12 @@ export const getAllResumes = async (
   }
 };
 
-// Get resume by id
+/**
+ * @desc Get a single resume by ID for the authenticated user
+ * @param req Authenticated request with resume ID in params
+ * @param res Express response
+ * @return Single resume if found and belongs to user (200), 404 if not found, 401 if unauthorized
+  */
 
 export const getResumeById = async (
   req: AuthRequest,
@@ -106,7 +119,12 @@ export const getResumeById = async (
   }
 };
 
-// Update Resumes
+/**
+ * @desc Update a resume by ID for the authenticated user
+ * @param req Authenticated request with resume ID in params and updated data in body 
+ * @param res Express response
+ * @returns Updated resume data (200) or error if not found/unauthorized
+ */
 
 export const updateResume = async (
   req: AuthRequest,
@@ -150,7 +168,12 @@ export const updateResume = async (
   }
 };
 
-// Delete Resume
+/**
+ * @desc Delete a resume by ID for the authenticated user
+ * @param req Authenticated request with resume ID in params
+ * @param res Express response
+ * @returns Success message (200) or error if not found/unauthorized
+ */
 export const deleteResume = async (
   req: AuthRequest,
   res: Response
