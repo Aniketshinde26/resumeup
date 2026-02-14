@@ -24,9 +24,9 @@ export const createCoverLetter = async (
 
     const coverletter = await CoverLetter.create({
       userId: req.user.id,
-      title,
-      templateId,
-      data,
+      Title: title,
+      TemplateId: templateId,
+      Data: data,
     });
     
     return res.status(201).json({

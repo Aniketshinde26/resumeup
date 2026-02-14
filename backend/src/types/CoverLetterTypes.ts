@@ -1,13 +1,13 @@
 import { Optional } from "sequelize";
 
 export interface CoverLetterAttributes {
-  id: number;
+  Id: number;
   userId: number;
-  title: string;
-  templateId: string;
-  data: object;
+  Title: string;
+  TemplateId: string;
+  Data: object;
   createdAt?: Date;
   updatedAt?: Date;
 }
 export interface CoverLetterCreationAttributes
-  extends Optional<CoverLetterAttributes, "id" | "createdAt" | "updatedAt"> {}
+  extends Optional<CoverLetterAttributes, "Id" | "createdAt" | "updatedAt"> {}

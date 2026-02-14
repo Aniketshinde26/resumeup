@@ -6,17 +6,17 @@ class CoverLetter
   extends Model<CoverLetterAttributes, CoverLetterCreationAttributes>
   implements CoverLetterAttributes
   {
-    public id!: number;
+    public Id!: number;
     public userId!: number;
-    public title!: string;
-    public templateId!: string;
-    public data!: object;
+    public Title!: string;
+    public TemplateId!: string;
+    public Data!: object;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
   }
   CoverLetter.init(
     {
-      id: {
+      Id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,   
@@ -25,15 +25,15 @@ class CoverLetter
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        title: {
+        Title: {
             type: DataTypes.STRING,     
             allowNull: false,
         },
-        templateId: {
+        TemplateId: {
             type: DataTypes.STRING, 
             allowNull: false,
         },
-        data: { 
+        Data: { 
             type: DataTypes.JSON,
             allowNull: false,
         },  
