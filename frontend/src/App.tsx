@@ -1,5 +1,4 @@
 
-
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -12,6 +11,8 @@ import DashboardLayout from "./layouts/Sidebar"; // The Sidebar wrapper
 import GithubCallback from "./components/GithubCallback";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import CoverletterDashboard from "./pages/CoverLetterDashboard";
+
 export default function App() {
   return (
     <Routes>
@@ -37,7 +38,7 @@ export default function App() {
           <Route path="/my-resumes" element={<Dashboard />} />
           
           {/* Future features can go here */}
-          <Route path="/cover-letter" element={<div>Cover Letter Feature Coming Soon</div>} />
+          <Route path="/cover-letter" element={<CoverletterDashboard />} />
           <Route path="/ats-check" element={<div>ATS Scorer Coming Soon</div>} />
 
 

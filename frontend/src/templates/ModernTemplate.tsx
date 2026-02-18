@@ -1,4 +1,4 @@
-import type { ResumeData } from "../templates/templateindex";
+import type { ResumeData } from "../types/templateindex";
 
 export default function Modern({ data }: { data: ResumeData }) {
   return (

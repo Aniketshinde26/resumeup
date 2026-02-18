@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface ResumeCardProps {
   title: string;
-  updatedAt: string;
+  updatedAt?: string;
   resumeData?: any;
   showContent?: boolean;
   preview?: string;
@@ -20,19 +20,16 @@ export default function ResumeCard({
   onDelete,
 }: ResumeCardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.28); // Fallback scale
+  const [scale, setScale] = useState(0.28);
 
   useEffect(() => {
     const updateScale = () => {
       if (containerRef.current) {
-        // Calculate scale: Container Width / Original Iframe Width (790px)
         const containerWidth = containerRef.current.offsetWidth;
         const newScale = containerWidth / 790;
         setScale(newScale);
       }
     };
-
-    // Calculate on mount and whenever the window resizes
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
@@ -41,29 +38,28 @@ export default function ResumeCard({
   return (
     <div
       onClick={onClick}
-      className="bg-card-bg border border-border-subtle rounded-xl p-8 hover:border-brand-primary/50 transition-all hover:shadow-md cursor-pointer group relative"
+      // Replaced custom variables with standard Slate/Blue classes for visibility
+      className="bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-500/50 transition-all hover:shadow-md cursor-pointer group relative flex flex-col h-full"
     >
-      {/* SHOWCASE CONTAINER */}
+      {/* PREVIEW CONTAINER */}
       <div 
         ref={containerRef}
-        className="bg-white rounded-lg aspect-[1/1.41] mb-6 border border-slate-300 overflow-hidden relative shadow-sm group-hover:shadow-md transition-all flex items-center justify-center"
+        className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center"
       >
         {showContent && resumeData?.id ? (
-          <div className="relative w-full h-full bg-white pointer-events-none flex items-center justify-center">
+          <div className="relative w-full h-full bg-white flex items-center justify-center overflow-hidden">
             <iframe
               src={`/resume/preview/${resumeData.id}`}
               title={title}
-              className="absolute border-none"
+              className="absolute border-none pointer-events-none"
               style={{
                 width: "790px",
                 height: "1118px", 
-                transform: `scale(${scale})`, // Use the dynamic scale
+                transform: `scale(${scale})`,
                 transformOrigin: "center center",
-                pointerEvents: "none",
               }}
             />
-            {/* Overlay to prevent interaction */}
-            <div className="absolute inset-0 z-10" />
+            <div className="absolute inset-0 z-30 bg-transparent" />
           </div>
         ) : (
           <img
@@ -71,46 +67,33 @@ export default function ResumeCard({
             alt={title}
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             onError={(e) => {
-              e.currentTarget.src =
-                "https://via.placeholder.com/300x424/f1f5f9/64748b?text=No+Preview";
+              e.currentTarget.src = "https://via.placeholder.com/300x424/f1f5f9/64748b?text=No+Preview";
             }}
           />
         )}
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20" />
       </div>
 
       {/* INFO FOOTER */}
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-end mt-auto">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-text-main truncate group-hover:text-brand-primary transition-colors text-sm">
+          <h3 className="font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors text-sm">
             {title || "Untitled Resume"}
           </h3>
-          <p className="text-[10px] text-text-muted mt-0.5">
-            Edited {new Date(updatedAt).toLocaleDateString()}
+          <p className="text-[10px] text-slate-400 mt-1 font-medium">
+            Edited {updatedAt ? new Date(updatedAt).toLocaleDateString() : "Recently"}
           </p>
         </div>
 
         <button
           onClick={(e) => {
             e.stopPropagation();
+            // Removed window.confirm - deletes immediately
             onDelete?.();
           }}
-          className="ml-10 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+          className="ml-4 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all md:opacity-0 group-hover:opacity-100"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </button>
       </div>

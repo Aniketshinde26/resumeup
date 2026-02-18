@@ -1,6 +1,6 @@
 import { useBuilder } from "../hooks/useBuilder";
 import {Award,LanguagesIcon, Rocket, ChevronDown ,Wrench , X, User,Briefcase,GraduationCap, Calendar, Camera,Plus, Trash2, Download } from "lucide-react";
-import { TEMPLATES } from "../templates/templateindex";
+import { TEMPLATES } from "../types/templateindex";
 import "../print.css";
 export default function Builder() {
   const {

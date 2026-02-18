@@ -1,4 +1,4 @@
-import type { ResumeData } from "./templateindex";
+import type { ResumeData } from "../types/templateindex";
 
 export default function NeoProfessionalTemplate({
   data,

@@ -1,9 +1,9 @@
-import ArchitectTemplate from "./Architect";
-import NeoProfessionalTemplate from "./NeoPofessionalTemplate";
-import CorporateTemplate from "./MinimalistCorporate";
-import MinimalTemplate from "./MinimalTemplate";
-import ModernTech from "./ModernTech";
-import ModernTemplate from "./ModernTemplate";
+import ArchitectTemplate from "../templates/Architect";
+import NeoProfessionalTemplate from "../templates/NeoPofessionalTemplate";
+import CorporateTemplate from "../templates/MinimalistCorporate";
+import MinimalTemplate from "../templates/MinimalTemplate";
+import ModernTech from "../templates/ModernTech";
+import ModernTemplate from "../templates/ModernTemplate";
 
 // Add your 10 templates here as you build them
 export const TEMPLATES: Record<string, React.FC<any>> = {
@@ -68,4 +68,18 @@ projects?: {
   }[];
     languages?: { name: string; proficiency: string }[];
   certifications?: { name: string; issuer: string; date: string }[];
+}
+export interface CoverLetter {
+  id: string;
+  Title: string;
+  TemplateId: string;
+  Data: any; // You can create a CoverLetterData interface later
+}
+
+// Interface for the Resume object itself (as stored in DB)
+export interface Resume {
+  id: string;
+  title: string;
+  templateId: string;
+  data: ResumeData;
 }

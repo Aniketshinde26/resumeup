@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { TEMPLATES } from "../templates/templateindex"; 
+import { TEMPLATES } from "../types/templateindex"; 
 
 export default function ResumePreview() {
   const { id } = useParams();

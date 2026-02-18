@@ -1,41 +1,33 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import type { Resume } from "../types/templateindex";
 
 export const useDashboard = () => {
-  const [resumes, setResumes] = useState([]);
+  const [resumes, setResumes] = useState<Resume[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEditReume = (id: string) => {
+  // Renamed for clarity: handleEditResume
+  const handleEditResume = (id: string) => {
     navigate(`/builder/${id}`);
   };
-  // Fetch all resumes on load
-const fetchResumes = async () => {
-  
-  setIsLoading(true); // Start the skeleton animation
-  
-  try {
-    // 1. Create a "Minimum Delay" promise (e.g., 1000ms = 1 second)
-    const delay = new Promise((resolve) => setTimeout(resolve, 450));
 
-    // 2. Fetch the actual data
-    const res = await api.get("/resumes");
-    
-
-    // 3. Wait for BOTH the data AND the timer to finish
-    // This ensures the skeleton doesn't "flicker" if the internet is too fast
-    await delay;
-
-    setResumes(res.data.resumes || []);
-  } catch (err) {
-    console.error("Failed to fetch resumes", err);
-  } finally {
-    setIsLoading(false); // Stop the skeleton animation
-  }
-};
+  const fetchResumes = async () => {
+    setIsLoading(true);
+    try {
+      const delay = new Promise((resolve) => setTimeout(resolve, 450));
+      const res = await api.get("/resumes");
+      await delay;
+      setResumes(res.data.resumes || []);
+    } catch (err) {
+      console.error("Failed to fetch resumes", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchResumes();
@@ -67,15 +59,14 @@ const fetchResumes = async () => {
   const handleDeleteResume = async (id: string) => {
     try {
       await api.delete(`/resumes/${id}`);
-      setResumes((prev) => prev.filter((resume: any) => resume.id !== id));
+      setResumes((prev) => prev.filter((resume) => resume.id !== id));
       console.log("Resume deleted successfully");
     } catch (err) {
       console.error("Failed to delete resume", err);
-      alert;
+      alert("Failed to delete resume. Please try again."); // Fixed function call
     }
   };
 
- 
   return {
     resumes,
     isModalOpen,
@@ -83,7 +74,7 @@ const fetchResumes = async () => {
     isLoading,
     handleTemplateSelect,
     handleCreate,
-    handleEditReume,
+    handleEditResume, 
     handleDeleteResume,
   };
 };
