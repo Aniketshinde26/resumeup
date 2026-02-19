@@ -36,7 +36,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
-app.use("/api/coverletters", coverletterRoutes);
+
+app.use("/api/cover-letter", coverletterRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "ResumeUp backend is running!" });

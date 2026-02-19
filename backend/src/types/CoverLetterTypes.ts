@@ -5,7 +5,7 @@ export interface CoverLetterAttributes {
   userId: number;
   Title: string;
   TemplateId: string;
-  Data: object;
+  Data: any;
   createdAt?: Date;
   updatedAt?: Date;
 }

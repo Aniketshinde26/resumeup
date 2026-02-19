@@ -12,7 +12,7 @@ import GithubCallback from "./components/GithubCallback";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import CoverletterDashboard from "./pages/CoverLetterDashboard";
-
+import CoverLetterBuilder from "./pages/CoverLetterBuilder";
 export default function App() {
   return (
     <Routes>
@@ -25,6 +25,7 @@ export default function App() {
 <Route path="/reset-password/:token" element={<ResetPassword />} />
       {/* Builder: Usually kept separate so you have full-screen space to design */}
       <Route path="/builder/:id" element={<Builder />} />
+      <Route path="/cover-letter/builder/:id" element={<CoverLetterBuilder />} />
           <Route path="/resume/preview/:id" element={<ResumePreview />} />
 
       {/* Protected Routes Group with Sidebar */}

@@ -48,7 +48,7 @@ export const useCoverLetterBuilder = () => {
         Data: {},
       });
       const newId = res.data.coverLetter?.id || res.data.id;
-      navigate(`/cover-letter-builder/${newId}`);
+     navigate(`/cover-letter/builder/${newId}`);
     } catch (err) {
       console.error("Failed to create cover letter", err);
     } finally {

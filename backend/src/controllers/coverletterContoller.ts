@@ -10,33 +10,35 @@ import { AuthRequest } from "../types/ResumeAuthTypes";
  */
 
 export const createCoverLetter = async (
-  req: AuthRequest,
+  req: AuthRequest, 
   res: Response
 ): Promise<Response> => {
   try {
+    // 1. THIS ELIMINATES THE 'UNDEFINED' ERROR
+    // After this check, TypeScript knows req.user is a JwtUser
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const { title, data, templateId } = req.body;
-    if (!data || !templateId || !title) {
-        return res.status(400).json({ message: "Missing required fields" });
-    }
 
+    const { Title, Data, TemplateId } = req.body;
+
+    // 2. THIS ELIMINATES THE 'STRING vs OBJECT' ERROR
+    // Ensure Data matches your interface (any or object)
     const coverletter = await CoverLetter.create({
-      userId: req.user.id,
-      Title: title,
-      TemplateId: templateId,
-      Data: data,
+      userId: req.user.id, // req.user.id is now safe to access
+      Title,
+      TemplateId,
+      Data: Data || {}, 
     });
-    
+
     return res.status(201).json({
       message: "Cover Letter created successfully",
-      coverletter,
+      coverLetter: coverletter,
     });
   } catch (error) {
-    console.error("CREATE COVER LETTER ERROR:", error);
-    return res.status(500).json({ message: "Failed to create cover letter" });
-  };
+    console.error("CREATE ERROR:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 /**
