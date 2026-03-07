@@ -9,7 +9,8 @@ interface CreateItemModalProps {
   type: "Resume" | "Cover Letter"; 
 }
 
-export default function CreateItemModal({
+export default function 
+CreateItemModal({
   isOpen,
   onClose,
   onCreate,

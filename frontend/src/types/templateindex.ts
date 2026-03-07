@@ -1,9 +1,10 @@
-import ArchitectTemplate from "../templates/Architect";
-import NeoProfessionalTemplate from "../templates/NeoPofessionalTemplate";
-import CorporateTemplate from "../templates/MinimalistCorporate";
-import MinimalTemplate from "../templates/MinimalTemplate";
-import ModernTech from "../templates/ModernTech";
-import ModernTemplate from "../templates/ModernTemplate";
+import React from "react";
+import ArchitectTemplate from "../resumetemplates/Architect";
+import NeoProfessionalTemplate from "../resumetemplates/NeoPofessionalTemplate";
+import CorporateTemplate from "../resumetemplates/MinimalistCorporate";
+import MinimalTemplate from "../resumetemplates/MinimalTemplate";
+import ModernTech from "../resumetemplates/ModernTech";
+import ModernTemplate from "../resumetemplates/ModernTemplate";
 
 // Add your 10 templates here as you build them
 export const TEMPLATES: Record<string, React.FC<any>> = {

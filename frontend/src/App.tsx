@@ -11,8 +11,8 @@ import DashboardLayout from "./layouts/Sidebar"; // The Sidebar wrapper
 import GithubCallback from "./components/GithubCallback";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import CoverletterDashboard from "./pages/CoverLetterDashboard";
-import CoverLetterBuilder from "./pages/CoverLetterBuilder";
+import CoverLetterDashboard from "./pages/CoverLetterDashboard";
+
 export default function App() {
   return (
     <Routes>
@@ -25,7 +25,6 @@ export default function App() {
 <Route path="/reset-password/:token" element={<ResetPassword />} />
       {/* Builder: Usually kept separate so you have full-screen space to design */}
       <Route path="/builder/:id" element={<Builder />} />
-      <Route path="/cover-letter/builder/:id" element={<CoverLetterBuilder />} />
           <Route path="/resume/preview/:id" element={<ResumePreview />} />
 
       {/* Protected Routes Group with Sidebar */}
@@ -37,9 +36,9 @@ export default function App() {
           
           {/* Your current dashboard (The Resume List) */}
           <Route path="/my-resumes" element={<Dashboard />} />
+          <Route path= "/cover-letter" element={<CoverLetterDashboard />} />
           
           {/* Future features can go here */}
-          <Route path="/cover-letter" element={<CoverletterDashboard />} />
           <Route path="/ats-check" element={<div>ATS Scorer Coming Soon</div>} />
 
 

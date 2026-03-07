@@ -11,3 +11,4 @@ export interface CoverLetterAttributes {
 }
 export interface CoverLetterCreationAttributes
   extends Optional<CoverLetterAttributes, "Id" | "createdAt" | "updatedAt"> {}
+  
