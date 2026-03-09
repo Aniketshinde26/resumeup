@@ -63,7 +63,7 @@ export const getAllCoverLetters = async (
         return res.status(200).json({
             message: "User cover letters fetched successfully",
             count: coverletters.length,
-            coverletters,
+            coverletters: coverletters,
             isGuest: false 
         });
     }
