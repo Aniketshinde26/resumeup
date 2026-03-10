@@ -80,7 +80,7 @@ projects?: {
   certifications?: { name: string; issuer: string; date: string }[];
 }
 export interface CoverLetter {
-  id: string;
+  Id: string;
   Title: string;
   TemplateId: string;
   Data: any; // You can create a CoverLetterData interface later

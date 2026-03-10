@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import type { CoverLetter } from "../types/templateindex";
@@ -10,23 +10,24 @@ export const useCoverLetterDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);  
   const navigate = useNavigate();   
 
-  const handleEditCoverLetter = (id: string) => {
-    navigate(`/cover-letter/builder/${id}`);
-  };
 
-  const fetchCoverLetters = async () => {
-    setIsLoading(true);
-    try {
-      const delay = new Promise((resolve) => setTimeout(resolve, 450));
-        const res = await api.get("/cover-letters");
-        await delay;
-        setCoverLetters(res.data.coverLetters || []);
-    } catch (err) {
-      console.error("Failed to fetch cover letters", err);
-    } finally {
-      setIsLoading(false);
-    }
-    };
+
+const fetchCoverLetters = async () => {
+  setIsLoading(true);
+  try {
+    const res = await api.get("/cover-letters");
+
+    setCoverLetters(res.data.coverletters || []); 
+  } catch (err) {
+    console.error("Failed to fetch", err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+    useEffect(() => {
+        fetchCoverLetters();
+    }, []);
 
     const handleTemplateSelect = (templateId: string) => {
         setSelectedTemplate(templateId);
@@ -72,10 +73,18 @@ const handleCreateCoverLetter = async (title: string) => {
       const handleDeleteCoverLetter = async (id: string) => {
         try {
           await api.delete(`/cover-letters/${id}`); 
-          setCoverLetters((prev) => prev.filter((cl) => cl.id !== id));
+          setCoverLetters((prev) => prev.filter((cl) => cl.Id !== id));
         } catch (err) {
           console.error("Deletion failed", err);
         } 
+      };
+
+      const handleEditCoverLetter = (Id: string|number) => {
+        if (!Id) {
+          console.error("No ID provided for editing");
+          return;
+        }
+        navigate(`/cover-letter-builder/${Id}`);
       };
 
      
@@ -89,6 +98,7 @@ const handleCreateCoverLetter = async (title: string) => {
         handleTemplateSelect,
         handleCreateCoverLetter,
         handleDeleteCoverLetter,
-        setIsModalOpen
+        setIsModalOpen,
+        
     };
 };

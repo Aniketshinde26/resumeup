@@ -58,6 +58,7 @@ export default function CoverLetterBuilder() {
 
               const iframeDoc = iframe.contentWindow?.document;
               if (!iframeDoc) return;
+              
 
               iframeDoc.write(`
                 <!DOCTYPE html>

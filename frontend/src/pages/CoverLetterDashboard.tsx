@@ -56,18 +56,18 @@ export default function CoverLetterDashboard() {
     
 
      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <SkeletonWrapper isLoading={false} count={4}>
+        <SkeletonWrapper isLoading={isLoading} count={4}>
           {coverLetters.length > 0 ? (
             coverLetters.map((coverLetter: any) => (
               <CoverLetterCard
-                key={coverLetter.id}
-                title={coverLetter.title}
+                key={coverLetter.Id}
+                Title={coverLetter.Title}
                 updatedAt={coverLetter.updatedAt}
                 coverLetterData={coverLetter}
                 preview={coverLetter.preview}
                 showContent={false}
-                onClick={() => handleEditCoverLetter(coverLetter.id)}
-                onDelete={() => handleDeleteCoverLetter(coverLetter.id)}
+                onClick={() => handleEditCoverLetter(coverLetter.Id)}
+                onDelete={() => handleDeleteCoverLetter(coverLetter.Id)}
               />
             ))
           ) : (
