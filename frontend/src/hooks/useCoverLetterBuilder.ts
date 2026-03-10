@@ -2,8 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
 
-// Assuming you want the same public templates available for cover letters
-const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
+const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional", "classic"];
 
 export const useCoverLetterBuilder = () => {
     const { id } = useParams<{ id: string }>();
@@ -18,6 +17,7 @@ export const useCoverLetterBuilder = () => {
         setIsDirty(true);
         setCoverLetter((prev: any) => ({
             ...prev,
+            // Consistently use capital 'Data'
             Data: { ...prev.Data, ...(newData.Data || newData) },
         }));
     };
@@ -27,42 +27,41 @@ export const useCoverLetterBuilder = () => {
 
         // 1. Guest Mode Check
         if (PUBLIC_TEMPLATES.includes(id as string)) {
-            console.log("Guest Mode: Loading template structure for", id);
-            const guestCoverLetter = {
+            setCoverLetter({
                 id: id,
                 Title: id === "moderntech" ? "Modern Tech Cover Letter" : "Professional Cover Letter",
                 TemplateId: id,
-                Data: {},
-            };
-            setCoverLetter(guestCoverLetter);
+                Data: { personal: {}, recipient: {}, letter: { bodyParagraphs: [] } },
+            });
             setLoading(false);
             return;
         }
 
         try {
             setLoading(true);
-            const res = await api.get(`/cover-letter/${id}`);
-            const fetchedCoverLetter = res.data.coverLetter || res.data;
+            const res = await api.get(`/cover-letters/${id}`);
+            const fetched = res.data.coverLetter || res.data.coverletter || res.data;
 
-            if (typeof fetchedCoverLetter.data === "string") {
+            // Fix the parsing logic to use capital 'Data'
+            if (typeof fetched.Data === "string") {
                 try {
-                    fetchedCoverLetter.data = JSON.parse(fetchedCoverLetter.data);
+                    fetched.Data = JSON.parse(fetched.Data);
                 } catch (e) {
-                    console.error("Failed to parse cover letter data string", e);
-                    fetchedCoverLetter.data = {};
+                    console.error("Failed to parse Data string", e);
+                    fetched.Data = {};
                 }
             }
 
-            // Ensure nested objects exist specifically for cover letters
-            if (!fetchedCoverLetter.data) fetchedCoverLetter.data = {};
+            // Ensure nested objects exist so the UI doesn't crash
+            if (!fetched.Data) fetched.Data = {};
             const fields = ['personal', 'recipient', 'letter'];
             fields.forEach(field => {
-                if (!fetchedCoverLetter.data[field]) {
-                    fetchedCoverLetter.data[field] = {}; 
+                if (!fetched.Data[field]) {
+                    fetched.Data[field] = field === 'letter' ? { bodyParagraphs: [] } : {}; 
                 }
             });
 
-            setCoverLetter(fetchedCoverLetter);
+            setCoverLetter(fetched);
         } catch (error) {
             console.error("Error loading cover letter:", error);
         } finally {
@@ -76,32 +75,25 @@ export const useCoverLetterBuilder = () => {
 
     // Auto-save logic
     useEffect(() => {
-        if (!coverLetter || !coverLetter.data || !id) return;
+        // Updated to use capital 'Data'
+        if (!coverLetter || !coverLetter.Data || !id) return;
         if (!isDirty || saving) return;
-
-        // Prevent auto-save for guests
         if (PUBLIC_TEMPLATES.includes(id as string)) return;
 
         const timer = setTimeout(() => {
             handleSave();
-        }, 1000);
+        }, 1500);
 
         return () => clearTimeout(timer);
-    }, [isDirty, coverLetter?.data, saving, coverLetter, id]);
+    }, [isDirty, coverLetter?.Data, saving, id]);
 
     const handleSave = async () => {
         if (!coverLetter || !coverLetter.Data || !id) return;
         if (!isDirty || saving) return;
 
-        // Block manual save for guests
-        if (PUBLIC_TEMPLATES.includes(id as string)) {
-            console.log("Guest Mode: Save disabled");
-            return;
-        }
-
         try {
             setSaving(true);
-            await api.put(`/cover-letter/${id}`, {
+            await api.put(`/cover-letters/${id}`, {
                 Title: coverLetter.Title,
                 Data: coverLetter.Data,
             });
@@ -128,7 +120,7 @@ export const useCoverLetterBuilder = () => {
         const file = e.target.files?.[0];
         if (file) {
             const previewUrl = URL.createObjectURL(file);
-            updatePersonal("image", previewUrl); // Adjusted to match your template's "image" property
+            updatePersonal("image", previewUrl);
         }
     };
 

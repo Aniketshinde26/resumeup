@@ -34,22 +34,40 @@ export const useCoverLetterDashboard = () => {
 
     };
 
-    const handleCreateCoverLetter = async (Title: string) => {
-        setIsLoading(true);
-        try {
-          const res = await api.post("/cover-letters", {
-            Title,
+const handleCreateCoverLetter = async (title: string) => {
+    setIsLoading(true);
+    try {
+        const res = await api.post("/cover-letters", {
+            Title: title,
             TemplateId: selectedTemplate,
             Data: {},
-          });
-          const newId = res.data.coverLetter?.id || res.data.id;
-          navigate(`/cover-letter-builder/${newId}`);
-        } catch (err) {
-          console.error("Creation failed", err);
-        } finally {
-          setIsLoading(false);
-        } 
-      };
+        });
+
+        // 1. Log this so you can see exactly what your DB sent back
+        console.log("DEBUG: Backend response data:", res.data);
+
+        // 2. Try every possible way the ID might be named
+        const newId = 
+            res.data.coverLetter?.id || 
+            res.data.coverLetter?.Id || 
+            res.data.id || 
+            res.data.Id;
+
+        if (!newId) {
+            console.error("CRITICAL: No ID returned from backend. Check the console log above.");
+            return; 
+        }
+
+        // 3. Only navigate if newId actually exists
+        navigate(`/cover-letter-builder/${newId}`);
+        setIsModalOpen(false);
+
+    } catch (err) {
+        console.error("Creation failed", err);
+    } finally {
+        setIsLoading(false);
+    }
+};
 
       const handleDeleteCoverLetter = async (id: string) => {
         try {
