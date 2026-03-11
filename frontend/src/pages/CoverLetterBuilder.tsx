@@ -3,12 +3,13 @@ import {
   AlignLeft, 
   User, 
   Camera, 
-  Trash2, 
-  Download, 
+  Trash2,  
   Calendar 
 } from "lucide-react";
 import { useCoverLetterBuilder } from "../hooks/useCoverLetterBuilder";
 import { COVER_LETTER_TEMPLATES_MAP } from "../types/templateindex"; 
+import { handlePrint } from "../utils/printUtils";
+import BuilderHeader from "../components/BuilderHeader";
 import "../print.css";
 
 export default function CoverLetterBuilder() {
@@ -27,119 +28,21 @@ export default function CoverLetterBuilder() {
   if (loading) return <div className="p-10 text-center">Loading Cover Letter...</div>;
   if (!coverLetter) return null;
 
-  const SelectedTemplate = COVER_LETTER_TEMPLATES_MAP[coverLetter.TemplateId || "professional"];
-
+const templateKey = (coverLetter.TemplateId || "moderncover").toLowerCase();
+const SelectedTemplate = COVER_LETTER_TEMPLATES_MAP[templateKey];
   return (
     <div className="flex flex-col h-screen bg-slate-50 text-slate-900">
       {/* TOOLBAR */}
-      <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-300 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-0 tracking-tight">
-            <span className="text-slate-900 font-bold text-xl">Cover</span>
-            <span className="text-indigo-600 font-bold text-xl">Up</span>
-          </div>
-          <div className="h-6 w-px bg-slate-200" />
-          <h1 className="font-medium text-slate-600">{coverLetter.Title}</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              const template = document.getElementById("cover-letter-template");
-              if (!template) return;
-
-              const iframe = document.createElement("iframe");
-              iframe.style.position = "fixed";
-              iframe.style.right = "100vw";
-              iframe.style.bottom = "100vh";
-              iframe.style.width = "0";
-              iframe.style.height = "0";
-              iframe.style.border = "0";
-              document.body.appendChild(iframe);
-
-              const iframeDoc = iframe.contentWindow?.document;
-              if (!iframeDoc) return;
-              
-
-              iframeDoc.write(`
-                <!DOCTYPE html>
-                <html>
-                  <head>
-                    <meta charset="UTF-8">
-                    <title>Cover Letter</title>
-                    <script src="https://cdn.tailwindcss.com"></script>
-                    <style>
-                      @page {
-                        size: A4 portrait;
-                        margin: 0;
-                      }
-                      * {
-                        margin: 0;
-                        padding: 0;
-                        box-sizing: border-box;
-                        -webkit-print-color-adjust: exact !important;
-                        print-color-adjust: exact !important;
-                      }
-                      body {
-                        width: 210mm;
-                        margin: 0;
-                        padding: 0;
-                      }
-                      #cover-letter-template {
-                        width: 210mm;
-                        min-height: 297mm;
-                      }
-                    </style>
-                  </head>
-                  <body>
-                    ${template.outerHTML}
-                    <script>
-                      window.onload = () => {
-                        setTimeout(() => {
-                          window.focus();
-                          window.print();
-                        }, 500);
-                      };
-                    </script>
-                  </body>
-                </html>
-              `);
-
-              iframeDoc.close();
-
-              setTimeout(() => {
-                if (document.body.contains(iframe)) {
-                  document.body.removeChild(iframe);
-                }
-              }, 3000);
-            }}
-            className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-all shadow-sm flex items-center gap-2"
-          >
-            <Download size={18} />
-            Download PDF
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-all shadow-sm"
-          >
-            {saving ? "Saving..." : "Save"}
-          </button>
-          <div className="flex items-center gap-2 px-3 py-1 bg-white border rounded-full shadow-sm">
-            <div
-              className={`h-2 w-2 rounded-full transition-colors duration-500 ${
-                saving
-                  ? "bg-blue-500 animate-pulse"
-                  : isDirty
-                  ? "bg-amber-500"
-                  : "bg-emerald-500"
-              }`}
-            />
-            <span className="text-[10px] font-bold uppercase text-slate-500">
-              {saving ? "Saving..." : isDirty ? "Changes Unsaved" : "Saved"}
-            </span>
-          </div>
-        </div>
-      </header>
+      <BuilderHeader
+        productName="Cover"
+        accentColor="text-indigo-600"
+        buttonColor="bg-indigo-600"
+        docTitle={coverLetter.Title}
+        isSaving={saving}
+        isDirty={isDirty}
+        onSave={handleSave}
+        onDownload={() => handlePrint("cover-letter-preview", "Cover Letter")}
+      />
 
       <main className="flex-1 flex overflow-hidden">
         {/* LEFT SIDE: INPUT FORMS */}

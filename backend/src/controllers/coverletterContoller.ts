@@ -112,7 +112,7 @@ export const getCoverLetterById = async (
 
 /**
  * @desc Update a cover letter by ID for the authenticated user
- * @param req Authenticated request with cover letter ID in params and updated data in body     
+ * @param req Authenticleneated request with cover letter ID in params and updated data in body     
  * @param res Express response
  * @returns Updated cover letter data (200) or error if not found/unauthorized
  */
