@@ -279,38 +279,43 @@ const SelectedTemplate = COVER_LETTER_TEMPLATES_MAP[templateKey];
 
         <div className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-slate-300/60 to-transparent" />
 
-        {/* RIGHT SIDE: PREVIEW */}
-        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
-          <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
-            <div
-              id="cover-letter-preview"
-              className="bg-white shadow-2xl rounded-[24px] overflow-hidden ring-1 ring-black/10 shrink-0"
-              style={{
-                width: "210mm",
-                height: "297mm",
-                minWidth: "210mm",
-                minHeight: "297mm",
-                margin: "0 auto",
-              }}
-            >
-              {SelectedTemplate ? (
-                <SelectedTemplate
-                  data={{
-                    ...coverLetter.Data,
-                    personal: {
-                      ...coverLetter.Data.personal,
-                      image: tempImage,
-                    },
-                  }}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-400">
-                  Template Not Found
-                </div>
-              )}
-            </div>
+       {/* RIGHT SIDE: PREVIEW */}
+{/* RIGHT SIDE: PREVIEW */}
+<section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
+  <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
+    {/* This div provides the rounded UI look in the browser */}
+    <div className="bg-white shadow-2xl rounded-[24px] overflow-hidden ring-1 ring-black/10 shrink-0">
+      
+      {/* This div is what handlePrint will target - it stays sharp for the PDF */}
+      <div
+        id="cover-letter-preview"
+        style={{
+          width: "210mm",
+          height: "297mm",
+          minWidth: "210mm",
+          minHeight: "297mm",
+        }}
+      >
+        {SelectedTemplate ? (
+          <SelectedTemplate
+            data={{
+              ...coverLetter.Data,
+              personal: {
+                ...coverLetter.Data.personal,
+                image: tempImage,
+              },
+            }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-slate-400">
+            Template Not Found
           </div>
-        </section>
+        )}
+      </div>
+
+    </div>
+  </div>
+</section>
       </main>
 
       <style>{`
