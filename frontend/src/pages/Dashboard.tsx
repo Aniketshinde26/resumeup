@@ -1,5 +1,5 @@
 import { TEMPLATE_LIST } from "../types/templateindex";
-import ResumeCard from "../components/ResumeCard";
+import DocumentCard from "../components/DocumentCard";
 import CreateItemModal from "../components/CreateItemModal";
 import { useDashboard } from "../hooks/useDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
@@ -21,7 +21,7 @@ export default function Dashboard() {
       {/* 1. START NEW Section */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           <SkeletonWrapper isLoading={isLoading} count={5}>
             {TEMPLATE_LIST.map((tpl) => (
               <div 
@@ -53,15 +53,15 @@ export default function Dashboard() {
           Your Resumes
         </h2>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">  
-          <SkeletonWrapper isLoading={isLoading} count={4}>
+<div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">          <SkeletonWrapper isLoading={isLoading} count={4}>
             {resumes.length > 0 ? (
               resumes.map((resume: any) => (
-                <ResumeCard
+                <DocumentCard
                   key={resume.id}
                   title={resume.title}
                   updatedAt={resume.updatedAt}
-                  resumeData={resume}
+                  id={resume.id}
+                  type="resume"
                   showContent={true}
                   preview={`/previews/${resume.templateId}.png`}
                   onClick={() => handleEditResume(resume.id)}

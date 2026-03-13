@@ -1,4 +1,4 @@
-import  CoverLetterCard from "../components/CoverLetterCard";
+import DocumentCard from "../components/DocumentCard";
 import CreateItemModal from "../components/CreateItemModal";
 import { useCoverLetterDashboard } from "../hooks/useCoverLetterDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
@@ -22,7 +22,7 @@ export default function CoverLetterDashboard() {
     <div className="p-8" max-w-7xl mx-auto>
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <SkeletonWrapper isLoading={false} count={2}>
               {COVER_LETTER_TEMPLATES.map((tpl) => (
             <div 
@@ -55,15 +55,16 @@ export default function CoverLetterDashboard() {
         </h2>
     
 
-     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <SkeletonWrapper isLoading={isLoading} count={4}>
+<div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">       
+   <SkeletonWrapper isLoading={isLoading} count={4}>
           {coverLetters.length > 0 ? (
             coverLetters.map((coverLetter: any) => (
-              <CoverLetterCard
+              <DocumentCard
                 key={coverLetter.Id}
-                Title={coverLetter.Title}
+                title={coverLetter.Title}
                 updatedAt={coverLetter.updatedAt}
-                coverLetterData={coverLetter}
+                id={coverLetter.Id}
+                type="coverletter"
                 preview={coverLetter.preview}
                 showContent={false}
                 onClick={() => handleEditCoverLetter(coverLetter.Id)}
