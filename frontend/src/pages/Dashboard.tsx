@@ -21,7 +21,7 @@ export default function Dashboard() {
       {/* 1. START NEW Section */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <SkeletonWrapper isLoading={isLoading} count={5}>
             {TEMPLATE_LIST.map((tpl) => (
               <div 

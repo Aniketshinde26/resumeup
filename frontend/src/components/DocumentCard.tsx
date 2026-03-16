@@ -40,7 +40,7 @@ export default function DocumentCard({
   }, [showContent]);
 
   // Determine the preview URL based on type
-  const previewUrl = type === "resume" ? `/resume/preview/${id}` : `/coverletter/preview/${id}`;
+  const previewUrl = type === "resume" ? `/resume/preview/${id}` : `/cover-letter/preview/${id}`;
 
   return (
     <div
@@ -62,7 +62,8 @@ export default function DocumentCard({
                 width: "790px",
                 height: "1118px",
                 transform: `scale(${scale})`,
-                transformOrigin: "center center",
+                transformOrigin: "top center",
+                top: 0,
               }}
             />
             {/* Overlay to prevent iframe interaction while in card mode */}

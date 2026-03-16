@@ -7,6 +7,7 @@ import ModernTech from "../resumetemplates/ModernTech";
 import ModernTemplate from "../resumetemplates/ModernTemplate";
 import ProfessionalSplitCoverLetter from "../coverlettertemplates/Architecttype";
 import ModernMinimalCoverLetter from "../coverlettertemplates/ModernMinimilistic";
+import MinimalistBorderTemplate from "../coverlettertemplates/MinimalBorder";
 export const TEMPLATES: Record<string, React.FC<any>> = {
   modern: ModernTemplate,
   minimal: MinimalTemplate,
@@ -19,6 +20,7 @@ export const TEMPLATES: Record<string, React.FC<any>> = {
 export const COVER_LETTER_TEMPLATES_MAP: Record<string, React.FC<any>> = {
   classic: ProfessionalSplitCoverLetter,
   moderncover: ModernMinimalCoverLetter,
+  minimalborder: MinimalistBorderTemplate,
 };
 
 export const TEMPLATE_LIST = [
@@ -33,6 +35,7 @@ export const TEMPLATE_LIST = [
 export const COVER_LETTER_TEMPLATES = [
  { id: "classic", name: "Classic Cover Letter" },
   { id: "moderncover", name: "Modern Minimalist" },
+  { id: "minimalborder", name: "Minimalist Border" },
 
 ];
 

@@ -22,7 +22,7 @@ export default function CoverLetterDashboard() {
     <div className="p-8" max-w-7xl mx-auto>
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <SkeletonWrapper isLoading={false} count={2}>
               {COVER_LETTER_TEMPLATES.map((tpl) => (
             <div 
@@ -65,8 +65,8 @@ export default function CoverLetterDashboard() {
                 updatedAt={coverLetter.updatedAt}
                 id={coverLetter.Id}
                 type="coverletter"
-                preview={coverLetter.preview}
-                showContent={false}
+                preview={`/previews/${coverLetter.templateId}.png`}
+                showContent={true}
                 onClick={() => handleEditCoverLetter(coverLetter.Id)}
                 onDelete={() => handleDeleteCoverLetter(coverLetter.Id)}
               />

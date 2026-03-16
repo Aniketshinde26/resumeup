@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import CoverLetterDashboard from "./pages/CoverLetterDashboard";
 import CoverLetterBuilder from "./pages/CoverLetterBuilder";
+import CoverLetterPreview from "./pages/CoverLetterPreview";
 export default function App() {
   return (
     <Routes>
@@ -21,29 +22,26 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/auth/github/callback" element={<GithubCallback />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-<Route path="/reset-password/:token" element={<ResetPassword />} />
-      {/* Builder: Usually kept separate so you have full-screen space to design */}
-      <Route path="/builder/:id" element={<Builder />} />
-          <Route path="/resume/preview/:id" element={<ResumePreview />} />
-<Route path="/cover-letter-builder/:id" element={<CoverLetterBuilder />} />
-      {/* Protected Routes Group with Sidebar */}
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+      {/* Protected Routes Group */}
       <Route element={<ProtectedRoute />}>
-        {/* Everything inside here will have the Sidebar */}
+        
+        {/* 1. Routes WITHOUT Sidebar (Full screen previews/builders) */}
+        <Route path="/builder/:id" element={<Builder />} />
+        <Route path="/resume/preview/:id" element={<ResumePreview />} />
+        <Route path="/cover-letter/preview/:id" element={<CoverLetterPreview />} />
+        <Route path="/cover-letter-builder/:id" element={<CoverLetterBuilder />} />
+
+        {/* 2. Routes WITH Sidebar */}
         <Route element={<DashboardLayout />}>
-          {/* This is the new 'Home' where they select options */}
           <Route path="/home" element={<SelectionPage />} />
-          
-          {/* Your current dashboard (The Resume List) */}
           <Route path="/my-resumes" element={<Dashboard />} />
-          <Route path= "/cover-letter" element={<CoverLetterDashboard />} />
-          
-          {/* Future features can go here */}
+          <Route path="/cover-letter" element={<CoverLetterDashboard />} />
           <Route path="/ats-check" element={<div>ATS Scorer Coming Soon</div>} />
-
-
-          
         </Route>
+
       </Route>
 
       {/* Catch-all Redirect */}
