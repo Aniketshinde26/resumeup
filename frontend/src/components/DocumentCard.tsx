@@ -40,7 +40,7 @@ export default function DocumentCard({
   }, [showContent]);
 
   // Determine the preview URL based on type
-  const previewUrl = type === "resume" ? `/resume/preview/${id}` : `/cover-letter/preview/${id}`;
+  const previewUrl = type === "resume" ? `/resume/preview/${id}` : `/cover-letters/preview/${id}`;
 
   return (
     <div

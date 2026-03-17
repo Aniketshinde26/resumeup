@@ -31,7 +31,7 @@ export default function App() {
         {/* 1. Routes WITHOUT Sidebar (Full screen previews/builders) */}
         <Route path="/builder/:id" element={<Builder />} />
         <Route path="/resume/preview/:id" element={<ResumePreview />} />
-        <Route path="/cover-letter/preview/:id" element={<CoverLetterPreview />} />
+        <Route path="/cover-letters/preview/:id" element={<CoverLetterPreview />} />
         <Route path="/cover-letter-builder/:id" element={<CoverLetterBuilder />} />
 
         {/* 2. Routes WITH Sidebar */}

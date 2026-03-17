@@ -1,99 +1,55 @@
 import { useParams } from "react-router-dom";
-
 import { useEffect, useState } from "react";
-
 import api from "../api/axios";
-
-import { COVER_LETTER_TEMPLATES_MAP } from "../types/templateindex";
-
+import {COVER_LETTER_TEMPLATES_MAP } from "../types/templateindex";
 
 export default function CoverLetterPreview() {
-
   const { id } = useParams();
-
   const [coverLetter, setCoverLetter] = useState<any>(null);
-
   const [loading, setLoading] = useState(true);
-
-
-    useEffect(() => {
-
+  useEffect(() => {
     const fetchCoverLetter = async () => {
-
       try {
-
-        const res = await api.get(`/coverletters/${id}`);
-
-        setCoverLetter(res.data.coverLetter || res.data);
-
+        const res = await api.get(`/cover-letters/${id}`);
+        setCoverLetter(res.data.coverletter || res.data);
       } catch (err) {
-
         console.error("Failed to fetch cover letter for preview", err);
-
       } finally {
-
         setLoading(false);
-
-      }   
-
+      } 
     };
-
     fetchCoverLetter();
+  }, [id]);
 
-    }, [id]);
-
-
-if (loading) return <div className="bg-white w-full h-full" />;  if (!coverLetter) return <div>Cover Letter not found</div>;
-
+  if (loading) return <div className="bg-white w-full h-full" />;
+  if (!coverLetter) return <div>Cover Letter not found</div>;  
+  
+  const templateId = coverLetter.TemplateId || coverLetter.templateId;
+  const rawData = coverLetter.Data || coverLetter.data;
 
   let parsedData = {};
-
-    try {
-
-    parsedData =
-
-      typeof coverLetter.data === "string"
-
-        ? JSON.parse(coverLetter.data)
-
-        : coverLetter.data;
-
+  try {
+    parsedData = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
   } catch (e) {
-
     console.error("Parse error", e);
-
+    parsedData = rawData;
   }
+  const TemplateComponent = COVER_LETTER_TEMPLATES_MAP[templateId];
 
-
-    const TemplateComponent = COVER_LETTER_TEMPLATES_MAP[coverLetter.templateId];
-
-
- return (
-// Inside CoverLetterPreview.tsx return
-<div className="bg-white w-[790px] h-[1118px] overflow-hidden preview-mode">
-  <style>{`
-    html, body { 
-      margin: 0; 
-      padding: 0; 
-      background-color: white !important; /* Force white */
-      width: 790px; 
-      height: 1118px; 
-      overflow: hidden;
-    }
-  `}</style>    
-  {TemplateComponent ? (  
-    <TemplateComponent data={parsedData} />
-  ) : (
-    <div className="flex items-center justify-center h-full text-slate-400 bg-white">
-      Template Not Found: {coverLetter.templateId}
+  return (
+    <div className="bg-white w-[790px] h-[1118px] overflow-hidden preview-mode">
+      <style>{`
+        body { margin: 0; padding: 0; overflow: hidden; width: 790px; height: 1118px; }
+        /* Ensure the template component doesn't add huge padding */
+        .preview-mode > div { padding: 0 !important; margin: 0 !important; }
+      `}</style>
+      {TemplateComponent ? (
+        <TemplateComponent data={parsedData} />
+      ) : ( 
+        <div className="p-10 text-center">
+          <p>Template "{templateId}" not found.</p>
+        </div>  
+      )}
     </div>
-  )}
-</div>
-);
-
+  );
 }
-
-
-
-
-
