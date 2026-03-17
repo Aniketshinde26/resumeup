@@ -8,6 +8,9 @@ import ModernTemplate from "../resumetemplates/ModernTemplate";
 import ProfessionalSplitCoverLetter from "../coverlettertemplates/Architecttype";
 import ModernMinimalCoverLetter from "../coverlettertemplates/ModernMinimilistic";
 import MinimalistBorderTemplate from "../coverlettertemplates/MinimalBorder";
+import ModernExecutiveTemplate from "../coverlettertemplates/ModernExecutive";
+import SwissMonoTemplate from "../coverlettertemplates/SwissMono";
+import ElegantSerifTemplate from "../coverlettertemplates/ElegantSerif";
 export const TEMPLATES: Record<string, React.FC<any>> = {
   modern: ModernTemplate,
   minimal: MinimalTemplate,
@@ -21,6 +24,9 @@ export const COVER_LETTER_TEMPLATES_MAP: Record<string, React.FC<any>> = {
   classic: ProfessionalSplitCoverLetter,
   moderncover: ModernMinimalCoverLetter,
   minimalborder: MinimalistBorderTemplate,
+  modernexecutive:ModernExecutiveTemplate,
+  swissmono:SwissMonoTemplate,
+  elegantserif:ElegantSerifTemplate
 };
 
 export const TEMPLATE_LIST = [
@@ -36,6 +42,9 @@ export const COVER_LETTER_TEMPLATES = [
  { id: "classic", name: "Classic Cover Letter" },
   { id: "moderncover", name: "Modern Minimalist" },
   { id: "minimalborder", name: "Minimalist Border" },
+  {id:"modernexecutive",name:"Modern Executive"},
+  {id:"swissmono",name:"Siwss Mono"},
+  {id:"elegantserif",name:"Elegant Serif"}
 
 ];
 
