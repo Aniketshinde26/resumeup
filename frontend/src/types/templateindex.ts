@@ -21,12 +21,12 @@ export const TEMPLATES: Record<string, React.FC<any>> = {
 };
 
 export const COVER_LETTER_TEMPLATES_MAP: Record<string, React.FC<any>> = {
-  classic: ProfessionalSplitCoverLetter,
+  classiccover: ProfessionalSplitCoverLetter,
   moderncover: ModernMinimalCoverLetter,
-  minimalborder: MinimalistBorderTemplate,
-  modernexecutive:ModernExecutiveTemplate,
-  swissmono:SwissMonoTemplate,
-  elegantserif:ElegantSerifTemplate
+  minimalbordercover: MinimalistBorderTemplate,
+  modernexecutivecover:ModernExecutiveTemplate,
+  swissmonocover:SwissMonoTemplate,
+  elegantserifcover:ElegantSerifTemplate
 };
 
 export const TEMPLATE_LIST = [
@@ -39,12 +39,12 @@ export const TEMPLATE_LIST = [
 ];
 
 export const COVER_LETTER_TEMPLATES = [
- { id: "classic", name: "Classic Cover Letter" },
+ { id: "classiccover", name: "Classic Cover Letter" },
   { id: "moderncover", name: "Modern Minimalist" },
-  { id: "minimalborder", name: "Minimalist Border" },
-  {id:"modernexecutive",name:"Modern Executive"},
-  {id:"swissmono",name:"Siwss Mono"},
-  {id:"elegantserif",name:"Elegant Serif"}
+  { id: "minimalbordercover", name: "Minimalist Border" },
+  {id:"modernexecutivecover",name:"Modern Executive"},
+  {id:"swissmonocover",name:"Siwss Mono"},
+  {id:"elegantserifcover",name:"Elegant Serif"}
 
 ];
 

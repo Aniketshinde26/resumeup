@@ -22,7 +22,7 @@ export default function Dashboard() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <SkeletonWrapper isLoading={isLoading} count={5}>
+          <SkeletonWrapper isLoading={false} count={2}>
             {TEMPLATE_LIST.map((tpl) => (
               <div 
                 key={tpl.id} 
@@ -53,7 +53,7 @@ export default function Dashboard() {
           Your Resumes
         </h2>
         
-<div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">          <SkeletonWrapper isLoading={isLoading} count={4}>
+<div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">          <SkeletonWrapper isLoading={false} count={4}>
             {resumes.length > 0 ? (
               resumes.map((resume: any) => (
                 <DocumentCard
