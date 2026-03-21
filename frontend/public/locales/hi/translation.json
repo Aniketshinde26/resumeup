@@ -1,0 +1,9 @@
+{
+  "sidebar":{
+    "home":"होम",
+    "my_resumes":"मेरे रेज़्यूमे",
+    "ats_check":"एटीएस चेक",
+    "cover_letter":"कवर लेटर"
+  },
+  "logout":"लॉगआउट"
+}

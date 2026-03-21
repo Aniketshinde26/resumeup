@@ -1,0 +1,9 @@
+{
+  "sidebar": {
+    "home": "Home",
+    "my_resumes": "My Resumes",
+    "ats_check": "ATS Check",
+    "cover_letter": "Cover Letter"
+  },
+  "logout": "Logout" 
+}
