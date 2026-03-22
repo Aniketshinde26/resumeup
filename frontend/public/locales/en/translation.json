@@ -3,7 +3,47 @@
     "home": "Home",
     "my_resumes": "My Resumes",
     "ats_check": "ATS Check",
-    "cover_letter": "Cover Letter"
+    "cover_letter": "Cover Letter",
+    "logout": "LOGOUT" 
   },
-  "logout": "Logout" 
+  "selectionpage":{
+    "resume_manager":"Resume Manager",
+    "cover_letter":"Cover Letter",
+    "ats_scorer":"ATS Scorer",
+    "create_and_edit_your_professional_resumes":"Create and edit your professional resumes",
+    "generate_custom_letters_for_specific_jobs":"Generate custom letters for specific job",
+    "analyze_your_resume_against_job_descriptions":"Analyze your resume againsgt job descriptions"
+  },
+  "dashboard": {
+    "start_new":"START NEW",
+    "your_resumes":"YOUR RESUMES",
+    "no_resumes_yet":"YOUR RESUMES YET",
+    "select_a_template_above_to_create_your_first_resume":"Select a template above to create your first resume"
+  },
+  "coverletterdashboard":{
+    "start_new":"START NEW",
+    "your_cover_letters":"YOUR COVER LETTERS",
+    "no_coverletters_yet":"No cover letters yet",
+    "select_a_template_above_to_create_your_first_cover_letter":"Select a template above to create your first cover letter"
+  },
+  "login": {
+    "step_into_your":"Step into your",
+    "next_role":"Next role",
+    "login_to_explore_more":"Login to explore more",
+    "welcome_back_please_enter_your_details":"Welcome back please enter your details",
+    "password":"Password",
+    "forgot":"Forgot?",
+    "dont_have_an_account":"Don't have an account",
+    "sign_up_free":"Sign up free",
+    "sign_in":"Sign In",
+    "or":"OR",
+    "email":"EMAIL",
+    "authenticating":"Authenticating"
+    
+    
+    
+
+   
+  }
+  
 }

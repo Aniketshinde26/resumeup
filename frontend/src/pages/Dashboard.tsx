@@ -3,8 +3,10 @@ import DocumentCard from "../components/DocumentCard";
 import CreateItemModal from "../components/CreateItemModal";
 import { useDashboard } from "../hooks/useDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
+import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
+  const {t} = useTranslation('translation',{keyPrefix:'dashboard'});
   const {
     resumes,
     isModalOpen,
@@ -20,7 +22,7 @@ export default function Dashboard() {
     <div className="p-8 max-w-7xl mx-auto">
       {/* 1. START NEW Section */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
+        <h2 className="text-2xl font-bold mb-6 text-slate-600">{t('start_new')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <SkeletonWrapper isLoading={false} count={2}>
             {TEMPLATE_LIST.map((tpl) => (
@@ -50,7 +52,7 @@ export default function Dashboard() {
       {/* 2. YOUR RESUMES Section */}
       <section>
         <h2 className="text-xl font-bold mb-6 text-slate-600 uppercase tracking-wider">
-          Your Resumes
+         {t('your_resumes')}
         </h2>
         
 <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">          <SkeletonWrapper isLoading={false} count={4}>
@@ -77,8 +79,8 @@ export default function Dashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-medium text-slate-900">No resumes yet</h3>
-                  <p className="text-slate-500 mt-1">Select a template above to create your first resume.</p>
+                  <h3 className="text-lg font-medium text-slate-900">{t('no_resumes_yet')}</h3>
+                  <p className="text-slate-500 mt-1">{t('select_a_template_above_to_create_your_first_resume')}</p>
                 </div>
               )
             )}

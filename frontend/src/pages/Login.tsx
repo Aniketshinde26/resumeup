@@ -4,8 +4,10 @@ import { ErrorMessage } from "../components/ui";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 import { useNavigate, Link } from "react-router-dom";
 import { useGithubAuth } from "../hooks/useGithubAuth";
-
+import { useTranslation } from "react-i18next";
+import { Languages } from "lucide-react";
 export default function Login() {
+  const {t, i18n} = useTranslation('translation',{keyPrefix:'login'})
   const navigate = useNavigate();
   const {
     email,
@@ -17,6 +19,11 @@ export default function Login() {
     handleLogin,
   } = useLogin();
 
+    const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'hi' : 'en';
+    i18n.changeLanguage(newLang);
+  };
+
   const {handleSocialClick} = useGithubAuth();
 
   const templates = [
@@ -25,9 +32,21 @@ export default function Login() {
   ];
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900 relative">
+     
       <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[400px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
-        
+   <div className="absolute top-6 right-6 z-50">
+  <button 
+    type="button"
+    onClick={toggleLanguage}
+    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white transition-all shadow-lg shadow-slate-900/20 group"
+  >
+    <Languages size={18} className="text-slate-400 group-hover:text-green-400 transition-colors" />
+    <span className="text-[10px] font-black uppercase tracking-widest">
+      {i18n.language?.startsWith('en') ? 'Hindi' : 'English'}
+    </span>
+  </button>
+</div>
         {/* LEFT SECTION */}
         <div className="lg:w-[50%] bg-slate-50 p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-primary/15 to-transparent pointer-events-none" />
@@ -41,7 +60,7 @@ export default function Login() {
                 <span className="text-green-600 font-bold text-xl">Up</span>
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Step into your <br/> next role.</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">{t('step_into_your')} <br/> {t('next_role')}</h2>
           </div>
 
           <div className="relative z-10 grid grid-cols-2 gap-5 my-8">
@@ -55,7 +74,7 @@ export default function Login() {
             ))}
           </div>
           <div className="relative z-10 pt-4 border-t border-slate-200">
-            <p className="text-[10px] text-slate-400 font-medium">Login to explore more</p>
+            <p className="text-[10px] text-slate-400 font-medium">{t('login_to_explore_more')}</p>
           </div>
         </div>
 
@@ -63,8 +82,8 @@ export default function Login() {
         <div className="lg:w-[55%] p-10 sm:p-16 flex flex-col justify-center bg-white">
           <div className="w-full max-w-sm mx-auto">
             <div className="mb-10">
-              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Sign in</h1>
-              <p className="text-slate-500 text-sm mt-1">Welcome back, please enter your details.</p>
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('sign_in')}</h1>
+              <p className="text-slate-500 text-sm mt-1">{t('welcome_back_please_enter_your_details')}</p>
             </div>
 
             {/* Social Logins */}
@@ -90,14 +109,14 @@ export default function Login() {
 
             <div className="relative flex items-center mb-8">
               <div className="flex-grow border-t border-slate-100"></div>
-              <span className="mx-4 text-[10px] text-slate-300 font-bold uppercase tracking-[0.2em]">OR</span>
+              <span className="mx-4 text-[10px] text-slate-300 font-bold uppercase tracking-[0.2em]">{t('or')}</span>
               <div className="flex-grow border-t border-slate-100"></div>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">
               {error && <ErrorMessage message={error} />}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{t('email')}</label>
                 <input
                   type="email"
                   placeholder="e.g. alex@work.com"
@@ -110,10 +129,10 @@ export default function Login() {
               <div className="space-y-1.5">
                {/* Find this section in your Login.tsx */}
 <div className="flex justify-between items-center px-1">
-  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Password</label>
+  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('password')}</label>
   {/* Change /forgot to /forgot-password */}
   <Link to="/forgot-password" className="text-[10px] text-brand-primary font-bold hover:underline">
-    Forgot?
+    {t('forgot')}
   </Link>
 </div>
                 <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -124,12 +143,12 @@ export default function Login() {
                 disabled={isLoading}
                 className="w-full mt-2 rounded-xl bg-brand-primary py-3.5 text-sm font-bold text-white hover:opacity-90 shadow-lg shadow-brand-primary/20 transition-all active:scale-[0.98] disabled:opacity-50"
               >
-                {isLoading ? "Authenticating..." : "Sign In"}
+                {isLoading ? t("authenticating") : t("sign_in")}
               </button>
             </form>
 
             <p className="mt-10 text-center text-sm text-slate-500">
-              Don't have an account? <Link to="/register" className="text-brand-primary font-bold hover:underline">Sign up free</Link>
+              {t('dont_have_an_account')} <Link to="/register" className="text-brand-primary font-bold hover:underline">{t('sign_up_free')}</Link>
             </p>
           </div>
         </div>

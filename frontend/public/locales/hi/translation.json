@@ -1,9 +1,47 @@
 {
-  "sidebar":{
+  "sidebar": {
     "home":"होम",
     "my_resumes":"मेरे रेज़्यूमे",
     "ats_check":"एटीएस चेक",
-    "cover_letter":"कवर लेटर"
+    "cover_letter":"कवर लेटर",
+    "logout":"लॉगआउट"
   },
-  "logout":"लॉगआउट"
+  "selectionpage": {
+  "resume_manager":"रेज़्यूमे प्रबंधक",
+  "cover_letter":"कवर लेटर",
+  "ats_scorer":"एटीएस स्कोरर",
+  "create_and_edit_your_professional_resumes": "अपने पेशेवर रेज़्यूमे बनाएं और संपादित करें",
+  "generate_custom_letters_for_specific_jobs": "विशिष्ट नौकरियों के लिए कस्टम पत्र तैयार करें",
+  "analyze_your_resume_against_job_descriptions": "जॉब डिस्क्रिप्शन के आधार पर अपने रेज़्यूमे का विश्लेषण करें"
+
+},
+"dashboard": {
+  "start_new": "नया शुरू करें",
+  "your_resumes": "आपके रेज़्यूमे",
+  "no_resumes_yet": "अभी तक कोई रेज़्यूमे नहीं",
+  "select_a_template_above_to_create_your_first_resume": "अपना पहला रेज़्यूमे बनाने के लिए ऊपर से एक टेम्पलेट चुनें"
+},
+"coverletterdashboard": {
+  "start_new": "नया शुरू करें",
+  "your_cover_letters": "आपके कवर लेटर",
+  "no_coverletters_yet": "अभी तक कोई कवर लेटर नहीं",
+  "select_a_template_above_to_create_your_first_cover_letter": "अपना पहला कवर लेटर बनाने के लिए ऊपर से एक टेम्पलेट चुनें"
+},
+"login":{
+  "step_into_your":"अपने",
+  "next_role": "अगले रोल की ओर कदम बढ़ाएं",
+  "login_to_explore_more": "अधिक जानकारी के लिए लॉगिन करें",
+  "welcome_back_please_enter_your_details": "स्वागत है, कृपया अपना विवरण दर्ज करें",
+  "password": "पासवर्ड",
+  "forgot": "भूल गए?",
+  "dont_have_an_account": "क्या आपका अकाउंट नहीं है?",
+  "sign_up_free": "मुफ्त में साइन अप करें",
+  "sign_in": "साइन इन करें",
+    "or": "या",
+    "email": "ईमेल",
+    "authenticating": "प्रमाणित किया जा रहा है..."
+  
+
+}
+  
 }

@@ -6,14 +6,14 @@ import api from "../api/axios";
 export default function DashboardLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(); // Initialize i18n
+  const { t, i18n } = useTranslation('translation',{keyPrefix:'sidebar'}); 
 
   // Move menuItems inside the component so they update when language changes
   const menuItems = [
-    { name: t('sidebar.home'), icon: <LayoutDashboard size={22} />, path: '/home' },
-    { name: t('sidebar.my_resumes'), icon: <FileText size={22} />, path: '/my-resumes' },
-    { name: t('sidebar.ats_check'), icon: <Search size={22} />, path: '/ats-check' },
-    { name: t('sidebar.cover_letter'), icon: <PenTool size={22} />, path: '/cover-letter' },
+    { name: t('home'), icon: <LayoutDashboard size={22} />, path: '/home' },
+    { name: t('my_resumes'), icon: <FileText size={22} />, path: '/my-resumes' },
+    { name: t('ats_check'), icon: <Search size={22} />, path: '/ats-check' },
+    { name: t('cover_letter'), icon: <PenTool size={22} />, path: '/cover-letter' },
   ];
 
   const toggleLanguage = () => {
@@ -99,7 +99,7 @@ export default function DashboardLayout() {
             <div className="w-6 h-6 flex items-center justify-center shrink-0">
               <LogOut size={20} />
             </div>
-            <span className="ml-5 text-xs font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="ml-5 text-xs font-black0 tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {t('logout')}
             </span>
           </button>

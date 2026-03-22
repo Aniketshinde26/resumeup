@@ -1,25 +1,26 @@
 import { Link } from "react-router-dom";
 import { FileText, PenTool, Search } from "lucide-react"; // Or use your own SVGs
-
+import { useTranslation } from "react-i18next";
 export default function SelectionPage() {
+  const {t} = useTranslation('translation',{keyPrefix:'selectionpage'});
   const tools = [
     {
-      title: "Resume Manager",
-      desc: "Create and edit your professional resumes.",
+      title: t('resume_manager'),
+      desc: t("create_and_edit_your_professional_resumes"),
       path: "/my-resumes",
       icon: <FileText className="w-6 h-6" />,
       color: "bg-blue-600"
     },
     {
-      title: "AI Cover Letter",
-      desc: "Generate custom letters for specific jobs.",
+      title: t('cover_letter'),
+      desc: t("generate_custom_letters_for_specific_jobs"),
       path: "/cover-letter",
       icon: <PenTool className="w-6 h-6" />,
       color: "bg-purple-600"
     },
     {
-      title: "ATS Scorer",
-      desc: "Analyze your resume against job descriptions.",
+      title: t('ats_scorer'),
+      desc: t("analyze_your_resume_against_job_descriptions"),
       path: "/ats-check",
       icon: <Search className="w-6 h-6" />,
       color: "bg-emerald-600"

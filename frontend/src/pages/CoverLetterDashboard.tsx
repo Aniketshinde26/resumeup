@@ -3,8 +3,9 @@ import CreateItemModal from "../components/CreateItemModal";
 import { useCoverLetterDashboard } from "../hooks/useCoverLetterDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
 import { COVER_LETTER_TEMPLATES } from "../types/templateindex";
-
+import { useTranslation } from "react-i18next";
 export default function CoverLetterDashboard() {
+  const {t} = useTranslation('translation',{keyPrefix:'coverletterdashboard'});
     const {
        coverLetters,
         isLoading,
@@ -21,7 +22,7 @@ export default function CoverLetterDashboard() {
   return (
     <div className="p-8" max-w-7xl mx-auto>
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-slate-600">START NEW</h2>
+          <h2 className="text-2xl font-bold mb-6 text-slate-600">{t('start_new')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <SkeletonWrapper isLoading={false} count={2}>
               {COVER_LETTER_TEMPLATES.map((tpl) => (
@@ -51,7 +52,7 @@ export default function CoverLetterDashboard() {
      
      <section>
         <h2 className="text-xl font-bold mb-6 text-slate-600 uppercase tracking-wider">
-          Your Cover Letters
+          {t('your_cover_letters')}
         </h2>
     
 
@@ -79,8 +80,8 @@ export default function CoverLetterDashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-medium text-slate-900">No coverletters yet</h3>
-                  <p className="text-slate-500 mt-1">Select a template above to create your first cover letter.</p>
+                  <h3 className="text-lg font-medium text-slate-900">{t('no_coverletters_yet')}</h3>
+                  <p className="text-slate-500 mt-1">{t('select_a_template_above_to_create_your_first_cover_letter')}</p>
                 </div>
               )          )}
         </SkeletonWrapper>
