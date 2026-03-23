@@ -35,8 +35,7 @@ export default function SelectionPage() {
       Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-green-600">ResumeUp</span>
     </h1>
     <p className="text-slate-500 mt-3 text-lg max-w-2xl">
-      Everything you need to land your dream job, powered by smart design and AI. 
-      Select a tool below to begin.
+      {t('everything_you_need_to_land_your_dream_job_powered_by_smart_design_select_a_tool_below_to_begin')}
     </p>
   </header>
 

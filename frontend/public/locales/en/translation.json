@@ -12,13 +12,15 @@
     "ats_scorer":"ATS Scorer",
     "create_and_edit_your_professional_resumes":"Create and edit your professional resumes",
     "generate_custom_letters_for_specific_jobs":"Generate custom letters for specific job",
-    "analyze_your_resume_against_job_descriptions":"Analyze your resume againsgt job descriptions"
+    "analyze_your_resume_against_job_descriptions":"Analyze your resume againsgt job descriptions",
+    "everything_you_need_to_land_your_dream_job_powered_by_smart_design_select_a_tool_below_to_begin":"Everything you need to land your dream job, powered by smart design. Select a tool below to begin"
   },
   "dashboard": {
     "start_new":"START NEW",
     "your_resumes":"YOUR RESUMES",
     "no_resumes_yet":"YOUR RESUMES YET",
     "select_a_template_above_to_create_your_first_resume":"Select a template above to create your first resume"
+
   },
   "coverletterdashboard":{
     "start_new":"START NEW",
@@ -53,6 +55,24 @@
     "creating_account":"Create Account...",
     "already_have_an_account":"Already have an account",
     "sign_in":"Sign In"
+  },
+  "createmodal":{
+    "create_new":"Create New",
+    "give_your":"Give Your",
+    "a_name_to_get_started":"A name to get started",
+    "title":"Title",
+    "full_stack_developer_google":"Eg. Full Stack Developer Google",
+    "application_letter_microsoft":"Eg. Application Letter Microsoft",
+    "cancel":"Cancel",
+    "creating":"Creating...",
+    "start_building":"Start Building"
+  },
+   "header":{
+    "saving":"Saving...",
+    "save":"Save",
+    "saved":"Saved",
+    "download_pdf":"Download PDF",
+    "changes_unsaved":"Changes Unsaved"
   }
   
 }

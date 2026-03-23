@@ -1,0 +1,76 @@
+{
+  "sidebar": {
+    "home": "होम",
+    "my_resumes": "मेरा रेजुमेहरू",
+    "ats_check": "ATS चेक",
+    "cover_letter": "कभर लेटर",
+    "logout": "लग आउट"
+  },
+  "selectionpage": {
+    "resume_manager": "रेजुमे म्यानेजर",
+    "cover_letter": "कभर लेटर",
+    "ats_scorer": "ATS स्कोरर",
+    "create_and_edit_your_professional_resumes": "तपाईंको व्यावसायिक रेजुमेहरू बनाउनुहोस् र सम्पादन गर्नुहोस्",
+    "generate_custom_letters_for_specific_jobs": "विशिष्ट कामहरूको लागि अनुकूलित पत्रहरू बनाउनुहोस्",
+    "analyze_your_resume_against_job_descriptions": "कामको विवरण अनुसार तपाईंको रेजुमे विश्लेषण गर्नुहोस्",
+    "everything_you_need_to_land_your_dream_job_powered_by_smart_design_select_a_tool_below_to_begin": "स्मार्ट डिजाइनद्वारा सञ्चालित, तपाईंको सपनाको जागिर पाउन आवश्यक पर्ने सबै कुरा यहाँ छ। सुरु गर्न तलको एउटा टुल छान्नुहोस्।"
+  },
+  "dashboard": {
+    "start_new": "नयाँ सुरु गर्नुहोस्",
+    "your_resumes": "तपाईंका रेजुमेहरू",
+    "no_resumes_yet": "अझै कुनै रेजुमे छैन",
+    "select_a_template_above_to_create_your_first_resume": "तपाईंको पहिलो रेजुमे बनाउन माथिबाट एउटा टेम्प्लेट छान्नुहोस्"
+  },
+  "coverletterdashboard": {
+    "start_new": "नयाँ सुरु गर्नुहोस्",
+    "your_cover_letters": "तपाईंका कभर लेटरहरू",
+    "no_coverletters_yet": "अझै कुनै कभर लेटर छैन",
+    "select_a_template_above_to_create_your_first_cover_letter": "तपाईंको पहिलो कभर लेटर बनाउन माथिबाट एउटा टेम्प्लेट छान्नुहोस्"
+  },
+  "login": {
+    "step_into_your": "तपाईंको पाइला चाल्नुहोस्",
+    "next_role": "अर्को भूमिकामा",
+    "login_to_explore_more": "थप जान्नको लागि लग-इन गर्नुहोस्",
+    "welcome_back_please_enter_your_details": "स्वागत छ, कृपया आफ्नो विवरणहरू प्रविष्ट गर्नुहोस्",
+    "password": "पासवर्ड",
+    "forgot": "बिर्सनुभयो?",
+    "dont_have_an_account": "खाता छैन?",
+    "sign_up_free": "नि:शुल्क दर्ता गर्नुहोस्",
+    "sign_in": "साइन इन",
+    "or": "वा",
+    "email": "इमेल",
+    "authenticating": "प्रमाणित गरिँदै..."
+  },
+  "register": {
+    "build_your_future": "आफ्नो भविष्य बनाउनुहोस्",
+    "piece_by_piece": "टुक्रा-टुक्रा जोडेर",
+    "optimize_your_job_hunt": "आफ्नो जागिरको खोजीलाई प्रभावकारी बनाउनुहोस्",
+    "create_account": "खाता खोल्नुहोस्",
+    "get_started_with_your_free_account_today": "आजै आफ्नो नि:शुल्क खाताको साथ सुरु गर्नुहोस्",
+    "or_register_with_email": "वा इमेल मार्फत दर्ता गर्नुहोस्",
+    "full_name": "पूरा नाम",
+    "email": "इमेल",
+    "password": "पासवर्ड",
+    "creating_account": "खाता बनाइँदै...",
+    "already_have_an_account": "पहिले नै खाता छ?",
+    "sign_in": "साइन इन"
+  },
+  "createmodal": {
+    "create_new": "नयाँ बनाउनुहोस्",
+    "give_your": "आफ्नो",
+    "a_name_to_get_started": "सुरु गर्न एउटा नाम दिनुहोस्",
+    "title": "शीर्षक",
+    "full_stack_developer_google": "उदाहरण: फुल स्ट्याक डेभलपर गुगल",
+    "application_letter_microsoft": "उदाहरण: आवेदन पत्र माइक्रोसफ्ट",
+    "cancel": "रद्द गर्नुहोस्",
+    "creating": "बनाइँदै...",
+    "start_building": "बनाउन सुरु गर्नुहोस्"
+  },
+  "header": {
+    "saving": "बचत गरिँदै...",
+    "save": "बचत गर्नुहोस्",
+    "saved": "बचत गरियो",
+    "download_pdf": "PDF डाउनलोड गर्नुहोस्",
+    "changes_unsaved": "परिवर्तनहरू बचत भएका छैनन्"
+  }
+}

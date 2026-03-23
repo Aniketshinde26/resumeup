@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 
 interface CreateItemModalProps {
   isOpen: boolean;
@@ -10,6 +12,7 @@ interface CreateItemModalProps {
 }
 
 export default function 
+
 CreateItemModal({
   isOpen,
   onClose,
@@ -18,6 +21,8 @@ CreateItemModal({
   type,
 }: CreateItemModalProps) {
   const [title, setTitle] = useState("");
+    const {t} = useTranslation('translation',{keyPrefix:'createmodal'})
+
 
   if (!isOpen) return null;
 
@@ -28,28 +33,30 @@ CreateItemModal({
     }
   };
 
+  
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
         {/* Dynamic Heading */}
-        <h2 className="text-2xl font-bold text-slate-900">Create New {type}</h2>
+        <h2 className="text-2xl font-bold text-slate-900">{t('create_new')} {type}</h2>
         <p className="text-slate-600 mt-1 mb-6">
-          Give your {type.toLowerCase()} a name to get started.
+          {t('give_your')} {type.toLowerCase()} {t('a_name_to_get_started')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             {/* Dynamic Label */}
             <label className="block text-sm font-medium text-slate-900 mb-2">
-              {type} Title
+              {type} {t('title')}
             </label>
             <input
               autoFocus
               type="text"
               placeholder={
-                type === "Resume" 
-                  ? "e.g. Full Stack Developer - Google" 
-                  : "e.g. Application Letter - Microsoft"
+                type === t("Resume") 
+                  ? t('full_stack_developer_google') 
+                  : t('application_letter_microsoft')
               }
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -64,14 +71,14 @@ CreateItemModal({
               onClick={onClose}
               className="px-5 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={isLoading || !title.trim()}
               className="bg-blue-600 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
             >
-              {isLoading ? "Creating..." : "Start Building"}
+              {isLoading ? t('creating') :t('start_building')}
             </button>
           </div>
         </form>

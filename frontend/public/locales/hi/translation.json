@@ -12,7 +12,8 @@
   "ats_scorer":"एटीएस स्कोरर",
   "create_and_edit_your_professional_resumes": "अपने पेशेवर रेज़्यूमे बनाएं और संपादित करें",
   "generate_custom_letters_for_specific_jobs": "विशिष्ट नौकरियों के लिए कस्टम पत्र तैयार करें",
-  "analyze_your_resume_against_job_descriptions": "जॉब डिस्क्रिप्शन के आधार पर अपने रेज़्यूमे का विश्लेषण करें"
+  "analyze_your_resume_against_job_descriptions": "जॉब डिस्क्रिप्शन के आधार पर अपने रेज़्यूमे का विश्लेषण करें",
+  "everything_you_need_to_land_your_dream_job_powered_by_smart_design_select_a_tool_below_to_begin": "स्मार्ट डिज़ाइन की शक्ति के साथ, अपने सपनों की नौकरी पाने के लिए यहाँ सब कुछ है। शुरू करने के लिए नीचे एक टूल चुनें।"
 
 },
 "dashboard": {
@@ -54,6 +55,25 @@
     "creating_account":"अकाउंट बनाया जा रहा है...",
     "already_have_an_account":"क्या आपके पास पहले से अकाउंट है?",
     "sign_in":"साइन इन करें"
-  }
+  },
   
+  "createmodal": {
+    "create_new": "नया बनाएँ",
+    "give_your": "अपना",
+    "a_name_to_get_started": "शुरू करने के लिए एक नाम दें",
+    "title": "शीर्षक",
+    "full_stack_developer_google": "जैसे: फुल स्टैक डेवलपर गूगल",
+    "application_letter_microsoft": "जैसे: आवेदन पत्र माइक्रोसॉफ्ट",
+    "cancel": "रद्द करें",
+    "creating": "बनाया जा रहा है...",
+    "start_building": "बनाना शुरू करें"
+  },
+  "header": {
+    "saving": "सहेजा जा रहा है...",
+    "save": "सहेजें",
+    "saved": "सहेजा गया",
+    "download_pdf": "पीडीएफ डाउनलोड करें",
+  "changes_unsaved": "बदलाव सहेजे नहीं गए"
+  }
 }
+  
