@@ -38,12 +38,21 @@
     "sign_in":"Sign In",
     "or":"OR",
     "email":"EMAIL",
-    "authenticating":"Authenticating"
-    
-    
-    
-
-   
+    "authenticating":"Authenticating..."
+  },
+  "register":{
+    "build_your_future":"Build your future",
+    "piece_by_piece":"Piece By Piece",
+    "optimize_your_job_hunt":"Optimize your job hunt",
+    "create_account":"Create account",
+    "get_started_with_your_free_account_today":"Get started with your free account today",
+    "or_register_with_email":"OR REGISTER WITH EMAIL",
+    "full_name":"FULL NAME",
+    "email":"EMAIL",
+    "password":"Password",
+    "creating_account":"Create Account...",
+    "already_have_an_account":"Already have an account",
+    "sign_in":"Sign In"
   }
   
 }

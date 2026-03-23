@@ -4,8 +4,10 @@ import { ErrorMessage } from "../components/ui";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 import { Link } from "react-router-dom";
 import { useGithubAuth } from "../hooks/useGithubAuth";
-
+import { useTranslation } from "react-i18next";
+import LanguageToggle from "../components/LanguageToggle";
 export default function Register() {
+  const {t} = useTranslation('translation',{keyPrefix:'register'});
   const {
     fullname,
     setFullname,
@@ -23,7 +25,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900">
-      
+      <LanguageToggle />
       {/* MAIN CONTAINER */}
       <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[600px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
         
@@ -51,8 +53,8 @@ export default function Register() {
 </div>    </div>
     
     <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
-      Build your future <br /> 
-      <span className="text-brand-primary">piece by piece.</span>
+      {t('build_your_future')} <br /> 
+      <span className="text-brand-primary">{t('piece_by_piece')}</span>
     </h2>
 
     {/* 2. ENHANCED UI MOCKUP (Added Stacking for Density) */}
@@ -98,7 +100,7 @@ export default function Register() {
 
       {/* SMALL DECORATIVE 'TAG' (Fills bottom right gap) */}
       <div className="absolute -bottom-4 right-0 z-30 bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg">
-        Optimize your job hunt
+       {t('optimize_your_job_hunt')}
       </div>
     </div>
   </div>
@@ -110,8 +112,8 @@ export default function Register() {
         <div className="lg:w-[50%] p-10 sm:p-16 flex flex-col justify-center bg-white">
           <div className="w-full max-w-sm mx-auto">
             <div className="mb-10">
-              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Create account</h1>
-              <p className="text-slate-500 text-sm mt-1">Get started with your free account today.</p>
+              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('create_account')}</h1>
+              <p className="text-slate-500 text-sm mt-1">{t('get_started_with_your_free_account_today')}</p>
             </div>
 
             {/* Social Registration */}
@@ -137,7 +139,7 @@ export default function Register() {
 
             <div className="relative flex items-center mb-8">
               <div className="flex-grow border-t border-slate-100"></div>
-              <span className="mx-4 text-[10px] text-slate-300 font-bold uppercase tracking-[0.2em]">OR REGISTER WITH EMAIL</span>
+              <span className="mx-4 text-[10px] text-slate-300 font-bold uppercase tracking-[0.2em]">{t('or_register_with_email')}</span>
               <div className="flex-grow border-t border-slate-100"></div>
             </div>
 
@@ -146,7 +148,7 @@ export default function Register() {
 
               {/* Full Name Input */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{t('full_name')}</label>
                 <input
                   type="text"
                   placeholder="e.g. Alex Johnson"
@@ -159,7 +161,7 @@ export default function Register() {
 
               {/* Email Input */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{t('email')}</label>
                 <input
                   type="email"
                   placeholder="e.g. alex@work.com"
@@ -172,7 +174,7 @@ export default function Register() {
 
               {/* Password Input */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">{t('password')}</label>
                 <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -184,12 +186,12 @@ export default function Register() {
                 disabled={isLoading}
                 className="w-full mt-4 rounded-xl bg-brand-primary py-3.5 text-sm font-bold text-white hover:opacity-90 shadow-lg shadow-brand-primary/20 transition-all active:scale-[0.98] disabled:opacity-50"
               >
-                {isLoading ? "Creating account..." : "Create account"}
+                {isLoading ? t("creating_account") : t("create_account")}
               </button>
             </form>
 
             <p className="mt-10 text-center text-sm text-slate-500">
-              Already have an account? <Link to="/login" className="text-brand-primary font-bold hover:underline">Sign in</Link>
+              {t('already_have_an_account')} <Link to="/login" className="text-brand-primary font-bold hover:underline">{t('sign_in')}</Link>
             </p>
           </div>
         </div>

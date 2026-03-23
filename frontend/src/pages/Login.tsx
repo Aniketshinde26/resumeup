@@ -5,9 +5,9 @@ import GoogleAuthButton from "../components/GoogleAuthButton";
 import { useNavigate, Link } from "react-router-dom";
 import { useGithubAuth } from "../hooks/useGithubAuth";
 import { useTranslation } from "react-i18next";
-import { Languages } from "lucide-react";
+import LanguageToggle from "../components/LanguageToggle";
 export default function Login() {
-  const {t, i18n} = useTranslation('translation',{keyPrefix:'login'})
+  const {t} = useTranslation('translation',{keyPrefix:'login'})
   const navigate = useNavigate();
   const {
     email,
@@ -19,10 +19,7 @@ export default function Login() {
     handleLogin,
   } = useLogin();
 
-    const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'hi' : 'en';
-    i18n.changeLanguage(newLang);
-  };
+  
 
   const {handleSocialClick} = useGithubAuth();
 
@@ -33,19 +30,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900 relative">
-     
+     <LanguageToggle />
       <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[400px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
    <div className="absolute top-6 right-6 z-50">
-  <button 
-    type="button"
-    onClick={toggleLanguage}
-    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white transition-all shadow-lg shadow-slate-900/20 group"
-  >
-    <Languages size={18} className="text-slate-400 group-hover:text-green-400 transition-colors" />
-    <span className="text-[10px] font-black uppercase tracking-widest">
-      {i18n.language?.startsWith('en') ? 'Hindi' : 'English'}
-    </span>
-  </button>
+
 </div>
         {/* LEFT SECTION */}
         <div className="lg:w-[50%] bg-slate-50 p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">

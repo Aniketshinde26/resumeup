@@ -37,11 +37,23 @@
   "dont_have_an_account": "क्या आपका अकाउंट नहीं है?",
   "sign_up_free": "मुफ्त में साइन अप करें",
   "sign_in": "साइन इन करें",
-    "or": "या",
-    "email": "ईमेल",
-    "authenticating": "प्रमाणित किया जा रहा है..."
-  
-
-}
+  "or": "या",
+  "email": "ईमेल",
+  "authenticating": "प्रमाणित किया जा रहा है..."
+},
+"register":{
+    "build_your_future":"अपना भविष्य बनाएं",
+    "piece_by_piece":"एक-एक कदम कर के",
+    "optimize_your_job_hunt":"अपनी नौकरी की तलाश को बेहतर बनाएं",
+    "create_account":"अकाउंट बनाएं",
+    "get_started_with_your_free_account_today":"आज ही अपने फ्री अकाउंट के साथ शुरुआत करें",
+    "or_register_with_email":"या ईमेल के साथ रजिस्टर करें",
+    "full_name":"पूरा नाम",
+    "email":"ईमेल",
+    "password":"पासवर्ड",
+    "creating_account":"अकाउंट बनाया जा रहा है...",
+    "already_have_an_account":"क्या आपके पास पहले से अकाउंट है?",
+    "sign_in":"साइन इन करें"
+  }
   
 }
