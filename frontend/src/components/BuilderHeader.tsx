@@ -1,10 +1,10 @@
 import { Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
 interface BuilderHeaderProps {
-  productName: string; // "Cover" or "Resume"
-  productSuffix?: string; // "Up"
-  accentColor: string; // "text-indigo-600" or "text-green-600"
-  buttonColor: string; // "bg-indigo-600" or "bg-green-600"
+  productName: string; 
+  productSuffix?: string; 
+  accentColor: string; 
+  buttonColor: string; 
   docTitle: string;
   isSaving: boolean;
   isDirty: boolean;

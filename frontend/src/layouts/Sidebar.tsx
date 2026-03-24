@@ -1,25 +1,41 @@
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages } from "lucide-react"; // Added Languages icon
-import { useTranslation } from "react-i18next"; // Import hook
+import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import api from "../api/axios";
 
 export default function DashboardLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation('translation',{keyPrefix:'sidebar'}); 
+  const { t, i18n } = useTranslation('translation', { keyPrefix: 'sidebar' });
+  
+  // --- New Dropdown State ---
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
 
-  // Move menuItems inside the component so they update when language changes
+  const languages = [
+    { code: 'en', label: 'English' },
+    { code: 'hi', label: 'हिन्दी' },
+    { code: 'nep', label: 'नेपाली' }
+  ];
+
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const menuItems = [
     { name: t('home'), icon: <LayoutDashboard size={22} />, path: '/home' },
     { name: t('my_resumes'), icon: <FileText size={22} />, path: '/my-resumes' },
     { name: t('ats_check'), icon: <Search size={22} />, path: '/ats-check' },
     { name: t('cover_letter'), icon: <PenTool size={22} />, path: '/cover-letter' },
   ];
-
-  const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'hi' : 'en';
-    i18n.changeLanguage(newLang);
-  };
 
   const handleLogout = async () => {
     try {
@@ -73,23 +89,47 @@ export default function DashboardLayout() {
           })}
         </nav>
 
-        {/* BOTTOM SECTION (LANGUAGE + LOGOUT) */}
-        <div className="p-4 border-t border-slate-100 shrink-0 space-y-1">
+        {/* BOTTOM SECTION */}
+        <div className="p-4 border-t border-slate-100 shrink-0 space-y-1 relative" ref={langRef}>
           
-          {/* LANGUAGE TOGGLE */}
-          <button 
-            onClick={toggleLanguage}
-            className="flex items-center h-12 px-3 w-full text-slate-400 hover:text-blue-600 transition-colors whitespace-nowrap overflow-hidden group/lang"
-          >
-            <div className="w-6 h-6 flex items-center justify-center shrink-0">
-              <Languages size={20} />
-            </div>
-            <div className="ml-5 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="text-xs font-black uppercase tracking-widest">
-                {i18n.language === 'en' ? 'Hindi' : 'English'}
-              </span>
-            </div>
-          </button>
+          {/* MULTI-LANGUAGE DROPDOWN */}
+          <div className="relative">
+            {isLangOpen && (
+              <div className="absolute bottom-full left-0 mb-2 w-48 bg-white border border-slate-200 rounded-xl shadow-2xl py-2 z-[60] animate-in fade-in slide-in-from-bottom-2">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      i18n.changeLanguage(lang.code);
+                      setIsLangOpen(false);
+                    }}
+                    className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
+                  >
+                    <span className={i18n.language.startsWith(lang.code) ? "font-bold text-slate-900" : ""}>
+                      {lang.label}
+                    </span>
+                    {i18n.language.startsWith(lang.code) && <Check size={14} className="text-green-600" />}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <button 
+              onClick={() => setIsLangOpen(!isLangOpen)}
+              className={`flex items-center h-12 px-3 w-full transition-colors whitespace-nowrap overflow-hidden rounded-xl
+                ${isLangOpen ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-blue-600'}`}
+            >
+              <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <Languages size={20} />
+              </div>
+              <div className="ml-5 flex items-center justify-between flex-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-xs font-black uppercase tracking-widest">
+                  {languages.find(l => i18n.language.startsWith(l.code))?.label || 'Language'}
+                </span>
+                <ChevronRight size={14} className={`transition-transform ${isLangOpen ? 'rotate-[-90deg]' : ''}`} />
+              </div>
+            </button>
+          </div>
 
           {/* LOGOUT */}
           <button 
@@ -99,7 +139,7 @@ export default function DashboardLayout() {
             <div className="w-6 h-6 flex items-center justify-center shrink-0">
               <LogOut size={20} />
             </div>
-            <span className="ml-5 text-xs font-black0 tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="ml-5 text-xs font-black tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {t('logout')}
             </span>
           </button>
