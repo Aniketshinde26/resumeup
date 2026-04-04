@@ -42,7 +42,7 @@ export const useBuilder = () => {
 
     try {
       setLoading(true);
-      const res = await api.get(`/resumes/${id}`);
+      const res = await api.get(`/resumes/${id}`);  
       const fetchedResume = res.data.resume || res.data;
 
       if (typeof fetchedResume.data === "string") {

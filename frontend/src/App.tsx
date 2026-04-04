@@ -18,12 +18,14 @@ import ResetPassword from "./pages/ResetPassword";
 import CoverLetterDashboard from "./pages/CoverLetterDashboard";
 import CoverLetterBuilder from "./pages/CoverLetterBuilder";
 import CoverLetterPreview from "./pages/CoverLetterPreview";
+import { ThemeProvider } from "./context/ThemeContext"; // Import the ThemeProvider
 
 export default function App() {
   return (
     // 4. Wrap everything in the Provider and Suspense
+    <ThemeProvider>
     <I18nextProvider i18n={i18n}>
-      <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
+<div className="min-h-screen bg-[var(--color-brand-surface)] text-[var(--color-text-main)] transition-colors duration-300">      <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Login />} />
@@ -55,6 +57,8 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
+      </div>
     </I18nextProvider>
+    </ThemeProvider>
   );
 }

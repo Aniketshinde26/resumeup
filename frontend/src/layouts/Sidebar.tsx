@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check } from "lucide-react";
+import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check, Moon, Sun } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import api from "../api/axios";
+import { useTheme } from "../context/ThemeContext"; // 1. Import the theme hook
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function DashboardLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'sidebar' });
-  
+  // const { theme, toggleTheme } = useTheme(); // 1. Use the theme hook
   // --- New Dropdown State ---
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
@@ -48,18 +50,20 @@ export default function DashboardLayout() {
     }
   };
 
-  return (
-    <div className="flex h-screen w-full bg-[#F8FAFC] overflow-hidden">
-      <aside className="h-full bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out group 
-                        w-[80px] hover:w-[280px] shrink-0 z-[50] shadow-xl shadow-slate-200/50">
+return (
+    <div className="flex h-screen w-full bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors duration-300 font-sans">
+      
+
+<aside className="h-full bg-[var(--color-card-bg)] border-r border-[var(--color-border-subtle)] flex flex-col transition-all duration-300 ease-in-out group 
+                  w-[80px] hover:w-[280px] shrink-0 z-[50] shadow-xl shadow-slate-200/50 dark:shadow-none">
         
         {/* LOGO SECTION */}
         <div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
-          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
+          <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
             <span className="text-white font-bold text-xs uppercase">R</span>
           </div>
           <div className="ml-4 flex items-center gap-0 tracking-tight whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <span className="text-slate-900 font-bold text-xl">Resume</span>
+            <span className="text-slate-900 dark:text-slate-100 font-bold text-xl">Resume</span>
             <span className="text-green-600 font-bold text-xl">Up</span>
           </div>
         </div>
@@ -74,8 +78,8 @@ export default function DashboardLayout() {
                 to={item.path}
                 className={`flex items-center h-12 px-3 rounded-xl transition-all relative whitespace-nowrap overflow-hidden
                   ${isActive 
-                    ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' 
-                    : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-lg shadow-slate-900/20' 
+                    : 'text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
               >
                 <div className="w-6 h-6 flex items-center justify-center shrink-0">
@@ -90,12 +94,16 @@ export default function DashboardLayout() {
         </nav>
 
         {/* BOTTOM SECTION */}
-        <div className="p-4 border-t border-slate-100 shrink-0 space-y-1 relative" ref={langRef}>
+        <div className="p-4 border-t border-slate-100 dark:border-slate-800 shrink-0 space-y-1 relative" ref={langRef}>
           
+      <div className="px-1">
+  <ThemeToggle />
+</div>
+
           {/* MULTI-LANGUAGE DROPDOWN */}
           <div className="relative">
             {isLangOpen && (
-              <div className="absolute bottom-full left-0 mb-2 w-48 bg-white border border-slate-200 rounded-xl shadow-2xl py-2 z-[60] animate-in fade-in slide-in-from-bottom-2">
+              <div className="absolute bottom-full left-0 mb-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-2 z-[60] animate-in fade-in slide-in-from-bottom-2">
                 {languages.map((lang) => (
                   <button
                     key={lang.code}
@@ -103,9 +111,9 @@ export default function DashboardLayout() {
                       i18n.changeLanguage(lang.code);
                       setIsLangOpen(false);
                     }}
-                    className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
+                    className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                   >
-                    <span className={i18n.language.startsWith(lang.code) ? "font-bold text-slate-900" : ""}>
+                    <span className={i18n.language.startsWith(lang.code) ? "font-bold text-slate-900 dark:text-slate-100" : ""}>
                       {lang.label}
                     </span>
                     {i18n.language.startsWith(lang.code) && <Check size={14} className="text-green-600" />}
@@ -117,7 +125,7 @@ export default function DashboardLayout() {
             <button 
               onClick={() => setIsLangOpen(!isLangOpen)}
               className={`flex items-center h-12 px-3 w-full transition-colors whitespace-nowrap overflow-hidden rounded-xl
-                ${isLangOpen ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-blue-600'}`}
+                ${isLangOpen ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100' : 'text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
             >
               <div className="w-6 h-6 flex items-center justify-center shrink-0">
                 <Languages size={20} />
@@ -134,7 +142,7 @@ export default function DashboardLayout() {
           {/* LOGOUT */}
           <button 
             onClick={handleLogout}
-            className="flex items-center h-12 px-3 w-full text-slate-400 hover:text-red-500 transition-colors whitespace-nowrap overflow-hidden"
+            className="flex items-center h-12 px-3 w-full text-slate-400 hover:text-red-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors whitespace-nowrap overflow-hidden rounded-xl"
           >
             <div className="w-6 h-6 flex items-center justify-center shrink-0">
               <LogOut size={20} />
@@ -146,11 +154,11 @@ export default function DashboardLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F8FAFC]">
-        <div className="p-10 max-w-7xl mx-auto min-h-full">
-           <Outlet />
-        </div>
-      </main>
+    <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--color-brand-surface)] text-[var(--color-text-main)] transition-colors duration-300">
+  <div className="p-10 max-w-7xl mx-auto min-h-full">
+    <Outlet />
+  </div>
+</main>
     </div>
   );
 }
