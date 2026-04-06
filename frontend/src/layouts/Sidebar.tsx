@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check, Moon, Sun } from "lucide-react";
+import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import api from "../api/axios";
-import { useTheme } from "../context/ThemeContext"; // 1. Import the theme hook
 import ThemeToggle from "../components/ThemeToggle";
 
 export default function DashboardLayout() {
@@ -96,9 +95,9 @@ return (
         {/* BOTTOM SECTION */}
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 shrink-0 space-y-1 relative" ref={langRef}>
           
-      <div className="px-1">
+     
   <ThemeToggle />
-</div>
+
 
           {/* MULTI-LANGUAGE DROPDOWN */}
           <div className="relative">
@@ -154,7 +153,7 @@ return (
         </div>
       </aside>
 
-    <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--color-brand-surface)] text-[var(--color-text-main)] transition-colors duration-300">
+    <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--color-card-bg)] text-[var(--color-text-main)] transition-colors duration-300">
   <div className="p-10 max-w-7xl mx-auto min-h-full">
     <Outlet />
   </div>

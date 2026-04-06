@@ -2,21 +2,27 @@ import { useTheme } from "../context/ThemeContext";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
-console.log("Current Theme in Toggle:", theme);
+
   return (
     <button
       onClick={toggleTheme}
-      className="flex items-center gap-2 p-2 rounded-lg transition-all duration-300 
-                 bg-gray-100 hover:bg-gray-200 
-                 dark:bg-slate-800 dark:hover:bg-slate-700"
+      // Added w-full and px-3 to match your Sidebar Link styles
+      className="flex items-center h-12 px-3 w-full rounded-xl transition-all duration-300 
+                 bg-slate-100/50 hover:bg-slate-200 
+                 dark:bg-slate-800/50 dark:hover:bg-slate-700
+                 text-slate-600 dark:text-slate-300"
     >
+      {/* Icon Container: Matches the 24px width of your Lucide icons */}
+      <div className="w-6 h-6 flex items-center justify-center shrink-0">
+        <span className="text-lg">
+          {theme === "light" ? "🌙" : "☀️"}
+        </span>
+      </div>
 
-<span className="flex items-center gap-2 text-slate-800 dark:text-yellow-400">
-  {theme === "light" ? "🌙" : "☀️"} 
-  <span className="text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-    {theme === "light" ? "Dark Mode" : "Light Mode"}
-  </span>
-</span>
+      {/* Text Label: Controlled by the Sidebar's 'group' hover state */}
+      <span className="ml-5 text-xs font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
+        {theme === "light" ? "Dark Mode" : "Light Mode"}
+      </span>
     </button>
   );
 };
