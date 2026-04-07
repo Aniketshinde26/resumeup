@@ -9,8 +9,6 @@ export default function DashboardLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'sidebar' });
-  // const { theme, toggleTheme } = useTheme(); // 1. Use the theme hook
-  // --- New Dropdown State ---
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
 
@@ -19,8 +17,7 @@ export default function DashboardLayout() {
     { code: 'hi', label: 'हिन्दी' },
     { code: 'nep', label: 'नेपाली' }
   ];
-
-  // Close when clicking outside
+  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(event.target as Node)) {
@@ -62,8 +59,10 @@ return (
             <span className="text-white font-bold text-xs uppercase">R</span>
           </div>
           <div className="ml-4 flex items-center gap-0 tracking-tight whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <span className="text-slate-900 dark:text-slate-100 font-bold text-xl">Resume</span>
-            <span className="text-green-600 font-bold text-xl">Up</span>
+            <span className="text-slate-900  font-bold text-xl" style={{ color: 'var(--color-text-main)' }}>
+              Resume
+            </span>
+            <span className="text-green-600 font-bold text-xl">Pro</span>
           </div>
         </div>
 
