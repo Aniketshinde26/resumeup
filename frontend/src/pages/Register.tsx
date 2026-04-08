@@ -27,7 +27,7 @@ export default function Register() {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900">
       <LanguageToggle />
       {/* MAIN CONTAINER */}
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[600px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
+      <div className="flex flex-col lg:flex-row w-full max-w-7xl min-h-[800px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
         
         {/* LEFT SECTION: BRAND & FEATURES (Matches Login Showcase style) */}
 {/* LEFT SECTION: DESIGN FILLER */}

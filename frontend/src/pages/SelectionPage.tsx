@@ -40,7 +40,7 @@ export default function SelectionPage() {
         <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--color-text-main)' }}>
           Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-700 to-green-600">ResumePro</span>
         </h1>
-        <p className="text-slate-500 mt-3 text-lg max-w-2xl">
+        <p className="color: 'var(--color-text-main)' mt-3 text-lg max-w-2xl">
           {t('everything_you_need_to_land_your_dream_job_powered_by_smart_design_select_a_tool_below_to_begin')}
         </p>
       </header>

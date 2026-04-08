@@ -27,7 +27,7 @@ const LanguageSelector = () => {
   const currentLanguageLabel = languages.find(l => i18n.language?.startsWith(l.code))?.label || 'English';
 
   return (
-    <div className="absolute top-6 right-6 z-50" ref={menuRef}>
+    <div className="relative" ref={menuRef}>
       {/* Trigger Button */}
       <button
         type="button"

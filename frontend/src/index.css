@@ -8,7 +8,9 @@
   --color-card-bg: #ffffff;
   --color-text-main: #0f172a;
   --color-text-muted: #475569;
---color-border-subtle: #e2e8f0;}
+--color-border-subtle: #e2e8f0;
+--color-card-left:#0f172a;
+}
 
 /* 2. OVERRIDE THEM WHEN .dark IS ON <html> */
 .dark {
@@ -17,6 +19,7 @@
   --color-text-main: #f8fafc !important;
   --color-text-muted: #94a3b8 !important;
   --color-border-subtle: #1e293b !important;
+  --color-card-left:#e2e8f0 !important;
 }
 
 /* 3. TELL TAILWIND ABOUT THE VARIABLES */
