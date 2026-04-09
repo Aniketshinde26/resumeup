@@ -10,16 +10,24 @@
   --color-text-muted: #475569;
 --color-border-subtle: #e2e8f0;
 --color-card-left:#0f172a;
+--color-card-right:#0f172a;
+--color-card-background:#A9A9A9 ;
+--color-card-title:#f8fafc;
+ --color-card-title1:#f8fafc !important;
+
 }
 
 /* 2. OVERRIDE THEM WHEN .dark IS ON <html> */
 .dark {
-  --color-brand-surface: #020617 !important;
+  --color-brand-surface: #212529 !important;
   --color-card-bg:#212529!important;
   --color-text-main: #f8fafc !important;
   --color-text-muted: #94a3b8 !important;
   --color-border-subtle: #1e293b !important;
   --color-card-left:#e2e8f0 !important;
+  --color-card-background:#212529;
+  --color-card-title:#212529 !important;
+  --color-card-title1:#0f172a !important;
 }
 
 /* 3. TELL TAILWIND ABOUT THE VARIABLES */

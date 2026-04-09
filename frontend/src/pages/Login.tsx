@@ -29,7 +29,7 @@ export default function Login() {
   ];
 
   return (
-<div className="min-h-screen w-full flex items-center justify-center bg-(--color-brand-surface) p-2 sm:p-8 font-sans transition-colors duration-300 relative">      
+<div className="min-h-screen w-full flex items-center justify-center bg-(--color-card-background) p-2 sm:p-8 font-sans transition-colors duration-300 relative">      
       {/* --- SHARED TOGGLE CONTAINER --- */}
       {/* This flex container keeps them side-by-side and prevents overlapping */}
       <div className="absolute top-6 right-6 z-[100] flex items-center gap-4">
@@ -37,9 +37,9 @@ export default function Login() {
         <LanguageToggle />
       </div>
 
-<div className="flex flex-col lg:flex-row w-full max-w-7xl min-h-[500px] overflow-hidden rounded-[1rem] bg-(--color-card-left) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
+<div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[1rem] bg-(--color-card-left) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
         {/* LEFT SECTION */}
-        <div className="lg:w-[50%] bg-slate-50 dark:bg-slate-800/50 p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100 dark:border-slate-800">
+        <div className="lg:w-[50%] (--color-card-left)  p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100 dark:border-slate-100">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-primary/15 to-transparent pointer-events-none" />
           
           <div className="relative z-10">
@@ -52,7 +52,7 @@ export default function Login() {
                 <span className="text-green-600 font-bold text-xl">Pro</span>
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-3 tracking-tight">
+            <h2 className="text-3xl font-bold" style={{ color: 'var(--color-card-title)' }}>
               {t('step_into_your')} <br/> {t('next_role')}
             </h2>
           </div>
@@ -74,7 +74,7 @@ export default function Login() {
         </div>
 
         {/* RIGHT SECTION */}
-<div className="lg:w-[50%] bg-(--color-brand-surface) p-10 flex flex-col justify-between relative overflow-hidden border-r border-(--color-border-subtle)">          <div className="w-full max-w-sm mx-auto">
+<div className="lg:w-[50%] bg-(--color-card-right) p-10 flex flex-col justify-between relative overflow-hidden border-r border-(--color-border-subtle)">          <div className="w-full max-w-sm mx-auto">
             <div className="mb-10">
               <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight(--color-card-bg)">{t('sign_in')}</h1>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{t('welcome_back_please_enter_your_details')}</p>
