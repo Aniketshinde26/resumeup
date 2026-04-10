@@ -29,18 +29,21 @@ export default function Login() {
   ];
 
   return (
-<div className="min-h-screen w-full flex items-center justify-center bg-(--color-card-background) p-2 sm:p-8 font-sans transition-colors duration-300 relative">      
-      {/* --- SHARED TOGGLE CONTAINER --- */}
+  <div className="min-h-screen w-full flex items-center justify-center (--color-brand-firstlayer) p-4 sm:p-6 font-sans text-slate-900">      {/* --- SHARED TOGGLE CONTAINER --- */}
       {/* This flex container keeps them side-by-side and prevents overlapping */}
       <div className="absolute top-6 right-6 z-[100] flex items-center gap-4">
         <ThemeToggle />
         <LanguageToggle />
       </div>
 
-<div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[1rem] bg-(--color-card-left) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
+<div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
         {/* LEFT SECTION */}
-        <div className="lg:w-[50%] (--color-card-left)  p-10 flex flex-col justify-between relative overflow-hidden border-r border-slate-100 dark:border-slate-100">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-primary/15 to-transparent pointer-events-none" />
+<div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
+            <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
+  {/* Larger Glowing Blobs */}
+  <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-brand-primary/10 rounded-full blur-3xl animate-pulse" />
+  <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/10 rounded-full blur-2xl" />
+
           
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-8">
@@ -48,12 +51,15 @@ export default function Login() {
                 <span className="text-white font-bold text-sm">R</span>
               </div>
               <div className="flex items-center gap-0 tracking-tight">
-                <span className="text-slate-900 dark:text-white font-bold text-xl">Resume</span>
+                <span className="font-bold text-xl" style={{ color: 'var(--color-brand-name)' }}>
+                  Resume
+                </span>
                 <span className="text-green-600 font-bold text-xl">Pro</span>
               </div>
             </div>
-            <h2 className="text-3xl font-bold" style={{ color: 'var(--color-card-title)' }}>
-              {t('step_into_your')} <br/> {t('next_role')}
+            <h2 className="text-4xl font-extrabold" style={{ color: 'var(--color-title-primary)' }}>
+              {t('step_into_your')} <br/>
+              <span className="text-brand-primary">{t('next_role')}</span>
             </h2>
           </div>
 
@@ -74,9 +80,12 @@ export default function Login() {
         </div>
 
         {/* RIGHT SECTION */}
-<div className="lg:w-[50%] bg-(--color-card-right) p-10 flex flex-col justify-between relative overflow-hidden border-r border-(--color-border-subtle)">          <div className="w-full max-w-sm mx-auto">
+<div className="lg:w-[50%] bg-(--color-card-right) p-10 flex flex-col justify-between relative overflow-hidden border-r border-(--color-border-subtle)">     
+       <div className="w-full max-w-sm mx-auto">
             <div className="mb-10">
-              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight(--color-card-bg)">{t('sign_in')}</h1>
+              <h1 className="text-3xl font-extrabold tracking-tight"  style={{ color: 'var(--color-title-primary)' }}>
+              {t('sign_in')}
+              </h1>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{t('welcome_back_please_enter_your_details')}</p>
             </div>
 

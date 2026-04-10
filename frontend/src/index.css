@@ -10,10 +10,13 @@
   --color-text-muted: #475569;
 --color-border-subtle: #e2e8f0;
 --color-card-left:#0f172a;
---color-card-right:#0f172a;
+--color-card-right:#F8FAFC;
 --color-card-background:#A9A9A9 ;
 --color-card-title:#f8fafc;
- --color-card-title1:#f8fafc !important;
+ --color-card-title1:#f8fafc;
+ --color-brand-firstlayer:#F8FAFC;
+ --color-brand-name:#0f172a;
+ --color-title-primary:#0f172a
 
 }
 
@@ -24,10 +27,12 @@
   --color-text-main: #f8fafc !important;
   --color-text-muted: #94a3b8 !important;
   --color-border-subtle: #1e293b !important;
-  --color-card-left:#e2e8f0 !important;
+  --color-card-left:#0f172a !important;
   --color-card-background:#212529;
   --color-card-title:#212529 !important;
   --color-card-title1:#0f172a !important;
+  --color-brand-name:#F8FAFC !important;
+  
 }
 
 /* 3. TELL TAILWIND ABOUT THE VARIABLES */

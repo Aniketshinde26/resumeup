@@ -24,14 +24,15 @@ export default function Register() {
   const {handleSocialClick} = useGithubAuth();
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#F8FAFC] p-4 sm:p-6 font-sans text-slate-900">
+    <div className="min-h-screen w-full flex items-center justify-center  (--color-brand-firstlayer) p-10 sm:p-12 font-sans text-slate-900">
+
       <LanguageToggle />
       {/* MAIN CONTAINER */}
-      <div className="flex flex-col lg:flex-row w-full max-w-7xl min-h-[800px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
+      <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
         
         {/* LEFT SECTION: BRAND & FEATURES (Matches Login Showcase style) */}
 {/* LEFT SECTION: DESIGN FILLER */}
-<div className="lg:w-[45%] bg-slate-50 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
+<div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
   
   {/* 1. LAYERED BACKGROUND (Fills the 'Empty' air) */}
   {/* Subtle Dot Grid */}
@@ -48,11 +49,13 @@ export default function Register() {
         <span className="text-white font-bold text-sm">R</span>
       </div>
 <div className="flex items-center gap-0 tracking-tight">
-  <span className="text-slate-900 font-bold text-xl">Resume</span>
-  <span className="text-green-600 font-bold text-xl">Up</span>
+  <span className="font-bold text-xl" style={{ color: 'var(--color-brand-name)' }}>
+    Resume
+  </span>
+  <span className="text-green-600 font-bold text-xl">Pro</span>
 </div>    </div>
     
-    <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
+    <h2 className="text-4xl font-extrabold" style={{ color: 'var(--color-title-primary)' }}>
       {t('build_your_future')} <br /> 
       <span className="text-brand-primary">{t('piece_by_piece')}</span>
     </h2>
@@ -109,7 +112,8 @@ export default function Register() {
 </div>
 
         {/* RIGHT SECTION: THE REGISTER FORM */}
-        <div className="lg:w-[50%] p-10 sm:p-16 flex flex-col justify-center bg-white">
+        <div className="lg:w-[50%] p-10 sm:p-16 flex flex-col justify-center
+        ">
           <div className="w-full max-w-sm mx-auto">
             <div className="mb-10">
               <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{t('create_account')}</h1>
