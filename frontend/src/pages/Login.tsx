@@ -63,7 +63,7 @@ export default function Login() {
             </h2>
           </div>
 
-          <div className="relative z-10 grid grid-cols-2 gap-5 my-8">
+          {/* <div className="relative z-10 grid grid-cols-2 gap-5 my-8">
             {templates.map((tpl) => (
               <div key={tpl.id} onClick={() => navigate(`/builder/${tpl.id}`)} className="group cursor-pointer">
                 <div className="relative aspect-[3/4.2] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-brand-primary/40 transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
@@ -72,8 +72,49 @@ export default function Login() {
                 <p className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-brand-primary transition-colors">{tpl.name}</p>
               </div>
             ))}
-          </div>
+          </div> */}
+<div className="relative z-10 grid grid-cols-2 gap-6 my-8">
+  {templates.map((tpl) => (
+    <div 
+      key={tpl.id} 
+      onClick={() => navigate(`/builder/${tpl.id}`)} 
+      className="group relative cursor-pointer"
+    >
+      {/* Main Card Container */}
+      <div className="relative aspect-[3/4.2] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-500 ease-out shadow-sm group-hover:shadow-2xl group-hover:shadow-brand-primary/20 group-hover:-translate-y-2 group-hover:border-brand-primary/50">
+        
+        {/* Subtle Gradient Overlay (Appears on Hover) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex flex-col justify-end p-4">
+          <span className=" text-[10px] font-bold uppercase tracking-tighter mb-1 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+            Click to Customize
+          </span>
+        </div>
 
+        {/* Image with Zoom Effect */}
+        <img 
+          src={`/previews/${tpl.id}.png`} 
+          alt={tpl.name} 
+          className="w-full h-full object-cover object-top opacity-90 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700 ease-in-out" 
+        />
+      </div>
+
+      {/* Label Styling */}
+      <div className="mt-4 flex items-center justify-between px-1">
+        <div>
+          <p className="text-[11px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider group-hover:text-brand-primary transition-colors">
+            {tpl.name}
+          </p>
+          <div className="h-0.5 w-0 group-hover:w-full bg-brand-primary transition-all duration-300 rounded-full" />
+        </div>
+        
+        {/* Small "New" or "Pro" tag (Optional) */}
+        <span className="text-[9px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold border border-slate-200 dark:border-slate-700">
+          FREE
+        </span>
+      </div>
+    </div>
+  ))}
+</div>
           <div className="relative z-10 pt-4 border-t border-slate-200 dark:border-slate-800">
             <p className="text-[10px] text-slate-400 font-medium">{t('login_to_explore_more')}</p>
           </div>

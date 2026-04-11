@@ -2,10 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
 
+
 const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
 
 export const useBuilder = () => {
   const { id } = useParams<{ id: string }>();
+ 
 
   const [resume, setResume] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -93,12 +95,18 @@ export const useBuilder = () => {
   const handleSave = async () => {
     if (!resume || !resume.data || !id) return;
     if (!isDirty || saving) return;
-
-    // 3. Block manual save for guests
-    if (PUBLIC_TEMPLATES.includes(id as string)) {
-      console.log("Guest Mode: Save disabled");
-      return;
-    }
+  if (PUBLIC_TEMPLATES.includes(id as string)) {
+    // 1. Save to localStorage instead of the database
+    localStorage.setItem(`guest_resume_${id}`, JSON.stringify(resume));
+    
+    // 2. Show a "Draft Saved" toast or message instead of redirecting
+    console.log("Progress saved locally to browser.");
+    setIsDirty(false); 
+    
+    // 3. Optional: Show a subtle non-blocking hint
+    // setInfoMessage("Progress saved to browser. Create an account to access this on any device!");
+    return;
+  }
 
     try {
       setSaving(true);

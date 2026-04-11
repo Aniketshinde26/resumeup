@@ -25,7 +25,8 @@ export default function App() {
     // 4. Wrap everything in the Provider and Suspense
     <ThemeProvider>
     <I18nextProvider i18n={i18n}>
-<div className="min-h-screen bg-[var(--color-brand-surface)] text-[var(--color-text-main)] transition-colors duration-300">      <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
+<div className="min-h-screen bg-[var(--color-brand-surface)] text-[var(--color-text-main)] transition-colors duration-300">
+        <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Login />} />
@@ -34,12 +35,13 @@ export default function App() {
           <Route path="/auth/github/callback" element={<GithubCallback />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/builder/:id" element={<Builder />} />
+
 
           {/* Protected Routes Group */}
           <Route element={<ProtectedRoute />}>
             
             {/* 1. Routes WITHOUT Sidebar */}
-            <Route path="/builder/:id" element={<Builder />} />
             <Route path="/resume/preview/:id" element={<ResumePreview />} />
             <Route path="/cover-letters/preview/:id" element={<CoverLetterPreview />} />
             <Route path="/cover-letter-builder/:id" element={<CoverLetterBuilder />} />
