@@ -7,7 +7,7 @@ import { useGithubAuth } from "../hooks/useGithubAuth";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "../components/LanguageToggle";
 import ThemeToggle from "../components/ThemeToggle";
-
+import ActionPanel from "../components/ActionPanel";
 export default function Login() {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
   const navigate = useNavigate();
@@ -30,13 +30,11 @@ export default function Login() {
 
   return (
   <div className="min-h-screen w-full flex items-center justify-center (--color-brand-firstlayer) p-4 sm:p-6 font-sans text-slate-900">      {/* --- SHARED TOGGLE CONTAINER --- */}
-      {/* This flex container keeps them side-by-side and prevents overlapping */}
-      <div className="absolute top-6 right-6 z-[100] flex items-center gap-4">
-        <ThemeToggle />
-        <LanguageToggle />
-      </div>
+    
+    <div className="w-full max-w-6xl">
+      <ActionPanel/>
 
-<div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
+<div className="flex flex-col lg:flex-row w-full min-h-[600px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
         {/* LEFT SECTION */}
 <div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
             <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
@@ -48,6 +46,7 @@ export default function Login() {
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-8">
               <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md">
+                
                 <span className="text-white font-bold text-sm">R</span>
               </div>
               <div className="flex items-center gap-0 tracking-tight">
@@ -184,13 +183,19 @@ export default function Login() {
               >
                 {isLoading ? t("authenticating") : t("sign_in")}
               </button>
+              
             </form>
+            
 
             <p className="mt-10 text-center text-sm text-slate-500 dark:text-slate-400">
               {t('dont_have_an_account')} <Link to="/register" className="text-brand-primary font-bold hover:underline">{t('sign_up_free')}</Link>
             </p>
+
+               {/* This flex container keeps them side-by-side and prevents overlapping */}
+    
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

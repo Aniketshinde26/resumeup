@@ -7,6 +7,7 @@ import { useGithubAuth } from "../hooks/useGithubAuth";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "../components/LanguageToggle";
 import ThemeToggle from "../components/ThemeToggle";
+import ActionPanel from "../components/ActionPanel";
 export default function Register() {
   const {t} = useTranslation('translation',{keyPrefix:'register'});
   const {
@@ -27,10 +28,9 @@ export default function Register() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center  (--color-brand-firstlayer) p-10 sm:p-12 font-sans text-slate-900">
 
-       <div className="absolute top-6 right-6 z-[100] flex items-center gap-4">
-        <ThemeToggle />
-        <LanguageToggle />
-      </div>
+<div className="w-full max-w-6xl relative">
+      <ActionPanel/> 
+      
       {/* MAIN CONTAINER */}
       <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
         
@@ -203,6 +203,7 @@ export default function Register() {
             </p>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
