@@ -31,7 +31,7 @@ export default function Login() {
   return (
   <div className="min-h-screen w-full flex items-center justify-center (--color-brand-firstlayer) p-4 sm:p-6 font-sans text-slate-900">      {/* --- SHARED TOGGLE CONTAINER --- */}
     
-    <div className="w-full max-w-6xl">
+    <div className="w-full max-w-6xl flex flex-col">
       <ActionPanel/>
 
 <div className="flex flex-col lg:flex-row w-full min-h-[600px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        

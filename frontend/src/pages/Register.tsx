@@ -32,7 +32,7 @@ export default function Register() {
       <ActionPanel/> 
       
       {/* MAIN CONTAINER */}
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[500px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
+      <div className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[200px] overflow-hidden rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">
         
         {/* LEFT SECTION: BRAND & FEATURES (Matches Login Showcase style) */}
 {/* LEFT SECTION: DESIGN FILLER */}
