@@ -14,9 +14,10 @@
 --color-card-background:#A9A9A9 ;
 --color-card-title:#f8fafc;
  --color-card-title1:#f8fafc;
- --color-brand-firstlayer:#F8FAFC;
+ --color-brand-firstlayer:#0f172a;
  --color-brand-name:#0f172a;
- --color-title-primary:#0f172a
+ --color-title-primary:#0f172a;
+ --color-sign-in:#0f172a
 
 }
 
@@ -31,7 +32,9 @@
   --color-card-background:#212529;
   --color-card-title:#212529 !important;
   --color-card-title1:#0f172a !important;
-  --color-brand-name:#F8FAFC !important;
+  --color-card-right:#1e293b !important;
+   --color-sign-in:#f8fafc !important;
+
   
 }
 
