@@ -26,7 +26,7 @@ export default function BuilderHeader({
     const {t} = useTranslation('translation',{keyPrefix:'header'});
 
   return (
-    <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-300 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">
+    <header className="h-20 backdrop-blur-md border-b border-slate-300 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-0 tracking-tight">
           <span className="text-slate-900 font-bold text-xl">{productName}</span>

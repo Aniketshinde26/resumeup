@@ -36,10 +36,11 @@ CreateItemModal({
   
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50
+     backdrop-blur-sm">
+      <div className="bg-[var(--color-brand-card)] rounded-2xl w-full max-w-md p-8 shadow-2xl zoom-in duration-200">
         {/* Dynamic Heading */}
-        <h2 className="text-2xl font-bold text-slate-900">{t('create_new')} {type}</h2>
+        <h2 className="text-2xl font-bold (--color-text-main)">{t('create_new')} {type}</h2>
         <p className="text-slate-600 mt-1 mb-6">
           {t('give_your')} {type.toLowerCase()} {t('a_name_to_get_started')}
         </p>
@@ -47,7 +48,7 @@ CreateItemModal({
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             {/* Dynamic Label */}
-            <label className="block text-sm font-medium text-slate-900 mb-2">
+            <label className="block text-sm font-medium color: var(--color-text-main) mb-2">
               {type} {t('title')}
             </label>
             <input
@@ -60,7 +61,7 @@ CreateItemModal({
               }
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-sm focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition"
+              className="w-full rounded-lg border border-slate-900 bg-slate-50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 outline-none transition"
               required
             />
           </div>

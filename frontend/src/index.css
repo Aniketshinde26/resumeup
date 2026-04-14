@@ -17,8 +17,10 @@
  --color-brand-firstlayer:#0f172a;
  --color-brand-name:#0f172a;
  --color-title-primary:#0f172a;
- --color-sign-in:#0f172a
-
+ --color-sign-in:#0f172a;
+--color-brand-card:#f8fafc;
+--color-text-modal:#0f172a;
+--color-header-bg:#f8fafc;
 }
 
 /* 2. OVERRIDE THEM WHEN .dark IS ON <html> */
@@ -34,6 +36,9 @@
   --color-card-title1:#0f172a !important;
   --color-card-right:#1e293b !important;
    --color-sign-in:#f8fafc !important;
+   --color-brand-card:#212529 !important;
+   --color-text-modal:#0f172a !important;
+   --color-header-bg:#212529 !important;
 
   
 }

@@ -33,7 +33,7 @@ export default function Register() {
       
       {/* MAIN CONTAINER */}
 <div 
-  className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[200px] rounded-[2rem] bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]"
+  className="flex flex-col lg:flex-row w-full max-w-6xl min-h-[200px] rounded-[2rem] bg-white ring-1 ring-slate-200/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]"
   style={{ 
     clipPath: 'inset(0 round 2rem)',
     transform: 'translateZ(0)',
