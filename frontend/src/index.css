@@ -21,6 +21,9 @@
 --color-brand-card:#f8fafc;
 --color-text-modal:#0f172a;
 --color-header-bg:#f8fafc;
+--color-form-bg:#f8fafc;
+--color-form-in:#f8fafc;
+
 }
 
 /* 2. OVERRIDE THEM WHEN .dark IS ON <html> */
@@ -39,7 +42,8 @@
    --color-brand-card:#212529 !important;
    --color-text-modal:#0f172a !important;
    --color-header-bg:#212529 !important;
-
+--color-form-bg:#212529 !important;
+--color-form-in:#475569 !important;
   
 }
 

@@ -23,7 +23,7 @@ export default function Builder() {
   const SelectedTemplate = TEMPLATES[resume.templateId || "minimal"];
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 text-slate-900">
+    <div className="bg-(--color-form-bg) flex flex-col h-screen  text-slate-100">
       {/* TOOLBAR */}
 <BuilderHeader
   productName="Resume"
@@ -40,7 +40,7 @@ export default function Builder() {
         {/* LEFT SIDE: INPUT FORMS */}
 <section className="w-1/2 overflow-y-auto p-8 border-r border-slate-200 space-y-10 custom-scrollbar no-print">
           {/* 1. PERSONAL INFO */}
-         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+         <div className="(--color-form-in) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <h2 className="text-slate-800 font-bold flex items-center gap-2">
@@ -53,7 +53,7 @@ export default function Builder() {
 
   <div className="p-6 space-y-6">
     {/* Profile Photo Section */}
-    <div className="flex items-center gap-6 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+    <div className="flex items-center gap-6 p-4 bg-slate-800 rounded-xl border border-dashed border-slate-200">
       <label className="relative cursor-pointer group shrink-0">
         <input
           type="file"
@@ -109,7 +109,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Full Name</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-slate-800 border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="e.g. John Doe"
           value={resume.data.personal?.fullName || ""}
           onChange={(e) => updatePersonal("fullName", e.target.value)}
@@ -120,7 +120,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Job Title</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-slate-800 border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="e.g. Software Engineer"
           value={resume.data.personal?.jobTitle || ""}
           onChange={(e) => updatePersonal("jobTitle", e.target.value)}

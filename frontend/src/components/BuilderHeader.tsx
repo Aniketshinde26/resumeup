@@ -26,14 +26,17 @@ export default function BuilderHeader({
     const {t} = useTranslation('translation',{keyPrefix:'header'});
 
   return (
-    <header className="h-20 backdrop-blur-md border-b border-slate-300 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">
+    <header className="h-20 bg-(--color-header-bg) backdrop-blur-md border-b border-slate-300 px-8 flex items-center justify-between sticky top-0 z-30 no-print transition-all">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-0 tracking-tight">
-          <span className="text-slate-900 font-bold text-xl">{productName}</span>
+          <span
+          style={{ color: 'var(--color-text-main)' }} className="font-bold text-xl">{productName}</span>
           <span className={`${accentColor} font-bold text-xl`}>{productSuffix}</span>
         </div>
         <div className="h-6 w-px bg-slate-200" />
-        <h1 className="font-medium text-slate-600">{docTitle}</h1>
+        <h1 className="font-medium text-slate-600" style={{ color: 'var(--color-text-main)' }}>
+          {docTitle}
+        </h1>
       </div>
 
       <div className="flex items-center gap-4">
