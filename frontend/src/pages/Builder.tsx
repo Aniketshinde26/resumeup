@@ -23,7 +23,7 @@ export default function Builder() {
   const SelectedTemplate = TEMPLATES[resume.templateId || "minimal"];
 
   return (
-    <div className="bg-(--color-form-bg) flex flex-col h-screen  text-slate-100">
+    <div className="bg-(--color-form-in) flex flex-col h-screen  text-slate-100">
       {/* TOOLBAR */}
 <BuilderHeader
   productName="Resume"
@@ -40,7 +40,7 @@ export default function Builder() {
         {/* LEFT SIDE: INPUT FORMS */}
 <section className="w-1/2 overflow-y-auto p-8 border-r border-slate-200 space-y-10 custom-scrollbar no-print">
           {/* 1. PERSONAL INFO */}
-         <div className="(--color-form-in) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+         <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <h2 className="text-slate-800 font-bold flex items-center gap-2">
@@ -53,7 +53,7 @@ export default function Builder() {
 
   <div className="p-6 space-y-6">
     {/* Profile Photo Section */}
-    <div className="flex items-center gap-6 p-4 bg-slate-800 rounded-xl border border-dashed border-slate-200">
+    <div className="flex items-center gap-6 p-4 bg-(--color-form-in) rounded-xl border border-dashed border-slate-200">
       <label className="relative cursor-pointer group shrink-0">
         <input
           type="file"
@@ -109,7 +109,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Full Name</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-slate-800 border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="e.g. John Doe"
           value={resume.data.personal?.fullName || ""}
           onChange={(e) => updatePersonal("fullName", e.target.value)}
@@ -120,7 +120,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Job Title</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-slate-800 border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="e.g. Software Engineer"
           value={resume.data.personal?.jobTitle || ""}
           onChange={(e) => updatePersonal("jobTitle", e.target.value)}
@@ -131,7 +131,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Email Address</label>
         <input
           type="email"
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="name@example.com"
           value={resume.data.personal?.email || ""}
           onChange={(e) => updatePersonal("email", e.target.value)}
@@ -142,7 +142,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Phone Number</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="+1 (555) 000-0000"
           value={resume.data.personal?.phone || ""}
           onChange={(e) => updatePersonal("phone", e.target.value)}
@@ -153,7 +153,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Location</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="City, Country"
           value={resume.data.personal?.location || ""}
           onChange={(e) => updatePersonal("location", e.target.value)}
@@ -163,7 +163,7 @@ export default function Builder() {
       <div className="space-y-1.5 md:col-span-2">
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Professional Summary</label>
         <textarea
-          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 min-h-[120px] resize-none"
+          className="w-full px-4 py-3 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 min-h-[120px] resize-none"
           placeholder="Briefly describe your career background and key achievements..."
           value={resume.data.personal?.summary || ""}
           onChange={(e) => updatePersonal("summary", e.target.value)}
@@ -173,9 +173,9 @@ export default function Builder() {
   </div>
 </div>
           {/* 2. EXPERIENCE */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
-  <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+  <div className="bg-slate-100/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <h2 className="text-slate-800 font-bold flex items-center gap-2">
       <div className="p-1.5 bg-emerald-100 text-emerald-600 rounded-lg">
         <Briefcase size={18} />
@@ -191,7 +191,7 @@ export default function Builder() {
           ],
         })
       }
-      className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-all border border-emerald-100"
+      className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg transition-all border border-emerald-100"
     >
       <Plus size={14} strokeWidth={3} />
       ADD EXPERIENCE
@@ -223,12 +223,12 @@ export default function Builder() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Company Name */}
-            <div className="space-y-1">
+            {/* <div className="space-y-1">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Company</label>
               <input
                 type="text"
                 placeholder="e.g. Google"
-                className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-semibold text-slate-700"
+                className="w-full px-4 py-2.5 bg-(--color-form-bg)border border-slate-200 rounded-xl focus:bg-white focus:ring-indigo-500/20 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-semibold placeholder:text-slate-400"
                 value={exp.company}
                 onChange={(e) => {
                   const newList = [...resume.data.experience];
@@ -236,7 +236,24 @@ export default function Builder() {
                   updateData({ experience: newList });
                 }}
               />
-            </div>
+            </div> */}
+
+            <div className="space-y-1.5">
+  <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">
+    Company
+  </label>
+  <input
+    type="text"
+    placeholder="e.g. Google"
+    className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+    value={exp.company}
+    onChange={(e) => {
+      const newList = [...resume.data.experience];
+      newList[idx].company = e.target.value;
+      updateData({ experience: newList });
+    }}
+  />
+</div>
 
             {/* Role */}
             <div className="space-y-1">
