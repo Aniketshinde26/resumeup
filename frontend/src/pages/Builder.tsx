@@ -1,9 +1,12 @@
 import { useBuilder } from "../hooks/useBuilder";
-import {Award,LanguagesIcon, Rocket, ChevronDown ,Wrench , X, User,Briefcase,GraduationCap, Calendar, Camera,Plus, Trash2, Download } from "lucide-react";
+import {Award,LanguagesIcon, Rocket, ChevronDown ,Wrench , X, User,Briefcase,GraduationCap, Calendar, Camera,Plus, Trash2 } from "lucide-react";
 import { TEMPLATES } from "../types/templateindex";
 import { handlePrint } from "../utils/printUtils";
 import BuilderHeader from "../components/BuilderHeader";
+import "react-datepicker/dist/react-datepicker.css";
+
 import "../print.css";
+
 export default function Builder() {
   const {
     resume,
@@ -109,7 +112,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Full Name</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border text-(--form-text) border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="e.g. John Doe"
           value={resume.data.personal?.fullName || ""}
           onChange={(e) => updatePersonal("fullName", e.target.value)}
@@ -191,7 +194,7 @@ export default function Builder() {
           ],
         })
       }
-      className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg transition-all border border-emerald-100"
+      className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-all border border-emerald-100"
     >
       <Plus size={14} strokeWidth={3} />
       ADD EXPERIENCE
@@ -222,21 +225,7 @@ export default function Builder() {
 
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Company Name */}
-            {/* <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Company</label>
-              <input
-                type="text"
-                placeholder="e.g. Google"
-                className="w-full px-4 py-2.5 bg-(--color-form-bg)border border-slate-200 rounded-xl focus:bg-white focus:ring-indigo-500/20 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-semibold placeholder:text-slate-400"
-                value={exp.company}
-                onChange={(e) => {
-                  const newList = [...resume.data.experience];
-                  newList[idx].company = e.target.value;
-                  updateData({ experience: newList });
-                }}
-              />
-            </div> */}
+       
 
             <div className="space-y-1.5">
   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">
@@ -245,7 +234,7 @@ export default function Builder() {
   <input
     type="text"
     placeholder="e.g. Google"
-    className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+    className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
     value={exp.company}
     onChange={(e) => {
       const newList = [...resume.data.experience];
@@ -261,7 +250,7 @@ export default function Builder() {
               <input
                 type="text"
                 placeholder="e.g. Senior Developer"
-                className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-slate-600"
+                className="w-full px-4 py-2 bg-(--color-form-bg) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
                 value={exp.position}
                 onChange={(e) => {
                   const newList = [...resume.data.experience];
@@ -272,28 +261,47 @@ export default function Builder() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Date Range */}
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Duration</label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-2.5 text-slate-400" size={14} />
-                <input
-                  type="text"
-                  placeholder="Jan 2022 - Present"
-                  className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
-                  value={`${exp.startDate}${exp.endDate ? " - " + exp.endDate : ""}`}
-                  onChange={(e) => {
-                    const newList = [...resume.data.experience];
-                    const parts = e.target.value.split("-");
-                    newList[idx].startDate = parts[0]?.trim() || "";
-                    newList[idx].endDate = parts[1]?.trim() || "";
-                    updateData({ experience: newList });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div className="space-y-1">
+    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
+      Duration
+    </label>
+    <div className="relative flex items-center gap-2">
+      {/* Start Date */}
+      <div className="relative flex-1">
+        <Calendar className="absolute left-3 top-2.5 text-slate-400" size={14} />
+        <input
+          type="date"
+          className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
+          value={exp.startDate || ""}
+          onChange={(e) => {
+            const newList = [...resume.data.experience];
+            newList[idx].startDate = e.target.value;
+            updateData({ experience: newList });
+          }}
+        />
+      </div>
+
+      <span className="text-slate-400 text-sm">—</span>
+
+      {/* End Date */}
+      <div className="relative flex-1">
+        <input
+          type="date"
+          className="w-full pl-4 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
+          value={exp.endDate || ""} // Changed from startDate to endDate
+          onChange={(e) => {
+            const newList = [...resume.data.experience];
+            newList[idx].endDate = e.target.value; // Changed from startDate to endDate
+            updateData({ experience: newList });
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
 
           {/* Description */}
           <div className="space-y-1">
@@ -340,7 +348,7 @@ export default function Builder() {
           ],
         })
       }
-      className="flex items-center gap-1.5 text-xs font-bold text-violet-600 hover:bg-violet-50 px-3 py-1.5 rounded-lg transition-all border border-violet-100"
+      className="flex items-center gap-1.5 text-xs font-bold text-violet-600 hover:bg-violet-100 px-3 py-1.5 rounded-lg transition-all border border-violet-100"
     >
       <Plus size={14} strokeWidth={3} />
       ADD EDUCATION
