@@ -123,7 +123,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Job Title</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg)  border text-(--form-text) border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="e.g. Software Engineer"
           value={resume.data.personal?.jobTitle || ""}
           onChange={(e) => updatePersonal("jobTitle", e.target.value)}
@@ -134,7 +134,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Email Address</label>
         <input
           type="email"
-          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border text-(--form-text) border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="name@example.com"
           value={resume.data.personal?.email || ""}
           onChange={(e) => updatePersonal("email", e.target.value)}
@@ -145,7 +145,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Phone Number</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) border text-(--form-text) border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="+1 (555) 000-0000"
           value={resume.data.personal?.phone || ""}
           onChange={(e) => updatePersonal("phone", e.target.value)}
@@ -156,7 +156,7 @@ export default function Builder() {
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Location</label>
         <input
           type="text"
-          className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          className="w-full px-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
           placeholder="City, Country"
           value={resume.data.personal?.location || ""}
           onChange={(e) => updatePersonal("location", e.target.value)}
@@ -166,7 +166,7 @@ export default function Builder() {
       <div className="space-y-1.5 md:col-span-2">
         <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Professional Summary</label>
         <textarea
-          className="w-full px-4 py-3 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 min-h-[120px] resize-none"
+          className="w-full px-4 py-3  bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 min-h-[120px] resize-none"
           placeholder="Briefly describe your career background and key achievements..."
           value={resume.data.personal?.summary || ""}
           onChange={(e) => updatePersonal("summary", e.target.value)}
@@ -234,7 +234,7 @@ export default function Builder() {
   <input
     type="text"
     placeholder="e.g. Google"
-    className="w-full px-4 py-2.5 bg-(--color-form-bg) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+    className="w-full px-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
     value={exp.company}
     onChange={(e) => {
       const newList = [...resume.data.experience];
@@ -250,7 +250,7 @@ export default function Builder() {
               <input
                 type="text"
                 placeholder="e.g. Senior Developer"
-                className="w-full px-4 py-2 bg-(--color-form-bg) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
+                className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
                 value={exp.position}
                 onChange={(e) => {
                   const newList = [...resume.data.experience];
@@ -273,7 +273,7 @@ export default function Builder() {
         <Calendar className="absolute left-3 top-2.5 text-slate-400" size={14} />
         <input
           type="date"
-          className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
+          className="w-full pl-9 pr-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
           value={exp.startDate || ""}
           onChange={(e) => {
             const newList = [...resume.data.experience];
@@ -289,7 +289,7 @@ export default function Builder() {
       <div className="relative flex-1">
         <input
           type="date"
-          className="w-full pl-4 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
+          className="w-full pl-4 pr-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
           value={exp.endDate || ""} // Changed from startDate to endDate
           onChange={(e) => {
             const newList = [...resume.data.experience];
@@ -308,7 +308,7 @@ export default function Builder() {
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Responsibilities</label>
             <textarea
               placeholder="Describe your achievements..."
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600 min-h-[100px] resize-none"
+              className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm  min-h-[100px] resize-none"
               value={exp.description}
               onChange={(e) => {
                 const newList = [...resume.data.experience];
@@ -330,7 +330,7 @@ export default function Builder() {
 </div>
 
           {/* 3. EDUCATION */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <h2 className="text-slate-800 font-bold flex items-center gap-2">
@@ -359,7 +359,7 @@ export default function Builder() {
     {resume.data.education?.map((edu: any, idx: number) => (
       <div
         key={idx}
-        className="relative p-5 bg-slate-50/50 border border-slate-100 rounded-2xl group hover:border-violet-200 hover:bg-white transition-all"
+        className=" relative p-5 border  border-slate-100  rounded-2xl group hover:border-violet-200 hover:transition-all"
       >
         {/* Delete Button */}
         <button
@@ -382,7 +382,7 @@ export default function Builder() {
             <input
               type="text"
               placeholder="e.g. Stanford University"
-              className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all font-semibold text-slate-700"
+              className="w-full px-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all  "
               value={edu.school}
               onChange={(e) => {
                 const newList = [...resume.data.education];
@@ -401,7 +401,7 @@ export default function Builder() {
               <input
                 type="text"
                 placeholder="e.g. Bachelor of Science in CS"
-                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all text-slate-600"
+                className="w-full px-4 py-2.5 text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all "
                 value={edu.degree}
                 onChange={(e) => {
                   const newList = [...resume.data.education];
@@ -421,7 +421,7 @@ export default function Builder() {
                 <input
                   type="text"
                   placeholder="e.g. 2024"
-                  className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all text-sm text-slate-600"
+                  className="w-full pl-9 pr-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all text-sm "
                   value={edu.year}
                   onChange={(e) => {
                     const newList = [...resume.data.education];
@@ -446,8 +446,8 @@ export default function Builder() {
 </div>
 
 {/* 4. UNIVERSAL SKILLS */}
-<div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-<div className="bg-white px-6 py-4 border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
+<div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+<div className="bg-slate-50/50 px-6 py-4 border border-slate-100  shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
   <h2 className="text-slate-800 font-bold flex items-center gap-8 w-full">
     {/* Icon Container */}
     <div className="p-2 bg-amber-50 text-amber-600 rounded-lg shrink-0 border border-amber-100">
@@ -457,12 +457,12 @@ export default function Builder() {
     {/* Smooth Editable Input */}
     <input 
       className="w-full bg-transparent px-2 py-1.5 rounded-md
-                 text-slate-800 font-bold outline-none
+                 text-slate-800 font-bold outline-none border border-slate-100
                  hover:bg-slate-50
-                 focus:bg-amber-50/50 focus:ring-2 focus:ring-amber-200/50
+                 focus:bg-amber-50/50 focus:ring-2 focus:ring-amber-500/50
                  transition-all duration-200"
       value={resume.data.sectionTitles?.skills ?? ""} 
-      placeholder="Technical Skills"
+      placeholder="Edit skill header"
       onChange={(e) => updateData({ 
         sectionTitles: { ...resume.data.sectionTitles, skills: e.target.value } 
       })}
@@ -477,7 +477,7 @@ export default function Builder() {
     <input
       type="text"
       placeholder="Press Enter to add (e.g. React, Surgery, Financial Analysis...)"
-      className="w-full pl-4 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 outline-none transition-all"
+      className="w-full pl-4 pr-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 outline-none transition-all"
       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
           const val = e.currentTarget.value.trim();
@@ -509,7 +509,7 @@ export default function Builder() {
 </div>
 
 {/* 5. PROJECTS / PROCEDURES / CASE STUDIES */}
-<div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6">
+<div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6">
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <div className="flex items-center gap-3">
       {/* Icon Color changes based on selection to give visual feedback */}
@@ -577,7 +577,7 @@ export default function Builder() {
               </label>
               <input 
                 placeholder={isMedical ? "e.g. Laparoscopic Cholecystectomy" : "e.g. Portfolio Website"}
-                className="w-full px-4 py-2 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500/20"
+                className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) rounded-xl  border border-slate-200 outline-none focus:ring-2 focus:ring-cyan-500/20"
                 value={proj.name}
                 onChange={(e) => {
                   const newList = [...resume.data.projects];
@@ -592,7 +592,7 @@ export default function Builder() {
               </label>
               <input 
                 placeholder={isMedical ? "e.g. General Surgery Dept" : "https://github.com..."}
-                className="w-full px-4 py-2 bg-slate-50 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500/20"
+                className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) rounded-xl  border border-slate-200 outline-none focus:ring-2 focus:ring-cyan-500/20"
                 value={proj.link}
                 onChange={(e) => {
                   const newList = [...resume.data.projects];
@@ -609,7 +609,7 @@ export default function Builder() {
             </label>
             <textarea 
               placeholder={isMedical ? "Describe your role in the procedure and the results..." : "Describe the project..."}
-              className="w-full px-4 py-3 bg-slate-50 rounded-xl min-h-[100px] outline-none focus:ring-2 focus:ring-cyan-500/20"
+              className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl min-h-[100px] outline-none focus:ring-2 focus:ring-cyan-500/20"
               value={proj.description}
               onChange={(e) => {
                 const newList = [...resume.data.projects];
@@ -625,7 +625,7 @@ export default function Builder() {
 </div>
 
           {/* 6. LANGUAGES */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <h2 className="text-slate-800 font-bold flex items-center gap-2">
@@ -658,11 +658,11 @@ export default function Builder() {
           className="flex flex-col sm:flex-row gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100 items-center group relative transition-all hover:bg-white hover:border-rose-200 hover:shadow-sm"
         >
           {/* Language Name Input */}
-          <div className="relative flex-1 w-full">
+          <div className="relative  flex-1 w-full">
             <input
               type="text"
               placeholder="e.g. English"
-              className="w-full pl-4 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-sm font-medium text-slate-700"
+              className="w-full pl-4 pr-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-sm font-medium "
               value={lang.name}
               onChange={(e) => {
                 const newList = [...resume.data.languages];
@@ -675,7 +675,7 @@ export default function Builder() {
           {/* Proficiency Select */}
           <div className="w-full sm:w-48">
             <select
-              className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-xs font-bold text-slate-500 uppercase tracking-wide cursor-pointer appearance-none"
+              className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-xs font-bold "
               value={lang.proficiency}
               onChange={(e) => {
                 const newList = [...resume.data.languages];
@@ -715,7 +715,7 @@ export default function Builder() {
 </div>
 
           {/* 7. CERTIFICATIONS */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
   {/* Section Header */}
   <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
     <h2 className="text-slate-800 font-bold flex items-center gap-2">
@@ -744,7 +744,7 @@ export default function Builder() {
     {resume.data.certifications?.map((cert: any, idx: number) => (
       <div
         key={idx}
-        className="relative p-4 bg-slate-50/50 border border-slate-100 rounded-xl group hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all"
+        className="relative p-4 bg-(--color-form-bg) border border-slate-100 rounded-xl group hover: hover:border-blue-200 hover:shadow-sm transition-all"
       >
         {/* Delete Button */}
         <button
@@ -767,7 +767,7 @@ export default function Builder() {
             <input
               type="text"
               placeholder="e.g. AWS Certified Solutions Architect"
-              className="w-full px-4 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-semibold text-slate-700 text-sm"
+              className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-semibold  text-sm"
               value={cert.name}
               onChange={(e) => {
                 const newList = [...resume.data.certifications];
@@ -786,7 +786,7 @@ export default function Builder() {
               <input
                 type="text"
                 placeholder="e.g. Amazon Web Services"
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs text-slate-600"
+                className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs "
                 value={cert.issuer}
                 onChange={(e) => {
                   const newList = [...resume.data.certifications];
@@ -804,7 +804,7 @@ export default function Builder() {
               <input
                 type="text"
                 placeholder="e.g. March 2024"
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs text-slate-600"
+                className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs "
                 value={cert.date}
                 onChange={(e) => {
                   const newList = [...resume.data.certifications];
