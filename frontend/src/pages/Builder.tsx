@@ -217,7 +217,7 @@ export default function Builder() {
             newList.splice(idx, 1);
             updateData({ experience: newList });
           }}
-          className="absolute top-0 right-0 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+            className="absolute top-0 right-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
           title="Remove entry"
         >
           <Trash2 size={16} />
@@ -368,7 +368,7 @@ export default function Builder() {
             newList.splice(idx, 1);
             updateData({ education: newList });
           }}
-          className="absolute top-4 right-4 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+            className="absolute top-4 right-4 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
         >
           <Trash2 size={16} />
         </button>
@@ -643,7 +643,7 @@ export default function Builder() {
           ],
         })
       }
-      className="flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition-all border border-rose-100"
+      className="flex items-center gap-3.0 text-xs font-bold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition-all border border-rose-100"
     >
       <Plus size={14} strokeWidth={3} />
       ADD LANGUAGE
@@ -655,14 +655,14 @@ export default function Builder() {
       {resume.data.languages?.map((lang: any, idx: number) => (
         <div 
           key={idx} 
-          className="flex flex-col sm:flex-row gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100 items-center group relative transition-all hover:bg-white hover:border-rose-200 hover:shadow-sm"
+          className="flex flex-col sm:flex-row gap-1 p-5 bg-(--color-form-bg) rounded-xl border border-slate-100 items-center group relative transition-all hover: hover:border-rose-200 hover:shadow-sm"
         >
           {/* Language Name Input */}
-          <div className="relative  flex-1 w-full">
+          <div className="relative  flex-1 sm:w-100">
             <input
               type="text"
               placeholder="e.g. English"
-              className="w-full pl-4 pr-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-sm font-medium "
+              className=" pl-3 pr-2 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-sm font-medium "
               value={lang.name}
               onChange={(e) => {
                 const newList = [...resume.data.languages];
@@ -673,9 +673,9 @@ export default function Builder() {
           </div>
 
           {/* Proficiency Select */}
-          <div className="w-full sm:w-48">
+          <div className="w-full sm:w-30">
             <select
-              className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-xs font-bold "
+              className="w-full px-2 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-xs font-bold "
               value={lang.proficiency}
               onChange={(e) => {
                 const newList = [...resume.data.languages];
@@ -698,7 +698,7 @@ export default function Builder() {
               newList.splice(idx, 1);
               updateData({ languages: newList });
             }}
-            className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100 sm:relative absolute top-1 right-1"
+            className="absolute top-1 right-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
           >
             <Trash2 size={16} />
           </button>
@@ -753,7 +753,7 @@ export default function Builder() {
             newList.splice(idx, 1);
             updateData({ certifications: newList });
           }}
-          className="absolute top-3 right-3 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+            className="absolute top-2 right-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
         >
           <Trash2 size={16} />
         </button>
