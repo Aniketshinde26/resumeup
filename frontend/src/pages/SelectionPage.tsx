@@ -49,7 +49,7 @@ export default function SelectionPage() {
         {tools.map((tool) => (
           <Link to={tool.path} key={tool.id} className="group">
             {/* Added bg-white here */}
-            <div className="h-full  border-slate-200 p-8 rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200 transition-all duration-300 flex flex-col items-start">
+            <div className="h-full bg-(--color-form-in) border-slate-200 p-8 rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200 transition-all duration-300 flex flex-col items-start">
               <div className={`p-4 rounded-2xl ${tool.color} text-white mb-6 shadow-lg shadow-current/20`}>
                 {tool.icon}
               </div>
