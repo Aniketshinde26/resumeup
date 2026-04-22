@@ -24,6 +24,7 @@
 --color-form-bg:#f8fafc;
 --color-form-in:#f8fafc;
 --form-text:#0f172a;
+--color-dots:#cbd5e1;
 
 }
 
@@ -46,6 +47,7 @@
 --color-form-bg:#212529 !important;
 --color-form-in:#000000!important;
 --form-text:#f8fafc!important;
+--color-dots:#f8fafc!important;
   
 }
 

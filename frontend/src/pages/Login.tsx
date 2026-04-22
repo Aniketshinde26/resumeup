@@ -5,8 +5,6 @@ import GoogleAuthButton from "../components/GoogleAuthButton";
 import { useNavigate, Link } from "react-router-dom";
 import { useGithubAuth } from "../hooks/useGithubAuth";
 import { useTranslation } from "react-i18next";
-import LanguageToggle from "../components/LanguageToggle";
-import ThemeToggle from "../components/ThemeToggle";
 import ActionPanel from "../components/ActionPanel";
 export default function Login() {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -29,15 +27,15 @@ export default function Login() {
   ];
 
   return (
-  <div className="min-h-screen w-full flex items-center justify-center (--color-brand-firstlayer) p-4 sm:p-6 font-sans ">     
+  <div className="min-h-screen w-full flex items-center justify-center  p-4 sm:p-6 font-sans ">     
     
     <div className="w-full max-w-6xl flex flex-col">
       <ActionPanel/>
 
-<div className="flex flex-col lg:flex-row w-full min-h-[600px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
+<div className="flex flex-col lg:flex-row w-full min-h-[700px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
         {/* LEFT SECTION */}
 <div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
-            <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
+            <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 2px)`, backgroundSize: '24px 24px' }} />
   {/* Larger Glowing Blobs */}
   <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-brand-primary/10 rounded-full blur-3xl" />
   <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/10 rounded-full blur-2xl" />
@@ -62,16 +60,7 @@ export default function Login() {
             </h2>
           </div>
 
-          {/* <div className="relative z-10 grid grid-cols-2 gap-5 my-8">
-            {templates.map((tpl) => (
-              <div key={tpl.id} onClick={() => navigate(`/builder/${tpl.id}`)} className="group cursor-pointer">
-                <div className="relative aspect-[3/4.2] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-brand-primary/40 transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
-                  <img src={`/previews/${tpl.id}.png`} alt={tpl.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-                <p className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-brand-primary transition-colors">{tpl.name}</p>
-              </div>
-            ))}
-          </div> */}
+    
 <div className="relative z-10 grid grid-cols-2 gap-6 my-8">
   {templates.map((tpl) => (
     <div 
