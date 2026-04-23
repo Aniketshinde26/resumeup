@@ -4,7 +4,7 @@ import { TEMPLATES } from "../types/templateindex";
 import { handlePrint } from "../utils/printUtils";
 import BuilderHeader from "../components/BuilderHeader";
 import "react-datepicker/dist/react-datepicker.css";
-
+import GridBackground from "../layouts/Gridbackground";
 import "../print.css";
 
 export default function Builder() {
@@ -26,6 +26,7 @@ export default function Builder() {
   const SelectedTemplate = TEMPLATES[resume.templateId || "minimal"];
 
   return (
+    
     <div className="bg-(--color-form-in) flex flex-col h-screen  text-slate-100">
       {/* TOOLBAR */}
 <BuilderHeader
@@ -833,6 +834,8 @@ export default function Builder() {
                 bg-gradient-to-b from-transparent 
                 via-slate-300/60 
                 to-transparent" />
+
+                
 
 
 

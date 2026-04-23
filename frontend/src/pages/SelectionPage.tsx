@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { FileText, PenTool, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import GridBackground from "../layouts/Gridbackground";
 
 export default function SelectionPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'selectionpage' });
@@ -34,6 +35,7 @@ export default function SelectionPage() {
   ];
 
   return (
+    <GridBackground>
     <div className="max-w-5xl mx-auto p-6">
       <header className="mb-12 relative">
         <div className="absolute -top-10 -left-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl" />
@@ -68,5 +70,6 @@ export default function SelectionPage() {
         ))}
       </div>
     </div>
+    </GridBackground>
   );
 }

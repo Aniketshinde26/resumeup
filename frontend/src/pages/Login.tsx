@@ -6,6 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useGithubAuth } from "../hooks/useGithubAuth";
 import { useTranslation } from "react-i18next";
 import ActionPanel from "../components/ActionPanel";
+import GridBackground from "../layouts/Gridbackground";
 export default function Login() {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Login() {
     setPassword,
     isLoading,
     error,
-    handleLogin,
+    handleLogin,  
   } = useLogin();
 
   const { handleSocialClick } = useGithubAuth();
@@ -27,9 +28,10 @@ export default function Login() {
   ];
 
   return (
-  <div className="min-h-screen w-full flex items-center justify-center  p-4 sm:p-6 font-sans ">     
+    <GridBackground>
+  <div className=" flex items-center justify-center  p-4 sm:p-6 font-sans ">     
     
-    <div className="w-full max-w-6xl flex flex-col">
+    <div className="w-full max-w-7xl flex flex-col">
       <ActionPanel/>
 
 <div className="flex flex-col lg:flex-row w-full min-h-[700px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
@@ -191,5 +193,6 @@ export default function Login() {
       </div>
       </div>
     </div>
+    </GridBackground>
   );
 }

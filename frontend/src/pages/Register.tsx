@@ -28,7 +28,7 @@ export default function Register() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center  (--color-brand-firstlayer) p-10 sm:p-12 font-sans text-slate-900">
 
-<div className="w-full max-w-6xl relative">
+<div className="w-full max-w-7xl relative">
       <ActionPanel/> 
       
       {/* MAIN CONTAINER */}
