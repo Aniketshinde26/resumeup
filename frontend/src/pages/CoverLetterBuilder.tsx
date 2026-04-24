@@ -31,6 +31,7 @@ export default function CoverLetterBuilder() {
 const templateKey = (coverLetter.TemplateId || "moderncover").toLowerCase();
 const SelectedTemplate = COVER_LETTER_TEMPLATES_MAP[templateKey];
   return (
+   
     <div className="flex flex-col h-screen bg-(--color-form-in) text-slate-900">
       {/* TOOLBAR */}
       <BuilderHeader

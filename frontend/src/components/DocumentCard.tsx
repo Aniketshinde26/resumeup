@@ -57,7 +57,7 @@ export default function DocumentCard({
             <iframe
               src={previewUrl}
               title={title}
-              className="absolute border-none pointer-events-none"
+              className="absolute border-none pointer-events-none text-slate-100"
               style={{
                 width: "790px",
                 height: "1118px",
@@ -81,10 +81,10 @@ export default function DocumentCard({
       {/* INFO FOOTER */}
       <div className="flex justify-between items-end mt-auto">
         <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-slate-800 truncate group-hover:text-blue-600 transition-colors text-sm">
+          <h3 className="font-bold text-slate-800 truncate group-hover:text-green-500 transition-colors text-sm">
             {title || `Untitled ${type === "resume" ? "Resume" : "Cover Letter"}`}
           </h3>
-          <p className="text-[10px] text-slate-400 mt-1 font-medium">
+          <p className="text-[10px] text-slate-500 mt-1 font-medium">
             Edited {updatedAt ? new Date(updatedAt).toLocaleDateString() : "Recently"}
           </p>
         </div>

@@ -36,7 +36,7 @@ export default function SelectionPage() {
 
   return (
     <GridBackground>
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <header className="mb-12 relative">
         <div className="absolute -top-10 -left-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl" />
         <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--color-text-main)' }}>

@@ -4,6 +4,7 @@ import CreateItemModal from "../components/CreateItemModal";
 import { useDashboard } from "../hooks/useDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
 import { useTranslation } from "react-i18next";
+import GridBackground from "../layouts/Gridbackground"; 
 
 export default function Dashboard() {
   const {t} = useTranslation('translation',{keyPrefix:'dashboard'});
@@ -19,10 +20,13 @@ export default function Dashboard() {
   } = useDashboard();
 
   return (
+    <GridBackground>
     <div className="p-8 max-w-7xl mx-auto">
       {/* 1. START NEW Section */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-slate-600">{t('start_new')}</h2>
+        <h2 className="text-2xl font-bold mb-6 text-(--color-text)">
+          {t('start_new')}
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <SkeletonWrapper isLoading={false} count={2}>
             {TEMPLATE_LIST.map((tpl) => (
@@ -51,11 +55,12 @@ export default function Dashboard() {
 
       {/* 2. YOUR RESUMES Section */}
       <section>
-        <h2 className="text-xl font-bold mb-6 text-slate-600 uppercase tracking-wider">
+        <h2 className="text-xl font-bold mb-6 text-(--color-text) uppercase tracking-wider">
          {t('your_resumes')}
         </h2>
         
-<div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">          <SkeletonWrapper isLoading={false} count={4}>
+<div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">         
+   <SkeletonWrapper isLoading={false} count={4}>
             {resumes.length > 0 ? (
               resumes.map((resume: any) => (
                 <DocumentCard
@@ -96,5 +101,6 @@ export default function Dashboard() {
         type="Resume"
       />
     </div>
+    </GridBackground>
   );
 }

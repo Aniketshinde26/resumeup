@@ -25,7 +25,6 @@ export default function App() {
     // 4. Wrap everything in the Provider and Suspense
     <ThemeProvider>
     <I18nextProvider i18n={i18n}>
-<div className="min-h-screen bg-[var(--color-brand-surface)] text-[var(--color-text-main)] transition-colors duration-300">
         <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
         <Routes>
           {/* Public Routes */}
@@ -59,7 +58,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
-      </div>
+     
     </I18nextProvider>
     </ThemeProvider>
   );

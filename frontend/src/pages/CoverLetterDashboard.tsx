@@ -4,6 +4,7 @@ import { useCoverLetterDashboard } from "../hooks/useCoverLetterDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
 import { COVER_LETTER_TEMPLATES } from "../types/templateindex";
 import { useTranslation } from "react-i18next";
+import GridBackground from "../layouts/Gridbackground";
 export default function CoverLetterDashboard() {
   const {t} = useTranslation('translation',{keyPrefix:'coverletterdashboard'});
     const {
@@ -20,9 +21,10 @@ export default function CoverLetterDashboard() {
     } = useCoverLetterDashboard();
 
   return (
+ <GridBackground>
     <div className="p-8" max-w-7xl mx-auto>
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-slate-600">{t('start_new')}</h2>
+          <h2 className="text-2xl font-bold mb-6 text-(--color-text)"> {t('start_new')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <SkeletonWrapper isLoading={false} count={2}>
               {COVER_LETTER_TEMPLATES.map((tpl) => (
@@ -38,7 +40,7 @@ export default function CoverLetterDashboard() {
                     className="w-full h-full object-cover opacity-0 transition-opacity duration-500"
                     onLoad={(e) => e.currentTarget.classList.remove('opacity-0')}
                   />
-                  <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors" />
+                  <div className="absolute inset-0 bg-blue-200/0 group-hover:bg-blue-600/0 transition-colors" />
                 </div>
                 <p className="mt-2 text-sm font-medium text-center text-slate-700 group-hover:text-blue-600 transition-colors">{tpl.name}</p>
 
@@ -51,7 +53,7 @@ export default function CoverLetterDashboard() {
 
      
      <section>
-        <h2 className="text-xl font-bold mb-6 text-slate-600 uppercase tracking-wider">
+        <h2 className="text-xl font-bold mb-6 text-(--color-text) uppercase tracking-wider">
           {t('your_cover_letters')}
         </h2>
     
@@ -98,5 +100,6 @@ export default function CoverLetterDashboard() {
 
   />
     </div>
+    </GridBackground>
   );
 }

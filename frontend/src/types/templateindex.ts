@@ -43,7 +43,7 @@ export const COVER_LETTER_TEMPLATES = [
   { id: "moderncover", name: "Modern Minimalist" },
   { id: "minimalbordercover", name: "Minimalist Border" },
   {id:"modernexecutivecover",name:"Modern Executive"},
-  {id:"swissmonocover",name:"Siwss Mono"},
+  {id:"swissmonocover",name:"Swiss Mono"},
   {id:"elegantserifcover",name:"Elegant Serif"}
 
 ];

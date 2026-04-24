@@ -15,10 +15,10 @@ export default function TemplateTeaser() {
             className="group cursor-pointer max-w-[250px]"
             onClick={() => navigate(`/builder/${tpl.id}`)} // Sends them straight to the editor
           >
-            <div className="aspect-[1/1.41] rounded-xl border-2 border-slate-200 group-hover:border-blue-500 transition-all overflow-hidden shadow-md">
+            <div className="aspect-[1/1.41] rounded-xl border-2 border-slate-200 group-hover:border-green-500 transition-all overflow-hidden shadow-md">
               <img src={`/previews/${tpl.id}.png`} alt={tpl.name} className="w-full h-full object-cover" />
             </div>
-            <p className="mt-4 text-center font-semibold text-slate-700">{tpl.name}</p>
+            <p className="mt-4 text-center font-semibold text-slate-100">{tpl.name}</p>
           </div>
         ))}
       </div>
