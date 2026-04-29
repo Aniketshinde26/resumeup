@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
+import { GetAllResumesResponse } from "../types/ResponseTypes";
 
 
 /**
@@ -59,21 +60,26 @@ export const getAllResumes = async (
         order: [["createdAt", "DESC"]],
       });
 
-      return res.status(200).json({
+      // Explicitly type the payload
+      const payload: GetAllResumesResponse = {
         message: "User resumes fetched successfully",
-        count: resumes.length,
+        count: resumes.length, // TypeScript confirms this is a number
         resumes,
         isGuest: false 
-      });
+      };
+
+      return res.status(200).json(payload);
     }
 
-   
-    return res.status(200).json({
+    // Explicitly type the guest payload
+    const guestPayload: GetAllResumesResponse = {
       message: "Guest mode active",
       count: 0,
       resumes: [],
       isGuest: true 
-    });
+    };
+
+    return res.status(200).json(guestPayload);
 
   } catch (error) {
     console.error("GET ALL RESUMES ERROR:", error);

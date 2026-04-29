@@ -2,26 +2,29 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import type { Resume } from "../types/templateindex";
+import { ResumeService } from "../types/resumeService";
 
 export const useDashboard = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [count, setCount] = useState(0); // State to track the count of resumes
   const navigate = useNavigate();
 
   // Renamed for clarity: handleEditResume
   const handleEditResume = (id: string) => {
     navigate(`/builder/${id}`);
   };
-
+// 
   const fetchResumes = async () => {
     setIsLoading(true);
     try {
       const delay = new Promise((resolve) => setTimeout(resolve, 450));
-      const res = await api.get("/resumes");
+      const res = await ResumeService.getAllResumes();
       await delay;
-      setResumes(res.data.resumes || []);
+      setResumes(res.resumes|| []);
+      setCount(res.count || 0); // Update the count state with the value from the response
     } catch (err) {
       console.error("Failed to fetch resumes", err);
     } finally {
@@ -76,5 +79,6 @@ export const useDashboard = () => {
     handleCreate,
     handleEditResume, 
     handleDeleteResume,
+    count, // Return the count to be used in the component
   };
 };

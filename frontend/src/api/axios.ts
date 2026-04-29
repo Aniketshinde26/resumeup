@@ -1,4 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+
 // 1. Define the shape of our queue items
 interface PromiseObject {
   resolve: (value: boolean) => void;
@@ -8,7 +9,7 @@ interface PromiseObject {
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
   withCredentials: true,
-  
+    
 });
 
 let isRefreshing = false;
@@ -75,5 +76,6 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default api;

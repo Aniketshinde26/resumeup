@@ -17,6 +17,8 @@ export default function Dashboard() {
     handleCreate,
     handleEditResume,
     handleDeleteResume,
+    count
+    
   } = useDashboard();
 
   return (
@@ -58,6 +60,13 @@ export default function Dashboard() {
         <h2 className="text-xl font-bold mb-6 text-(--color-text) uppercase tracking-wider">
          {t('your_resumes')}
         </h2>
+
+     <div className="text-right">
+    <span className="text-xs font-medium text-slate-400 uppercase">Remaining Slots</span>
+    <p className="text-xl font-bold text-slate-900">
+      {Math.max(0, 10 - count)} {/* Prevents showing negative numbers */}
+    </p>
+  </div>
         
 <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">         
    <SkeletonWrapper isLoading={false} count={4}>
