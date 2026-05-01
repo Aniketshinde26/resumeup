@@ -12,31 +12,12 @@ export const useDashboard = () => {
   const [count, setCount] = useState(0); // State to track the count of resumes
   const navigate = useNavigate();
 
-  // Renamed for clarity: handleEditResume
+ 
   const handleEditResume = (id: string) => {
     navigate(`/builder/${id}`);
   };
-// 
-  const fetchResumes = async () => {
-    setIsLoading(true);
-    try {
-      const delay = new Promise((resolve) => setTimeout(resolve, 450));
-      const res = await ResumeService.getAllResumes();
-      await delay;
-      setResumes(res.resumes|| []);
-      setCount(res.count || 0); // Update the count state with the value from the response
-    } catch (err) {
-      console.error("Failed to fetch resumes", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchResumes();
-  }, []);
-
-  const handleTemplateSelect = (templateId: string) => {
+  
+    const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
     setIsModalOpen(true);
   };
@@ -66,9 +47,28 @@ export const useDashboard = () => {
       console.log("Resume deleted successfully");
     } catch (err) {
       console.error("Failed to delete resume", err);
-      alert("Failed to delete resume. Please try again."); // Fixed function call
+      alert("Failed to delete resume. Please try again."); 
     }
   };
+
+    const fetchResumes = async () => {
+    setIsLoading(true);
+    try {
+      const delay = new Promise((resolve) => setTimeout(resolve, 450));
+      const res = await ResumeService.getAllResumes();
+      await delay;
+      setResumes(res.resumes|| []);
+      setCount(res.count || 0);
+    } catch (err) {
+      console.error("Failed to fetch resumes", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchResumes();
+  }, []);
 
   return {
     resumes,
@@ -79,6 +79,6 @@ export const useDashboard = () => {
     handleCreate,
     handleEditResume, 
     handleDeleteResume,
-    count, // Return the count to be used in the component
+    count, 
   };
 };

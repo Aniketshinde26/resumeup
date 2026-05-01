@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { GetAllResumesResponse } from "../types/ResponseTypes";
+import { GetAllResumesResponse, resumeByIdResponse } from "../types/ResponseTypes";
 
 
 /**
@@ -15,6 +15,7 @@ export const createResume = async (
   res: Response
 ): Promise<Response> => {
   try {
+
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -97,7 +98,8 @@ export const getAllResumes = async (
 export const getResumeById = async (
   req: AuthRequest,
   res: Response
-): Promise<Response> => {
+): Promise<Response> => {   
+  
   try {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -112,13 +114,16 @@ export const getResumeById = async (
     });
 
     if (!resume) {
+
       return res.status(404).json({ message: "Resume not found" });
     }
 
-    return res.status(200).json({
+  const payload: resumeByIdResponse = {
       message: "Resume fetched successfully",
       resume,
-    });
+    };
+    return res.status(200).json(payload);
+
   } catch (error) {
     console.error("GET RESUME BY ID ERROR:", error);
     return res.status(500).json({ message: "Failed to fetch resume" });

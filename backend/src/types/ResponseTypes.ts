@@ -1,8 +1,14 @@
 interface GetAllResumesResponse {
   message: string;
   count: number;
-  resumes: any[]; // Or use your Resume Model type
+  resumes: any[]; 
   isGuest: boolean;
 }
 
-export type { GetAllResumesResponse };
+interface resumeByIdResponse {
+  message: string;
+  resume: any; 
+}
+
+
+export type { GetAllResumesResponse, resumeByIdResponse };

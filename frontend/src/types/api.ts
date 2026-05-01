@@ -1,16 +1,22 @@
 import type { Resume } from "./templateindex";
 
-//Success Messsage 
-export interface ApiResponse<T> {
+
+ interface ApiResponse<T> {
   success: boolean;
   message: string;
   data: T; 
 }
 
-export interface FetchResumesResponse {
+ interface FetchResumesResponse {
   message: string;
   count : number;
   resumes: Resume[];
   isGuest?: boolean;
 }
 
+ interface ResumeByIdResponse {
+  message: string;
+  resume: Resume;
+}
+
+export type { ApiResponse, FetchResumesResponse, ResumeByIdResponse };

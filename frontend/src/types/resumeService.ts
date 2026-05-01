@@ -1,5 +1,5 @@
 import api from "../api/axios";
-import type { FetchResumesResponse } from "./api";
+import type { FetchResumesResponse, ResumeByIdResponse,  } from "./api";
 
 
 /**
@@ -12,4 +12,13 @@ export const ResumeService = {
         const response = await api.get<FetchResumesResponse>("/resumes");
         return response.data;
     },
+
+    getResumeById: async (id: string): Promise<ResumeByIdResponse> => {
+        const response = await api.get<ResumeByIdResponse>(`/resumes/${id}`);
+        return response.data;
+    }
 }
+
+
+
+
