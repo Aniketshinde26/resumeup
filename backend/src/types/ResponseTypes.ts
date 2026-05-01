@@ -10,5 +10,14 @@ interface resumeByIdResponse {
   resume: any; 
 }
 
+interface deleteResumeResponse {
+  message: string;
+}
 
-export type { GetAllResumesResponse, resumeByIdResponse };
+interface createResumeResponse {
+  message: string;
+  resume: any; 
+}
+
+
+export type { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse };

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { GetAllResumesResponse, resumeByIdResponse } from "../types/ResponseTypes";
+import { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse } from "../types/ResponseTypes";
 
 
 /**
@@ -33,10 +33,11 @@ export const createResume = async (
       data,
     });
 
-    return res.status(201).json({
+ const payload: createResumeResponse = {
       message: "Resume created successfully",
       resume,
-    });
+    };
+    return res.status(201).json(payload);
   } catch (error) {
     console.error("CREATE RESUME ERROR:", error);
     return res.status(500).json({ message: "Failed to create resume" });
@@ -169,10 +170,12 @@ export const updateResume = async (
       data,
     });
 
-    return res.status(200).json({
+  const payload: resumeByIdResponse = {
       message: "Resume updated successfully",
       resume,
-    });
+    };
+
+    return res.status(200).json(payload);
   } catch (error) {
     console.error("UPDATE RESUME ERROR:", error);
     return res.status(500).json({ message: "Failed to update resume" });
@@ -208,12 +211,15 @@ export const deleteResume = async (
     }
 
     await resume.destroy();
-
-    return res.status(200).json({
+  const payload: deleteResumeResponse = {
       message: "Resume deleted successfully",
-    });
+    };
+    return res.status(200).json(payload);
   } catch (error) {
     console.error("DELETE RESUME ERROR:", error);
     return res.status(500).json({ message: "Failed to delete resume" });
   }
 };
+
+
+

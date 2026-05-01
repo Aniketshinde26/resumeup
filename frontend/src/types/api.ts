@@ -19,4 +19,13 @@ import type { Resume } from "./templateindex";
   resume: Resume;
 }
 
-export type { ApiResponse, FetchResumesResponse, ResumeByIdResponse };
+interface DeleteResumeResponse {
+  message: string;
+}
+
+interface CreateResumeResponse {
+  message: string;
+  resume: Resume; // This is the key that was missing!
+}
+
+export type { ApiResponse, FetchResumesResponse, ResumeByIdResponse, DeleteResumeResponse, CreateResumeResponse };
