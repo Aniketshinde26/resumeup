@@ -19,5 +19,26 @@ interface createResumeResponse {
   resume: any; 
 }
 
+interface createCoverLetterResponse {
+  message: string;
+  coverletter: any; 
+}
 
-export type { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse };
+interface getAllCoverLettersResponse {
+  message: string;
+  count: number;
+  coverletters: any[]; 
+  isGuest: boolean;
+}
+
+interface deleteCoverLetterResponse {
+  message: string;
+}
+
+interface coverLetterByIdResponse {
+  message: string;
+  coverletter: any;
+}
+
+
+export type { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse, createCoverLetterResponse, getAllCoverLettersResponse, deleteCoverLetterResponse, coverLetterByIdResponse };

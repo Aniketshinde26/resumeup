@@ -1,6 +1,6 @@
 // Use "export" so other files can use this blueprint
 export interface User {
-  id: string;
+  id: number;
   email: string;
   fullname: string;
   createdAt?: string;

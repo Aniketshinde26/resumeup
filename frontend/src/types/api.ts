@@ -1,4 +1,4 @@
-import type { Resume } from "./templateindex";
+import type { CoverLetter, Resume } from "./templateindex";
 
 
  interface ApiResponse<T> {
@@ -28,4 +28,27 @@ interface CreateResumeResponse {
   resume: Resume; // This is the key that was missing!
 }
 
-export type { ApiResponse, FetchResumesResponse, ResumeByIdResponse, DeleteResumeResponse, CreateResumeResponse };
+interface FetchCoverLettersResponse {
+  message: string;
+  count : number;
+  coverLetters: CoverLetter[];
+  isGuest?: boolean;
+}
+
+interface CoverLetterByIdResponse {
+  message: string;
+  coverLetter: CoverLetter;
+}
+
+interface DeleteCoverLetterResponse {
+  message: string;
+}
+
+interface CreateCoverLetterResponse {
+  message: string;
+  coverLetter: CoverLetter;
+}
+
+
+
+export type { ApiResponse, FetchResumesResponse, ResumeByIdResponse, DeleteResumeResponse, CreateResumeResponse, FetchCoverLettersResponse, CoverLetterByIdResponse, DeleteCoverLetterResponse, CreateCoverLetterResponse };

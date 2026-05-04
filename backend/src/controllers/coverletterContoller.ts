@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import CoverLetter from "../models/Coverletter";
 import { AuthRequest } from "../types/ResumeAuthTypes";
+import { coverLetterByIdResponse, createCoverLetterResponse, deleteCoverLetterResponse, getAllCoverLettersResponse } from "../types/ResponseTypes";
 
 /***
  * @desc Create a new cover letter for the authenticated user
@@ -11,21 +12,19 @@ import { AuthRequest } from "../types/ResumeAuthTypes";
 
 export const createCoverLetter = async (
   req: AuthRequest, 
-  res: Response
+  res: Response<createCoverLetterResponse |{message: string}>
 ): Promise<Response> => {
   try {
-    // 1. THIS ELIMINATES THE 'UNDEFINED' ERROR
-    // After this check, TypeScript knows req.user is a JwtUser
+   
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     const { Title, Data, TemplateId } = req.body;
 
-    // 2. THIS ELIMINATES THE 'STRING vs OBJECT' ERROR
-    // Ensure Data matches your interface (any or object)
+   
     const coverletter = await CoverLetter.create({
-      userId: req.user.id, // req.user.id is now safe to access
+      userId: req.user.id,
       Title,
       TemplateId,
       Data: Data || {}, 
@@ -33,7 +32,7 @@ export const createCoverLetter = async (
 
     return res.status(201).json({
       message: "Cover Letter created successfully",
-      coverLetter: coverletter,
+      coverletter: coverletter,
     });
   } catch (error) {
     console.error("CREATE ERROR:", error);
@@ -51,7 +50,7 @@ export const createCoverLetter = async (
 
 export const getAllCoverLetters = async (
   req: Request, 
-  res: Response
+  res: Response<getAllCoverLettersResponse |{message:string}>
 ): Promise<Response> => {
   try {
     if (req.user) {
@@ -87,7 +86,7 @@ export const getAllCoverLetters = async (
  */
 export const getCoverLetterById = async (
   req: AuthRequest,
-  res: Response
+  res: Response<coverLetterByIdResponse | {message: string}>
 ): Promise<Response> => {
   try {
     if (!req.user) {
@@ -119,7 +118,7 @@ export const getCoverLetterById = async (
 
 export const updateCoverLetter = async (
   req: AuthRequest,
-  res: Response
+  res: Response<createCoverLetterResponse| {message: string}>
 ): Promise<Response> => {
   try {
     if (!req.user) {        
@@ -152,7 +151,7 @@ export const updateCoverLetter = async (
 
 export const deleteCoverLetter = async (
     req: AuthRequest,
-    res: Response
+    res: Response<deleteCoverLetterResponse | {message: string}>
 ): Promise<Response> => {
     try {
         if (!req.user) {

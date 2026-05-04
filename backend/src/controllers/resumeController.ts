@@ -12,32 +12,28 @@ import { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, create
  */
 export const createResume = async (
   req: AuthRequest,
-  res: Response
+  // We define the allowed JSON bodies here
+  res: Response<createResumeResponse | { message: string }>
 ): Promise<Response> => {
   try {
-
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
     const { title, templateId, data } = req.body;
-
     if (!title || !templateId || !data) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-
     const resume = await Resume.create({
       userId: req.user.id,
       title,
       templateId,
       data,
     });
-
- const payload: createResumeResponse = {
+    return res.status(201).json({
       message: "Resume created successfully",
-      resume,
-    };
-    return res.status(201).json(payload);
+      resume, 
+    });
+
   } catch (error) {
     console.error("CREATE RESUME ERROR:", error);
     return res.status(500).json({ message: "Failed to create resume" });
@@ -52,8 +48,8 @@ export const createResume = async (
  */
 
 export const getAllResumes = async (
-  req: Request, 
-  res: Response
+  req: Request, // Note: Ensure your Request type handles .user (use AuthRequest if needed)
+  res: Response<GetAllResumesResponse | { message: string }>
 ): Promise<Response> => {
   try {
     if (req.user) {
@@ -62,33 +58,28 @@ export const getAllResumes = async (
         order: [["createdAt", "DESC"]],
       });
 
-      // Explicitly type the payload
-      const payload: GetAllResumesResponse = {
+      // Pass the object directly; TypeScript validates it against GetAllResumesResponse
+      return res.status(200).json({
         message: "User resumes fetched successfully",
-        count: resumes.length, // TypeScript confirms this is a number
+        count: resumes.length,
         resumes,
-        isGuest: false 
-      };
-
-      return res.status(200).json(payload);
+        isGuest: false,
+      });
     }
 
-    // Explicitly type the guest payload
-    const guestPayload: GetAllResumesResponse = {
+    // Guest mode return
+    return res.status(200).json({
       message: "Guest mode active",
       count: 0,
       resumes: [],
-      isGuest: true 
-    };
-
-    return res.status(200).json(guestPayload);
+      isGuest: true,
+    });
 
   } catch (error) {
     console.error("GET ALL RESUMES ERROR:", error);
     return res.status(500).json({ message: "Failed to fetch resumes" });
   }
 };
-
 /**
  * @desc Get a single resume by ID for the authenticated user
  * @param req Authenticated request with resume ID in params
@@ -98,13 +89,14 @@ export const getAllResumes = async (
 
 export const getResumeById = async (
   req: AuthRequest,
-  res: Response
+  res: Response<resumeByIdResponse | { message: string }>
 ): Promise<Response> => {   
   
   try {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+
     const { id } = req.params;
 
     const resume = await Resume.findOne({
@@ -115,15 +107,14 @@ export const getResumeById = async (
     });
 
     if (!resume) {
-
       return res.status(404).json({ message: "Resume not found" });
     }
 
-  const payload: resumeByIdResponse = {
+    // Pass directly to .json() to let TypeScript validate the structure
+    return res.status(200).json({
       message: "Resume fetched successfully",
       resume,
-    };
-    return res.status(200).json(payload);
+    });
 
   } catch (error) {
     console.error("GET RESUME BY ID ERROR:", error);
@@ -140,7 +131,8 @@ export const getResumeById = async (
 
 export const updateResume = async (
   req: AuthRequest,
-  res: Response
+  // 1. Inject the generic types into the Response
+  res: Response<resumeByIdResponse | { message: string }>
 ): Promise<Response> => {
   try {
     if (!req.user) {
@@ -150,6 +142,7 @@ export const updateResume = async (
     const { id } = req.params;
     const { title, data } = req.body;
 
+    // Guard clause for validation
     if (!data) {
       return res.status(400).json({ message: "Resume data is required" });
     }
@@ -165,17 +158,19 @@ export const updateResume = async (
       return res.status(404).json({ message: "Resume not found" });
     }
 
+    // Perform the update
     await resume.update({
       title: title ?? resume.title,
       data,
     });
 
-  const payload: resumeByIdResponse = {
+    // 2. Return the success response directly
+    // TypeScript ensures this matches the resumeByIdResponse interface
+    return res.status(200).json({
       message: "Resume updated successfully",
       resume,
-    };
+    });
 
-    return res.status(200).json(payload);
   } catch (error) {
     console.error("UPDATE RESUME ERROR:", error);
     return res.status(500).json({ message: "Failed to update resume" });
@@ -190,7 +185,7 @@ export const updateResume = async (
  */
 export const deleteResume = async (
   req: AuthRequest,
-  res: Response
+  res: Response<deleteResumeResponse | { message: string }>
 ): Promise<Response> => {
   try {
     if (!req.user) {
@@ -211,10 +206,12 @@ export const deleteResume = async (
     }
 
     await resume.destroy();
-  const payload: deleteResumeResponse = {
-      message: "Resume deleted successfully",
-    };
-    return res.status(200).json(payload);
+
+    // No need for a separate payload variable
+    return res.status(200).json({ 
+      message: "Resume deleted successfully" 
+    });
+
   } catch (error) {
     console.error("DELETE RESUME ERROR:", error);
     return res.status(500).json({ message: "Failed to delete resume" });
