@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
+import { createEmptyResumeData, type Resume, type ResumeData, type createEmptyResume } from "../types/templateindex";
+import type { ResumeByIdResponse } from "../types/api";
 
 
 const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
@@ -9,7 +11,7 @@ export const useBuilder = () => {
   const { id } = useParams<{ id: string }>();
  
 
-  const [resume, setResume] = useState<any>(null);
+  const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -33,9 +35,7 @@ export const useBuilder = () => {
         id: id,
         title: id === "moderntech" ? "Modern Tech Resume" : "Professional Resume",
         templateId: id,
-        data: {
-         
-        },
+        data: createEmptyResumeData()
       };
       setResume(guestResume);
       setLoading(false);
@@ -44,31 +44,22 @@ export const useBuilder = () => {
 
     try {
       setLoading(true);
-      const res = await api.get(`/resumes/${id}`);  
-      const fetchedResume = res.data.resume || res.data;
+      const res = await api.get<ResumeByIdResponse>(`/resumes/${id}`);  
+      const fetchedResume = res.data.resume;
 
-      if (typeof fetchedResume.data === "string") {
-        try {
-          fetchedResume.data = JSON.parse(fetchedResume.data);
-        } catch (e) {
-          console.error("Failed to parse resume data string", e);
-          fetchedResume.data = {};
-        }
-      }
+    const rawData = typeof fetchedResume.data === "string" 
+    ? JSON.parse(fetchedResume.data) 
+    : fetchedResume.data;
 
-      // Ensure nested objects exist
-      if (!fetchedResume.data) fetchedResume.data = {};
-      const fields = ['personal', 'experience', 'education', 'skills', 'projects', 'languages', 'certifications'];
-      fields.forEach(field => {
-        if (!fetchedResume.data[field]) {
-           fetchedResume.data[field] = field === 'personal' ? {} : [];
-        }
-      });
+  setResume({
+    ...fetchedResume,
+    data: { ...createEmptyResumeData(), ...rawData }
+  });
 
-      setResume(fetchedResume);
+      
     } catch (err) {
       console.error("Failed to load resume:", err);
-    } finally {
+    }finally {
       setLoading(false);
     }
   }, [id]);
@@ -123,16 +114,26 @@ export const useBuilder = () => {
   };
 
   // Rest of your helpers...
-  const updatePersonal = (field: string, value: string) => {
-    setIsDirty(true);
-    setResume((prev: any) => ({
+ const updatePersonal = (field: string, value: string) => {
+  setIsDirty(true);
+  
+  setResume((prev) => {
+    // 1. Guard Clause: If there's no resume, we can't update it.
+    if (!prev) return null;
+
+    // 2. Return the full object, ensuring 'id' and other root properties remain intact
+    return {
       ...prev,
       data: {
         ...prev.data,
-        personal: { ...prev.data.personal, [field]: value },
+        personal: { 
+          ...prev.data.personal, 
+          [field]: value 
+        },
       },
-    }));
-  };
+    };
+  });
+};
 
 
 

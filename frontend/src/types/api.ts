@@ -25,7 +25,7 @@ interface DeleteResumeResponse {
 
 interface CreateResumeResponse {
   message: string;
-  resume: Resume; // This is the key that was missing!
+  resume: Resume; 
 }
 
 interface FetchCoverLettersResponse {

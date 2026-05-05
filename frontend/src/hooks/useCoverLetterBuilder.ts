@@ -17,7 +17,6 @@ export const useCoverLetterBuilder = () => {
         setIsDirty(true);
         setCoverLetter((prev: any) => ({
             ...prev,
-            // Consistently use capital 'Data'
             Data: { ...prev.Data, ...(newData.Data || newData) },
         }));
     };
@@ -25,7 +24,6 @@ export const useCoverLetterBuilder = () => {
     const loadCoverLetter = useCallback(async () => {
         if (!id) return;
 
-        // 1. Guest Mode Check
         if (PUBLIC_TEMPLATES.includes(id as string)) {
             setCoverLetter({
                 id: id,
@@ -42,7 +40,6 @@ export const useCoverLetterBuilder = () => {
             const res = await api.get(`/cover-letters/${id}`);
             const fetched = res.data.coverLetter || res.data.coverletter || res.data;
 
-            // Fix the parsing logic to use capital 'Data'
             if (typeof fetched.Data === "string") {
                 try {
                     fetched.Data = JSON.parse(fetched.Data);
@@ -52,7 +49,6 @@ export const useCoverLetterBuilder = () => {
                 }
             }
 
-            // Ensure nested objects exist so the UI doesn't crash
             if (!fetched.Data) fetched.Data = {};
             const fields = ['personal', 'recipient', 'letter'];
             fields.forEach(field => {
@@ -73,9 +69,7 @@ export const useCoverLetterBuilder = () => {
         if (id) loadCoverLetter();
     }, [id, loadCoverLetter]);
 
-    // Auto-save logic
     useEffect(() => {
-        // Updated to use capital 'Data'
         if (!coverLetter || !coverLetter.Data || !id) return;
         if (!isDirty || saving) return;
         if (PUBLIC_TEMPLATES.includes(id as string)) return;

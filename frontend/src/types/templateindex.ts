@@ -129,4 +129,22 @@ export interface CoverLetterData {
     bodyParagraphs: string[];
     closing: string;
   };
+
+  
 }
+export const createEmptyResumeData = (): ResumeData => ({
+  personal: { fullName: "", jobTitle: "", email: "", phone: "", location: "", summary: "" },
+  experience: [],
+  education: [],
+  skills: [],
+  projects: [],
+  certifications: [],
+  languages: []
+});
+
+export const createEmptyResume = (id: string, title: string, templateId: string): Resume => ({
+  id,
+  title,
+  templateId,
+  data: createEmptyResumeData()
+});
