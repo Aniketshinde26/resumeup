@@ -31,7 +31,7 @@ interface CreateResumeResponse {
 interface FetchCoverLettersResponse {
   message: string;
   count : number;
-  coverLetters: CoverLetter[];
+  coverletters: CoverLetter[];
   isGuest?: boolean;
 }
 
@@ -46,7 +46,7 @@ interface DeleteCoverLetterResponse {
 
 interface CreateCoverLetterResponse {
   message: string;
-  coverLetter: CoverLetter;
+  coverletter: CoverLetter;
 }
 
 

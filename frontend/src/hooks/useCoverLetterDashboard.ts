@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import type { CoverLetter } from "../types/templateindex";
+import type { CreateCoverLetterResponse, DeleteCoverLetterResponse, FetchCoverLettersResponse } from "../types/api";
 
 export const useCoverLetterDashboard = () => {
   const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
@@ -15,7 +16,7 @@ export const useCoverLetterDashboard = () => {
 const fetchCoverLetters = async () => {
   setIsLoading(true);
   try {
-    const res = await api.get("/cover-letters");
+    const res = await api.get<FetchCoverLettersResponse>("/cover-letters");
 
     setCoverLetters(res.data.coverletters || []); 
   } catch (err) {
@@ -38,28 +39,21 @@ const fetchCoverLetters = async () => {
 const handleCreateCoverLetter = async (title: string) => {
     setIsLoading(true);
     try {
-        const res = await api.post("/cover-letters", {
+        const res = await api.post<CreateCoverLetterResponse>("/cover-letters", {
             Title: title,
             TemplateId: selectedTemplate,
             Data: {},
         });
 
-        // 1. Log this so you can see exactly what your DB sent back
-        console.log("DEBUG: Backend response data:", res.data);
 
-        // 2. Try every possible way the ID might be named
-        const newId = 
-            res.data.coverLetter?.id || 
-            res.data.coverLetter?.Id || 
-            res.data.id || 
-            res.data.Id;
+        const newId = res.data.coverletter?.Id 
+                  
 
         if (!newId) {
-            console.error("CRITICAL: No ID returned from backend. Check the console log above.");
+            console.error("CRITICAL: No ID returned from backend. Check the console log above.", res.data);
             return; 
         }
 
-        // 3. Only navigate if newId actually exists
         navigate(`/cover-letter-builder/${newId}`);
         setIsModalOpen(false);
 
@@ -72,7 +66,7 @@ const handleCreateCoverLetter = async (title: string) => {
 
       const handleDeleteCoverLetter = async (id: string) => {
         try {
-          await api.delete(`/cover-letters/${id}`); 
+          await api.delete<DeleteCoverLetterResponse>(`/cover-letters/${id}`); 
           setCoverLetters((prev) => prev.filter((cl) => cl.Id !== id));
         } catch (err) {
           console.error("Deletion failed", err);
