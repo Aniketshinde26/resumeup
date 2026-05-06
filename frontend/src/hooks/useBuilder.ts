@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
-import { createEmptyResumeData, type Resume, type ResumeData, type createEmptyResume } from "../types/templateindex";
+import type { Resume } from "../types/templateindex";
 import type { ResumeByIdResponse } from "../types/api";
-
+import { createEmptyResumeData } from "../types/templateindex";
 
 const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
 
@@ -27,8 +27,6 @@ export const useBuilder = () => {
 
   const loadResume = useCallback(async () => {
     if (!id) return;
-
-    // 1. Fixed the TypeScript error by casting 'id as string'
     if (PUBLIC_TEMPLATES.includes(id as string)) {
       console.log("Guest Mode: Loading template structure for", id);
       const guestResume = {
@@ -68,12 +66,9 @@ export const useBuilder = () => {
     if (id) loadResume();
   }, [id, loadResume]);
 
-  // Auto-save logic
   useEffect(() => {
     if (!resume || !resume.data || !id) return;
-    if (!isDirty || saving) return;
-    
-    // 2. Prevent auto-save for guests
+    if (!isDirty || saving) return; 
     if (PUBLIC_TEMPLATES.includes(id as string)) return;
 
     const timer = setTimeout(() => {
@@ -86,22 +81,15 @@ export const useBuilder = () => {
   const handleSave = async () => {
     if (!resume || !resume.data || !id) return;
     if (!isDirty || saving) return;
-  if (PUBLIC_TEMPLATES.includes(id as string)) {
-    // 1. Save to localStorage instead of the database
+    if (PUBLIC_TEMPLATES.includes(id as string)) {
     localStorage.setItem(`guest_resume_${id}`, JSON.stringify(resume));
-    
-    // 2. Show a "Draft Saved" toast or message instead of redirecting
     console.log("Progress saved locally to browser.");
     setIsDirty(false); 
-    
-    // 3. Optional: Show a subtle non-blocking hint
-    // setInfoMessage("Progress saved to browser. Create an account to access this on any device!");
     return;
   }
-
     try {
       setSaving(true);
-      await api.put(`/resumes/${id}`, {
+      await api.put<ResumeByIdResponse>(`/resumes/${id}`, {
         title: resume.title,
         data: resume.data,
       });
@@ -113,15 +101,12 @@ export const useBuilder = () => {
     }
   };
 
-  // Rest of your helpers...
  const updatePersonal = (field: string, value: string) => {
   setIsDirty(true);
   
   setResume((prev) => {
-    // 1. Guard Clause: If there's no resume, we can't update it.
     if (!prev) return null;
 
-    // 2. Return the full object, ensuring 'id' and other root properties remain intact
     return {
       ...prev,
       data: {
@@ -140,10 +125,7 @@ export const useBuilder = () => {
 const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
   if (file) {
-
-    const previewUrl = URL.createObjectURL(file);
-    
-   
+    const previewUrl = URL.createObjectURL(file);   
     updatePersonal("profileImage", previewUrl);
   }
 };

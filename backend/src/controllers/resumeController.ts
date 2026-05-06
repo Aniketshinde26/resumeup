@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
 import { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse } from "../types/ResponseTypes";
-
-
 /**
  * @desc Create a new resume for the authenticated user
  * @param req Authenticated request
