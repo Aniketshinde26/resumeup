@@ -37,7 +37,7 @@ interface FetchCoverLettersResponse {
 
 interface CoverLetterByIdResponse {
   message: string;
-  coverLetter: CoverLetter;
+  coverletter: CoverLetter;
 }
 
 interface DeleteCoverLetterResponse {

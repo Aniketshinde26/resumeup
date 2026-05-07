@@ -1,13 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
+import type { CoverLetterByIdResponse } from "../types/api";
+import type { coverLetter } from "../types/templateindex";
 
-const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional", "classic"];
 
 export const useCoverLetterBuilder = () => {
     const { id } = useParams<{ id: string }>();
 
-    const [coverLetter, setCoverLetter] = useState<any>(null);
+    const [coverLetter, setCoverLetter] = useState<coverLetter | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
@@ -21,49 +22,27 @@ export const useCoverLetterBuilder = () => {
         }));
     };
 
-    const loadCoverLetter = useCallback(async () => {
-        if (!id) return;
+const loadCoverLetter = useCallback(async () => {
 
-        if (PUBLIC_TEMPLATES.includes(id as string)) {
-            setCoverLetter({
-                id: id,
-                Title: id === "moderntech" ? "Modern Tech Cover Letter" : "Professional Cover Letter",
-                TemplateId: id,
-                Data: { personal: {}, recipient: {}, letter: { bodyParagraphs: [] } },
-            });
-            setLoading(false);
-            return;
-        }
+    try {
+        setLoading(true);
+        const res = await api.get<CoverLetterByIdResponse>(`/cover-letters/${id}`);
+        
+        const fetchedLetter = res.data.coverletter;
 
-        try {
-            setLoading(true);
-            const res = await api.get(`/cover-letters/${id}`);
-            const fetched = res.data.coverLetter || res.data.coverletter || res.data;
-
-            if (typeof fetched.Data === "string") {
-                try {
-                    fetched.Data = JSON.parse(fetched.Data);
-                } catch (e) {
-                    console.error("Failed to parse Data string", e);
-                    fetched.Data = {};
-                }
-            }
-
-            if (!fetched.Data) fetched.Data = {};
-            const fields = ['personal', 'recipient', 'letter'];
-            fields.forEach(field => {
-                if (!fetched.Data[field]) {
-                    fetched.Data[field] = field === 'letter' ? { bodyParagraphs: [] } : {}; 
-                }
-            });
-
-            setCoverLetter(fetched);
-        } catch (error) {
-            console.error("Error loading cover letter:", error);
-        } finally {
-            setLoading(false);
-        }
-    }, [id]);
+        const rawData = typeof fetchedLetter.Data === "string"
+            ? JSON.parse(fetchedLetter.Data)
+            : fetchedLetter.Data;
+        setCoverLetter({
+            ...fetchedLetter,
+            Data: { ...fetchedLetter.Data, ...rawData }
+        });
+    } catch (error) {
+        console.error("Error loading cover letter:", error);
+    } finally {
+        setLoading(false);
+    }
+}, [id]);
 
     useEffect(() => {
         if (id) loadCoverLetter();
@@ -72,7 +51,6 @@ export const useCoverLetterBuilder = () => {
     useEffect(() => {
         if (!coverLetter || !coverLetter.Data || !id) return;
         if (!isDirty || saving) return;
-        if (PUBLIC_TEMPLATES.includes(id as string)) return;
 
         const timer = setTimeout(() => {
             handleSave();
@@ -87,7 +65,7 @@ export const useCoverLetterBuilder = () => {
 
         try {
             setSaving(true);
-            await api.put(`/cover-letters/${id}`, {
+            await api.put<CoverLetterByIdResponse>(`/cover-letters/${id}`, {
                 Title: coverLetter.Title,
                 Data: coverLetter.Data,
             });

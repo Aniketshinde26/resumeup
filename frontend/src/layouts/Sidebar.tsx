@@ -31,7 +31,7 @@ export default function DashboardLayout() {
   const menuItems = [
     { name: t('home'), icon: <LayoutDashboard size={22} />, path: '/home' },
     { name: t('my_resumes'), icon: <FileText size={22} />, path: '/my-resumes' },
-        { name: t('cover_letter'), icon: <PenTool size={22} />, path: '/cover-letter' },
+    { name: t('cover_letter'), icon: <PenTool size={22} />, path: '/cover-letter' },
     { name: t('ats_check'), icon: <Search size={22} />, path: '/ats-check' },
 
   ];

@@ -36,6 +36,8 @@ const fetchCoverLetters = async () => {
 
     };
 
+    
+
 const handleCreateCoverLetter = async (title: string) => {
     setIsLoading(true);
     try {
@@ -44,11 +46,7 @@ const handleCreateCoverLetter = async (title: string) => {
             TemplateId: selectedTemplate,
             Data: {},
         });
-
-
         const newId = res.data.coverletter?.Id 
-                  
-
         if (!newId) {
             console.error("CRITICAL: No ID returned from backend. Check the console log above.", res.data);
             return; 

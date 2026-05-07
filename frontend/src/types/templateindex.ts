@@ -93,7 +93,7 @@ projects?: {
     languages?: { name: string; proficiency: string }[];
   certifications?: { name: string; issuer: string; date: string }[];
 }
-export interface CoverLetter {
+export interface coverLetter {
   Id: string;
   Title: string;
   TemplateId: string;

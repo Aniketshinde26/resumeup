@@ -4,7 +4,6 @@ import { TEMPLATES } from "../types/templateindex";
 import { handlePrint } from "../utils/printUtils";
 import BuilderHeader from "../components/BuilderHeader";
 import "react-datepicker/dist/react-datepicker.css";
-import GridBackground from "../layouts/Gridbackground";
 import "../print.css";
 
 export default function Builder() {
@@ -22,6 +21,13 @@ export default function Builder() {
 
   if (loading) return <div className="p-10 text-center">Loading Resume...</div>;
   if (!resume) return null;
+
+  const experienceList = resume.data.experience ?? [];
+  const projectList = resume.data.projects ?? [];
+  const languageList = resume.data.languages ?? []; 
+  const educationList = resume.data.education ?? [];
+  const skillsList = resume.data.skills ?? [];
+  const certificationsList = resume.data.certifications ?? [];
 
   const SelectedTemplate = TEMPLATES[resume.templateId || "minimal"];
 
@@ -190,7 +196,7 @@ export default function Builder() {
       onClick={() =>
         updateData({
           experience: [
-            ...(resume.data.experience || []),
+            ...experienceList,
             { company: "", position: "", startDate: "", endDate: "", description: "" },
           ],
         })
@@ -203,7 +209,7 @@ export default function Builder() {
   </div>
 
   <div className="p-6 space-y-8">
-    {resume.data.experience?.map((exp: any, idx: number) => (
+    {experienceList.map((exp: any, idx: number) => (
       <div
         key={idx}
         className="relative pl-6 border-l-2 border-slate-100 hover:border-emerald-400 transition-colors group"
@@ -214,7 +220,7 @@ export default function Builder() {
         {/* Delete Button */}
         <button
           onClick={() => {
-            const newList = [...resume.data.experience];
+            const newList = [...experienceList];
             newList.splice(idx, 1);
             updateData({ experience: newList });
           }}
@@ -238,7 +244,7 @@ export default function Builder() {
     className="w-full px-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
     value={exp.company}
     onChange={(e) => {
-      const newList = [...resume.data.experience];
+      const newList = [...experienceList];
       newList[idx].company = e.target.value;
       updateData({ experience: newList });
     }}
@@ -254,7 +260,7 @@ export default function Builder() {
                 className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-400"
                 value={exp.position}
                 onChange={(e) => {
-                  const newList = [...resume.data.experience];
+                  const newList = [...experienceList];
                   newList[idx].position = e.target.value;
                   updateData({ experience: newList });
                 }}
@@ -277,7 +283,7 @@ export default function Builder() {
           className="w-full pl-9 pr-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus: focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
           value={exp.startDate || ""}
           onChange={(e) => {
-            const newList = [...resume.data.experience];
+            const newList = [...experienceList];
             newList[idx].startDate = e.target.value;
             updateData({ experience: newList });
           }}
@@ -293,7 +299,7 @@ export default function Builder() {
           className="w-full pl-4 pr-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-600"
           value={exp.endDate || ""} // Changed from startDate to endDate
           onChange={(e) => {
-            const newList = [...resume.data.experience];
+            const newList = [...experienceList];
             newList[idx].endDate = e.target.value; // Changed from startDate to endDate
             updateData({ experience: newList });
           }}
@@ -312,7 +318,7 @@ export default function Builder() {
               className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm  min-h-[100px] resize-none"
               value={exp.description}
               onChange={(e) => {
-                const newList = [...resume.data.experience];
+                const newList = [...experienceList];
                 newList[idx].description = e.target.value;
                 updateData({ experience: newList });
               }}
@@ -322,7 +328,7 @@ export default function Builder() {
       </div>
     ))}
 
-    {(!resume.data.experience || resume.data.experience.length === 0) && (
+    {(!experienceList || experienceList.length === 0) && (
       <div className="text-center py-8 border-2 border-dashed border-slate-100 rounded-2xl">
         <p className="text-slate-400 text-sm">No experience added yet. Click the button above to start.</p>
       </div>
@@ -344,7 +350,7 @@ export default function Builder() {
       onClick={() =>
         updateData({
           education: [
-            ...(resume.data.education || []),
+            ...educationList,
             { school: "", degree: "", year: "" },
           ],
         })
@@ -357,7 +363,7 @@ export default function Builder() {
   </div>
 
   <div className="p-6 space-y-6">
-    {resume.data.education?.map((edu: any, idx: number) => (
+    {educationList.map((edu: any, idx: number) => (
       <div
         key={idx}
         className=" relative p-5 border  border-slate-100  rounded-2xl group hover:border-violet-200 hover:transition-all"
@@ -365,7 +371,7 @@ export default function Builder() {
         {/* Delete Button */}
         <button
           onClick={() => {
-            const newList = [...resume.data.education];
+            const newList = [...educationList];
             newList.splice(idx, 1);
             updateData({ education: newList });
           }}
@@ -386,7 +392,7 @@ export default function Builder() {
               className="w-full px-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all  "
               value={edu.school}
               onChange={(e) => {
-                const newList = [...resume.data.education];
+                const newList = [...educationList];
                 newList[idx].school = e.target.value;
                 updateData({ education: newList });
               }}
@@ -405,7 +411,7 @@ export default function Builder() {
                 className="w-full px-4 py-2.5 text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all "
                 value={edu.degree}
                 onChange={(e) => {
-                  const newList = [...resume.data.education];
+                  const newList = [...educationList];
                   newList[idx].degree = e.target.value;
                   updateData({ education: newList });
                 }}
@@ -425,7 +431,7 @@ export default function Builder() {
                   className="w-full pl-9 pr-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all text-sm "
                   value={edu.year}
                   onChange={(e) => {
-                    const newList = [...resume.data.education];
+                    const newList = [...educationList];
                     newList[idx].year = e.target.value;
                     updateData({ education: newList });
                   }}
@@ -437,7 +443,7 @@ export default function Builder() {
       </div>
     ))}
 
-    {(!resume.data.education || resume.data.education.length === 0) && (
+    {(!educationList || educationList.length === 0) && (
       <div className="text-center py-10 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/30">
         <GraduationCap size={32} className="mx-auto text-slate-200 mb-2" />
         <p className="text-slate-400 text-sm">Add your academic background to complete your profile.</p>
@@ -483,7 +489,7 @@ export default function Builder() {
         if (e.key === "Enter") {
           const val = e.currentTarget.value.trim();
           if (val) {
-            updateData({ skills: [...(resume.data.skills || []), val] });
+            updateData({ skills: [...(skillsList || []), val] });
             e.currentTarget.value = "";
           }
         }
@@ -491,12 +497,12 @@ export default function Builder() {
     />
 
     <div className="flex flex-wrap gap-2">
-      {resume.data.skills?.map((skill: string, idx: number) => (
+      {skillsList?.map((skill: string, idx: number) => (
         <div key={idx} className="group flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg">
           <span className="text-sm font-medium text-slate-600">{skill}</span>
           <button
             onClick={() => {
-              const newList = resume.data.skills.filter((_: string, i: number) => i !== idx);
+              const newList = skillsList.filter((_: string, i: number) => i !== idx);
               updateData({ skills: newList });
             }}
             className="text-slate-300 hover:text-red-500"
@@ -546,7 +552,7 @@ export default function Builder() {
     
     <button
       onClick={() => updateData({
-        projects: [...(resume.data.projects || []), { name: "", link: "", description: "" }],
+        projects: [...projectList, { name: "", link: "", description: "" }],
       })}
       className="flex items-center gap-1.5 text-xs font-bold bg-white text-cyan-600 hover:bg-cyan-50 border border-cyan-200 px-3 py-1.5 rounded-lg transition-all shadow-sm"
     >
@@ -555,14 +561,14 @@ export default function Builder() {
   </div>
 
   <div className="p-6 space-y-6">
-    {resume.data.projects?.map((proj: any, idx: number) => {
+    {projectList?.map((proj: any, idx: number) => {
       const isMedical = resume.data.sectionTitles?.projects === "Procedures";
       
       return (
         <div key={idx} className="p-5 border border-slate-200 rounded-2xl group relative">
           <button
             onClick={() => {
-              const newList = [...resume.data.projects];
+              const newList = [...projectList];
               newList.splice(idx, 1);
               updateData({ projects: newList });
             }}
@@ -581,7 +587,7 @@ export default function Builder() {
                 className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) rounded-xl  border border-slate-200 outline-none focus:ring-2 focus:ring-cyan-500/20"
                 value={proj.name}
                 onChange={(e) => {
-                  const newList = [...resume.data.projects];
+                  const newList = [...projectList];
                   newList[idx].name = e.target.value;
                   updateData({ projects: newList });
                 }}
@@ -596,7 +602,7 @@ export default function Builder() {
                 className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) rounded-xl  border border-slate-200 outline-none focus:ring-2 focus:ring-cyan-500/20"
                 value={proj.link}
                 onChange={(e) => {
-                  const newList = [...resume.data.projects];
+                  const newList = [...projectList];
                   newList[idx].link = e.target.value;
                   updateData({ projects: newList });
                 }}
@@ -613,7 +619,7 @@ export default function Builder() {
               className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl min-h-[100px] outline-none focus:ring-2 focus:ring-cyan-500/20"
               value={proj.description}
               onChange={(e) => {
-                const newList = [...resume.data.projects];
+                const newList = [...projectList];
                 newList[idx].description = e.target.value;
                 updateData({ projects: newList });
               }}
@@ -666,7 +672,7 @@ export default function Builder() {
               className=" pl-3 pr-2 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-sm font-medium "
               value={lang.name}
               onChange={(e) => {
-                const newList = [...resume.data.languages];
+                const newList = [...languageList];
                 newList[idx].name = e.target.value;
                 updateData({ languages: newList });
               }}
@@ -679,7 +685,7 @@ export default function Builder() {
               className="w-full px-2 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all text-xs font-bold "
               value={lang.proficiency}
               onChange={(e) => {
-                const newList = [...resume.data.languages];
+                const newList = [...languageList];
                 newList[idx].proficiency = e.target.value;
                 updateData({ languages: newList });
               }}
@@ -695,7 +701,7 @@ export default function Builder() {
           {/* Remove Button */}
           <button
             onClick={() => {
-              const newList = [...resume.data.languages];
+              const newList = [...languageList];
               newList.splice(idx, 1);
               updateData({ languages: newList });
             }}
@@ -750,7 +756,7 @@ export default function Builder() {
         {/* Delete Button */}
         <button
           onClick={() => {
-            const newList = [...resume.data.certifications];
+            const newList = [...certificationsList];
             newList.splice(idx, 1);
             updateData({ certifications: newList });
           }}
@@ -771,7 +777,7 @@ export default function Builder() {
               className="w-full px-4 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-semibold  text-sm"
               value={cert.name}
               onChange={(e) => {
-                const newList = [...resume.data.certifications];
+                const newList = [...certificationsList];
                 newList[idx].name = e.target.value;
                 updateData({ certifications: newList });
               }}
@@ -790,7 +796,7 @@ export default function Builder() {
                 className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs "
                 value={cert.issuer}
                 onChange={(e) => {
-                  const newList = [...resume.data.certifications];
+                  const newList = [...certificationsList];
                   newList[idx].issuer = e.target.value;
                   updateData({ certifications: newList });
                 }}
@@ -808,7 +814,7 @@ export default function Builder() {
                 className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs "
                 value={cert.date}
                 onChange={(e) => {
-                  const newList = [...resume.data.certifications];
+                  const newList = [...certificationsList];
                   newList[idx].date = e.target.value;
                   updateData({ certifications: newList });
                 }}
