@@ -22,7 +22,7 @@ export const useCoverLetterBuilder = () => {
         }));
     };
 
-const loadCoverLetter = useCallback(async () => {
+    const loadCoverLetter = useCallback(async () => {
 
     try {
         setLoading(true);
