@@ -7,7 +7,8 @@ import { OAuth2Client } from "google-auth-library";
 import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
-const generateAccessToken = (user: any) => {
+import { UserAttributes } from "../types/UserTypes";
+const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET as string,
@@ -15,7 +16,7 @@ const generateAccessToken = (user: any) => {
   );
 };
 
-const generateRefreshToken = (user: any) => {
+const generateRefreshToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_REFRESH_SECRET as string,
@@ -25,7 +26,8 @@ const generateRefreshToken = (user: any) => {
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: 
+  Response) => {
   try {
     const { fullname, email, password } = req.body;
 
@@ -142,7 +144,7 @@ export const googleLogin = async (req: Request, res: Response) => {
         email,
         googleId,
         password: "",
-      } as any);
+      } as UserAttributes);
       console.log(`New user registered via Google: ${email}`);
     } else if (!user.googleId) {
       await user.update({ googleId });
@@ -285,7 +287,7 @@ if (!user) {
     fullname: name || "GitHub User",
     githubId: String(githubId),
     password: "", 
-  } as any);
+  } as UserAttributes);
 } else if (!user.githubId) {
   // UPDATE existing user found by email
   await user.update({ githubId: String(githubId) });
