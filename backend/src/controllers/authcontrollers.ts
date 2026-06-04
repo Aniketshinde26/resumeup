@@ -288,6 +288,7 @@ if (!user) {
     githubId: String(githubId),
     password: "", 
   } as UserAttributes);
+
 } else if (!user.githubId) {
   // UPDATE existing user found by email
   await user.update({ githubId: String(githubId) });

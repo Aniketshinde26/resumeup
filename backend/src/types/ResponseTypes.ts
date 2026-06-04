@@ -25,10 +25,16 @@ interface createCoverLetterResponse {
 }
 
 interface getAllCoverLettersResponse {
+  success: true;
   message: string;
   count: number;
   coverletters: any[]; 
   isGuest: boolean;
+}
+interface ErrorResponse {
+  success: false;
+  message: string;
+  error?: string; 
 }
 
 interface deleteCoverLetterResponse {
@@ -41,4 +47,4 @@ interface coverLetterByIdResponse {
 }
 
 
-export type { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse, createCoverLetterResponse, getAllCoverLettersResponse, deleteCoverLetterResponse, coverLetterByIdResponse };
+export type { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse, createCoverLetterResponse, getAllCoverLettersResponse, deleteCoverLetterResponse, coverLetterByIdResponse, ErrorResponse };

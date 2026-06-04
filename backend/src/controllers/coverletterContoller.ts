@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import CoverLetter from "../models/Coverletter";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { coverLetterByIdResponse, createCoverLetterResponse, deleteCoverLetterResponse, getAllCoverLettersResponse } from "../types/ResponseTypes";
+import { coverLetterByIdResponse, createCoverLetterResponse, deleteCoverLetterResponse, getAllCoverLettersResponse, ErrorResponse } from "../types/ResponseTypes";
 
 /***
  * @desc Create a new cover letter for the authenticated user
@@ -50,7 +50,7 @@ export const createCoverLetter = async (
 
 export const getAllCoverLetters = async (
   req: Request, 
-  res: Response<getAllCoverLettersResponse |{message:string}>
+  res: Response<getAllCoverLettersResponse |ErrorResponse>
 ): Promise<Response> => {
   try {
     if (req.user) {
@@ -60,6 +60,7 @@ export const getAllCoverLetters = async (
         });
 
         return res.status(200).json({
+            success: true,
             message: "User cover letters fetched successfully",
             count: coverletters.length,
             coverletters: coverletters,
@@ -67,6 +68,7 @@ export const getAllCoverLetters = async (
         });
     }
     return res.status(200).json({
+        success: true,
         message: "Guest mode activated",
         count: 0,
         coverletters: [],
@@ -74,8 +76,9 @@ export const getAllCoverLetters = async (
     });
   }catch (error) {
     console.error("GET COVER LETTERS ERROR:", error);
-    return res.status(500).json({ message: "Failed to fetch cover letters" });
+    return res.status(500).json({ success: false, message: "Failed to fetch cover letters" });
   }
+
 };
 
 /**
@@ -86,26 +89,27 @@ export const getAllCoverLetters = async (
  */
 export const getCoverLetterById = async (
   req: AuthRequest,
-  res: Response<coverLetterByIdResponse | {message: string}>
+  res: Response<coverLetterByIdResponse | ErrorResponse>
 ): Promise<Response> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
     const coverLetter = await CoverLetter.findByPk(req.params.id);
     if (!coverLetter) {
-      return res.status(404).json({ message: "Cover letter not found" });
+      return res.status(404).json({ success: false, message: "Cover letter not found" });
     }
     if (coverLetter.userId !== req.user.id) {
-      return res.status(403).json({ message: "Forbidden" });
+      return res.status(403).json({ success: false, message: "Forbidden" });
     }
     return res.status(200).json({
+      
       message: "Cover letter fetched successfully",
       coverletter: coverLetter,
     });
   } catch (error) {
     console.error("GET COVER LETTER BY ID ERROR:", error);
-    return res.status(500).json({ message: "Failed to fetch cover letter" });
+    return res.status(500).json({ success: false, message: "Failed to fetch cover letter" });
   }
 };
 
@@ -118,18 +122,18 @@ export const getCoverLetterById = async (
 
 export const updateCoverLetter = async (
   req: AuthRequest,
-  res: Response<createCoverLetterResponse| {message: string}>
+  res: Response<createCoverLetterResponse| ErrorResponse>
 ): Promise<Response> => {
   try {
     if (!req.user) {        
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ success: false, message: "Unauthorized" });
     }
     const coverLetter = await CoverLetter.findByPk(req.params.id);
     if (!coverLetter) {
-      return res.status(404).json({ message: "Cover letter not found" });
+      return res.status(404).json({ success: false, message: "Cover letter not found" });
     }
     if (coverLetter.userId !== req.user.id) {
-      return res.status(403).json({ message: "Forbidden" });
+      return res.status(403).json({ success: false, message: "Forbidden" });
     }
     const updatedCoverLetter = await coverLetter.update(req.body);
     return res.status(200).json({
@@ -138,7 +142,7 @@ export const updateCoverLetter = async (
     });
   } catch (error) {
     console.error("UPDATE COVER LETTER ERROR:", error);
-    return res.status(500).json({ message: "Failed to update cover letter" });
+    return res.status(500).json({ success: false, message: "Failed to update cover letter" });
   }
 };
 
@@ -151,11 +155,11 @@ export const updateCoverLetter = async (
 
 export const deleteCoverLetter = async (
     req: AuthRequest,
-    res: Response<deleteCoverLetterResponse | {message: string}>
+    res: Response<deleteCoverLetterResponse | ErrorResponse>
 ): Promise<Response> => {
     try {
         if (!req.user) {
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(401).json({ success: false, message: "Unauthorized" });
         }
         const coverLetter = await CoverLetter.findByPk(req.params.id);
         if (!coverLetter) {
