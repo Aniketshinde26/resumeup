@@ -1,50 +1,40 @@
-interface GetAllResumesResponse {
-  message: string;
-  count: number;
-  resumes: any[]; 
-  isGuest: boolean;
-}
-
-interface resumeByIdResponse {
-  message: string;
-  resume: any; 
-}
-
-interface deleteResumeResponse {
-  message: string;
-}
-
-interface createResumeResponse {
-  message: string;
-  resume: any; 
-}
-
-interface createCoverLetterResponse {
-  message: string;
-  coverletter: any; 
-}
-
-interface getAllCoverLettersResponse {
+// Core blueprints for all responses
+interface BaseSuccessResponse {
   success: true;
   message: string;
-  count: number;
-  coverletters: any[]; 
-  isGuest: boolean;
 }
-interface ErrorResponse {
+
+export interface ErrorResponse {
   success: false;
   message: string;
   error?: string; 
 }
 
-interface deleteCoverLetterResponse {
-  message: string;
-}
-
-interface coverLetterByIdResponse {
-  message: string;
-  coverletter: any;
-}
+// Generic Wrapper that automatically bridges success and error states
+export type ApiResponse<T = {}> = (BaseSuccessResponse & T) | ErrorResponse;
 
 
-export type { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse, createCoverLetterResponse, getAllCoverLettersResponse, deleteCoverLetterResponse, coverLetterByIdResponse, ErrorResponse };
+// --- Explicit Response Shapes ---
+
+export type GetAllResumesResponse = ApiResponse<{
+  count: number;
+  resumes: any[]; 
+  isGuest: boolean;
+}>;
+
+export type ResumeResponse = ApiResponse<{
+  resume: any; 
+}>;
+
+export type GetAllCoverLettersResponse = ApiResponse<{
+  count: number;
+  coverletters: any[]; 
+  isGuest: boolean;
+}>;
+
+export type CoverLetterResponse = ApiResponse<{
+  coverletter: any; 
+}>;
+
+// Shares generic structure since deletions just return success & message
+export type DeleteResponse = ApiResponse;

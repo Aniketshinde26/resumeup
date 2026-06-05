@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, createResumeResponse } from "../types/ResponseTypes";
-/**
+import { GetAllResumesResponse, ResumeResponse, DeleteResponse } from "../types/ResponseTypes";/**
  * @desc Create a new resume for the authenticated user
  * @param req Authenticated request
  * @param res Express response
@@ -11,7 +10,7 @@ import { GetAllResumesResponse, resumeByIdResponse, deleteResumeResponse, create
 export const createResume = async (
   req: AuthRequest,
   // We define the allowed JSON bodies here
-  res: Response<createResumeResponse | { message: string }>
+  res: Response<ResumeResponse | { message: string }>
 ): Promise<Response> => {
   try {
     if (!req.user) {
@@ -87,7 +86,7 @@ export const getAllResumes = async (
 
 export const getResumeById = async (
   req: AuthRequest,
-  res: Response<resumeByIdResponse | { message: string }>
+  res: Response<ResumeResponse | { message: string }>
 ): Promise<Response> => {   
   
   try {
@@ -130,7 +129,7 @@ export const getResumeById = async (
 export const updateResume = async (
   req: AuthRequest,
   // 1. Inject the generic types into the Response
-  res: Response<resumeByIdResponse | { message: string }>
+  res: Response<ResumeResponse | { message: string }>
 ): Promise<Response> => {
   try {
     if (!req.user) {
@@ -183,7 +182,7 @@ export const updateResume = async (
  */
 export const deleteResume = async (
   req: AuthRequest,
-  res: Response<deleteResumeResponse | { message: string }>
+  res: Response<DeleteResponse | { message: string }>
 ): Promise<Response> => {
   try {
     if (!req.user) {

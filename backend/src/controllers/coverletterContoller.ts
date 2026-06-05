@@ -1,28 +1,29 @@
 import { Request, Response } from "express";
 import CoverLetter from "../models/Coverletter";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { coverLetterByIdResponse, createCoverLetterResponse, deleteCoverLetterResponse, getAllCoverLettersResponse, ErrorResponse } from "../types/ResponseTypes";
+import { 
+  CoverLetterResponse, 
+  GetAllCoverLettersResponse, 
+  DeleteResponse 
+} from "../types/ResponseTypes";
 
-/***
+/**
  * @desc Create a new cover letter for the authenticated user
  * @param req Authenticated request
  * @param res Express response
  * @returns Created cover letter (201)
  */
-
 export const createCoverLetter = async (
   req: AuthRequest, 
-  res: Response<createCoverLetterResponse |{message: string}>
+  res: Response<CoverLetterResponse>
 ): Promise<Response> => {
   try {
-   
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const { Title, Data, TemplateId } = req.body;
 
-   
     const coverletter = await CoverLetter.create({
       userId: req.user.id,
       Title,
@@ -31,12 +32,13 @@ export const createCoverLetter = async (
     });
 
     return res.status(201).json({
+      success: true,
       message: "Cover Letter created successfully",
       coverletter: coverletter,
     });
   } catch (error) {
     console.error("CREATE ERROR:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
@@ -45,12 +47,10 @@ export const createCoverLetter = async (
  * @param req 
  * @param res 
  * @returns All cover letters for the authenticated user or guest mode data (200)
- * 
  */
-
 export const getAllCoverLetters = async (
   req: Request, 
-  res: Response<getAllCoverLettersResponse |ErrorResponse>
+  res: Response<GetAllCoverLettersResponse>
 ): Promise<Response> => {
   try {
     if (req.user) {
@@ -74,11 +74,10 @@ export const getAllCoverLetters = async (
         coverletters: [],
         isGuest: true 
     });
-  }catch (error) {
+  } catch (error) {
     console.error("GET COVER LETTERS ERROR:", error);
     return res.status(500).json({ success: false, message: "Failed to fetch cover letters" });
   }
-
 };
 
 /**
@@ -89,21 +88,24 @@ export const getAllCoverLetters = async (
  */
 export const getCoverLetterById = async (
   req: AuthRequest,
-  res: Response<coverLetterByIdResponse | ErrorResponse>
+  res: Response<CoverLetterResponse>
 ): Promise<Response> => {
   try {
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
+    
     const coverLetter = await CoverLetter.findByPk(req.params.id);
     if (!coverLetter) {
       return res.status(404).json({ success: false, message: "Cover letter not found" });
     }
+    
     if (coverLetter.userId !== req.user.id) {
       return res.status(403).json({ success: false, message: "Forbidden" });
     }
+    
     return res.status(200).json({
-      
+      success: true,
       message: "Cover letter fetched successfully",
       coverletter: coverLetter,
     });
@@ -115,28 +117,31 @@ export const getCoverLetterById = async (
 
 /**
  * @desc Update a cover letter by ID for the authenticated user
- * @param req Authenticleneated request with cover letter ID in params and updated data in body     
+ * @param req Authenticated request with cover letter ID in params and updated data in body     
  * @param res Express response
  * @returns Updated cover letter data (200) or error if not found/unauthorized
  */
-
 export const updateCoverLetter = async (
   req: AuthRequest,
-  res: Response<createCoverLetterResponse| ErrorResponse>
+  res: Response<CoverLetterResponse>
 ): Promise<Response> => {
   try {
     if (!req.user) {        
         return res.status(401).json({ success: false, message: "Unauthorized" });
     }
+    
     const coverLetter = await CoverLetter.findByPk(req.params.id);
     if (!coverLetter) {
       return res.status(404).json({ success: false, message: "Cover letter not found" });
     }
+    
     if (coverLetter.userId !== req.user.id) {
       return res.status(403).json({ success: false, message: "Forbidden" });
     }
+    
     const updatedCoverLetter = await coverLetter.update(req.body);
     return res.status(200).json({
+      success: true,
       message: "Cover letter updated successfully",
       coverletter: updatedCoverLetter,
     });
@@ -152,26 +157,31 @@ export const updateCoverLetter = async (
  * @param res Express response
  * @returns Success message (200) or error if not found/unauthorized    
  */
-
 export const deleteCoverLetter = async (
     req: AuthRequest,
-    res: Response<deleteCoverLetterResponse | ErrorResponse>
+    res: Response<DeleteResponse>
 ): Promise<Response> => {
     try {
         if (!req.user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
+        
         const coverLetter = await CoverLetter.findByPk(req.params.id);
         if (!coverLetter) {
-            return res.status(404).json({ message: "Cover letter not found" });
+            return res.status(404).json({ success: false, message: "Cover letter not found" });
         }
+        
         if (coverLetter.userId !== req.user.id) {
-            return res.status(403).json({ message: "Forbidden" });
+            return res.status(403).json({ success: false, message: "Forbidden" });
         }
+        
         await coverLetter.destroy();
-        return res.status(200).json({ message: "Cover letter deleted successfully" });
+        return res.status(200).json({ 
+            success: true, 
+            message: "Cover letter deleted successfully" 
+        });
     } catch (error) {
         console.error("DELETE COVER LETTER ERROR:", error);
-        return res.status(500).json({ message: "Failed to delete cover letter" });
+        return res.status(500).json({ success: false, message: "Failed to delete cover letter" });
     }
 };
