@@ -10,15 +10,15 @@ import { GetAllResumesResponse, ResumeResponse, DeleteResponse } from "../types/
 export const createResume = async (
   req: AuthRequest,
   // We define the allowed JSON bodies here
-  res: Response<ResumeResponse | { message: string }>
+  res: Response<ResumeResponse >
 ): Promise<Response> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
     const { title, templateId, data } = req.body;
     if (!title || !templateId || !data) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ success: false, message: "Missing required fields" });
     }
     const resume = await Resume.create({
       userId: req.user.id,
@@ -27,13 +27,14 @@ export const createResume = async (
       data,
     });
     return res.status(201).json({
+      success: true,
       message: "Resume created successfully",
       resume, 
     });
 
   } catch (error) {
     console.error("CREATE RESUME ERROR:", error);
-    return res.status(500).json({ message: "Failed to create resume" });
+    return res.status(500).json({ success: false, message: "Failed to create resume" });
   }
 };
 
@@ -46,7 +47,7 @@ export const createResume = async (
 
 export const getAllResumes = async (
   req: Request, // Note: Ensure your Request type handles .user (use AuthRequest if needed)
-  res: Response<GetAllResumesResponse | { message: string }>
+  res: Response<GetAllResumesResponse>
 ): Promise<Response> => {
   try {
     if (req.user) {
@@ -57,6 +58,7 @@ export const getAllResumes = async (
 
       // Pass the object directly; TypeScript validates it against GetAllResumesResponse
       return res.status(200).json({
+        success: true,
         message: "User resumes fetched successfully",
         count: resumes.length,
         resumes,
@@ -66,6 +68,7 @@ export const getAllResumes = async (
 
     // Guest mode return
     return res.status(200).json({
+      success: true,
       message: "Guest mode active",
       count: 0,
       resumes: [],
@@ -74,7 +77,7 @@ export const getAllResumes = async (
 
   } catch (error) {
     console.error("GET ALL RESUMES ERROR:", error);
-    return res.status(500).json({ message: "Failed to fetch resumes" });
+    return res.status(500).json({ success: false, message: "Failed to fetch resumes" });
   }
 };
 /**
@@ -86,12 +89,13 @@ export const getAllResumes = async (
 
 export const getResumeById = async (
   req: AuthRequest,
-  res: Response<ResumeResponse | { message: string }>
+  res: Response<ResumeResponse>
 ): Promise<Response> => {   
   
   try {
+    // Intentional error to test error handling
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const { id } = req.params;
@@ -104,18 +108,19 @@ export const getResumeById = async (
     });
 
     if (!resume) {
-      return res.status(404).json({ message: "Resume not found" });
+      return res.status(404).json({ success: false, message: "Resume not found" });
     }
 
     // Pass directly to .json() to let TypeScript validate the structure
     return res.status(200).json({
+      success: true,
       message: "Resume fetched successfully",
       resume,
     });
 
   } catch (error) {
     console.error("GET RESUME BY ID ERROR:", error);
-    return res.status(500).json({ message: "Failed to fetch resume" });
+    return res.status(500).json({ success: false, message: "Failed to fetch resume" });
   }
 };
 
@@ -129,11 +134,11 @@ export const getResumeById = async (
 export const updateResume = async (
   req: AuthRequest,
   // 1. Inject the generic types into the Response
-  res: Response<ResumeResponse | { message: string }>
+  res: Response<ResumeResponse>
 ): Promise<Response> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const { id } = req.params;
@@ -141,7 +146,7 @@ export const updateResume = async (
 
     // Guard clause for validation
     if (!data) {
-      return res.status(400).json({ message: "Resume data is required" });
+      return res.status(400).json({ success: false, message: "Resume data is required" });
     }
 
     const resume = await Resume.findOne({
@@ -152,7 +157,7 @@ export const updateResume = async (
     });
 
     if (!resume) {
-      return res.status(404).json({ message: "Resume not found" });
+      return res.status(404).json({ success: false, message: "Resume not found" });
     }
 
     // Perform the update
@@ -164,13 +169,14 @@ export const updateResume = async (
     // 2. Return the success response directly
     // TypeScript ensures this matches the resumeByIdResponse interface
     return res.status(200).json({
+      success: true,
       message: "Resume updated successfully",
       resume,
     });
 
   } catch (error) {
     console.error("UPDATE RESUME ERROR:", error);
-    return res.status(500).json({ message: "Failed to update resume" });
+    return res.status(500).json({ success: false, message: "Failed to update resume" });
   }
 };
 
@@ -182,11 +188,11 @@ export const updateResume = async (
  */
 export const deleteResume = async (
   req: AuthRequest,
-  res: Response<DeleteResponse | { message: string }>
+  res: Response<DeleteResponse>
 ): Promise<Response> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const { id } = req.params;
@@ -199,19 +205,20 @@ export const deleteResume = async (
     });
 
     if (!resume) {
-      return res.status(404).json({ message: "Resume not found" });
+      return res.status(404).json({ success: false, message: "Resume not found" });
     }
 
     await resume.destroy();
 
     // No need for a separate payload variable
     return res.status(200).json({ 
+      success: true,
       message: "Resume deleted successfully" 
     });
 
   } catch (error) {
     console.error("DELETE RESUME ERROR:", error);
-    return res.status(500).json({ message: "Failed to delete resume" });
+    return res.status(500).json({ success: false, message: "Failed to delete resume" });
   }
 };
 

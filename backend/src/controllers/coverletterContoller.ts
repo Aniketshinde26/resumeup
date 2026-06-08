@@ -91,6 +91,7 @@ export const getCoverLetterById = async (
   res: Response<CoverLetterResponse>
 ): Promise<Response> => {
   try {
+
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
