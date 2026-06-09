@@ -38,3 +38,29 @@ export type CoverLetterResponse = ApiResponse<{
 
 // Shares generic structure since deletions just return success & message
 export type DeleteResponse = ApiResponse;
+
+// --- Authentication Payloads ---
+interface AuthUserPayload {
+  id: number;
+  email: string;
+  fullname: string;
+  picture?: string;
+}
+
+export type RegisterUserResponse = ApiResponse<{
+  user: any; // Or swap with your User instance type later
+}>;
+
+export type LoginUserResponse = ApiResponse<{
+  accessToken: string;
+  refreshToken: string;
+  user: AuthUserPayload;
+}>;
+
+export type RefreshTokenResponse = ApiResponse<{
+  accessToken: string;
+}>;
+
+// Endpoints that only return a message (like forgotPassword, resetPassword, logoutUser) 
+// can completely share our existing generic ApiResponse type!
+export type AuthMessageResponse = ApiResponse;

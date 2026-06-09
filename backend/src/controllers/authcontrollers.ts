@@ -8,6 +8,8 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
 import { UserAttributes } from "../types/UserTypes";
+import {RegisterUserResponse, LoginUserResponse, AuthMessageResponse, RefreshTokenResponse} from "../types/ResponseTypes";
+
 const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
@@ -27,7 +29,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const registerUser = async (req: Request, res: 
-  Response) => {
+  Response<RegisterUserResponse>): Promise<Response> => {
   try {
     const { fullname, email, password } = req.body;
 
@@ -41,11 +43,12 @@ export const registerUser = async (req: Request, res:
         const hashedPassword = await bcrypt.hash(password, 10);
         await existingUser.update({ password: hashedPassword, fullname });
         return res.status(200).json({
+          success: true,
           message: "Password added to your Google account!",
           user: existingUser,
         });
       }
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(400).json({ success: false, message: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -54,36 +57,36 @@ export const registerUser = async (req: Request, res:
       email,
       password: hashedPassword,
     });
-    return res.status(201).json({ message: "User registered", user: newUser });
+    return res.status(201).json({ success: true, message: "User registered", user: newUser });
   } catch (error) {
-    res.status(500).json({ message: "Error registering user" });
+   return res.status(500).json({ success: false, message: "Error registering user" });
   }
 };
 
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response<LoginUserResponse>) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email & password required" });
+      return res.status(400).json({ success: false, message: "Email & password required" });
     }
 
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ success: false, message: "User not found" });
     }
 
-    if (!user.password || user.password === "") {
+  if (!user.password || user.password === "") {
       return res.status(400).json({
-        message:
-          "This account was created via Google Login. Please use the 'Sign in with Google' button.",
+        success: false,
+        message: "This account was created via Google Login. Please use the 'Sign in with Google' button.",
       });
     }
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res.status(400).json({ message: "Invalid password" });
+      return res.status(400).json({ success: false, message: "Invalid password" });
     }
 
     const accessToken = generateAccessToken(user);
@@ -105,6 +108,7 @@ export const loginUser = async (req: Request, res: Response) => {
     });
 
     return res.json({
+      success: true,
       message: "Login successful",
       accessToken,
       refreshToken,
@@ -112,7 +116,7 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
-    res.status(500).json({ message: "Error logging in" });
+    return res.status(500).json({ success: false, message: "Error logging in" });
   }
 };
 
