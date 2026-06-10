@@ -120,11 +120,11 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
   }
 };
 
-export const googleLogin = async (req: Request, res: Response) => {
+export const googleLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
   const { id_token } = req.body;
 
   if (!id_token) {
-    return res.status(400).json({ message: "Missing Google ID Token" });
+    return res.status(400).json({ success: false, message: "Missing Google ID Token" });
   }
 
   try {
@@ -135,7 +135,7 @@ export const googleLogin = async (req: Request, res: Response) => {
 
     const payload = ticket.getPayload();
     if (!payload || !payload.email || !payload.sub) {
-      return res.status(401).json({ message: "Invalid Google Token Payload" });
+      return res.status(401).json({ success: false, message: "Invalid Google Token Payload" });
     }
 
     const { sub: googleId, email, name: fullname, picture } = payload;
@@ -173,7 +173,8 @@ export const googleLogin = async (req: Request, res: Response) => {
       sameSite: "lax",
     });
 
-    return res.json({
+    return res.status(200).json({
+      success: true,
       message: "Google login successful",
       accessToken,
       refreshToken,
@@ -186,18 +187,20 @@ export const googleLogin = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("GOOGLE LOGIN ERROR:", error);
-    res
+
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return res
       .status(401)
-      .json({ message: "Failed to authenticate with Google", error });
+      .json({ success: false, message: "Failed to authenticate with Google", error: errorMessage});
   }
 };
 
-export const refreshAccessToken = async (req: Request, res: Response) => {
+export const refreshAccessToken = async (req: Request, res: Response<RefreshTokenResponse>) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
     if (!refreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
+      return res.status(401).json({ success: false, message: "No refresh token provided" });
     }
 
     const decoded = jwt.verify(
@@ -208,7 +211,7 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
     const user = await User.findByPk(decoded.id);
 
     if (!user || user.refreshToken !== refreshToken) {
-      return res.status(403).json({ message: "Invalid refresh token" });
+      return res.status(403).json({ success: false, message: "Invalid refresh token" });
     }
 
     const newAccessToken = generateAccessToken(user);
@@ -220,17 +223,18 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
     });
 
     return res.json({
+      success: true,
       message: "Access token refreshed",
       accessToken: newAccessToken,
     });
   } catch (error) {
     return res
       .status(403)
-      .json({ message: "Refresh token expired or invalid" });
+      .json({ success: false, message: "Refresh token expired or invalid" });
   }
 };
 
-export const logoutUser = async (req: Request, res: Response) => {
+export const logoutUser = async (req: Request, res: Response<AuthMessageResponse>) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (refreshToken) {
@@ -243,15 +247,15 @@ export const logoutUser = async (req: Request, res: Response) => {
   res.clearCookie("token");
   res.clearCookie("refreshToken");
 
-  res.json({ message: "Logged out successfully" });
+  return res.json({ success: true, message: "Logged out successfully" });
 };
 
 
 
-export const githubLogin = async (req: Request, res: Response) => {
+export const githubLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
   const { code } = req.body;
 
-  if (!code) return res.status(400).json({ message: "Missing GitHub Code" });
+  if (!code) return res.status(400).json({ success: false, message: "Missing GitHub Code" });
 
   try {
     // 1. Exchange code for access token
@@ -313,20 +317,23 @@ if (!user) {
     res.cookie("token", newAccessToken, cookieOptions);
     res.cookie("refreshToken", newRefreshToken, cookieOptions);
 
-    return res.json({
+    return res.status(200).json({
+      success: true,
       message: "GitHub login successful",
       user: { id: user.id, email: user.email, fullname: user.fullname, picture },
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
     });
 
   } catch (error: any) {
     console.error("GitHub Auth Error:", error.message);
-    res.status(401).json({ message: "Authentication failed" });
+    return res.status(401).json({ success: false, message: "Authentication failed",error: error.message });
   }
 };
 
 // --- PASSWORD RESET LOGIC ---
 
-export const forgotPassword = async (req: Request, res: Response) => {
+export const forgotPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
   const { email } = req.body;
 
   try {
@@ -334,7 +341,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     if (!user) {
       // Security: Don't confirm if user exists, just send a generic message
-      return res.status(200).json({ message: "If an account exists with that email, a reset link has been sent." });
+      return res.status(200).json({ success: true, message: "If an account exists with that email, a reset link has been sent." });
     }
 
     // 1. Generate a random reset token (Plain text for email)
@@ -357,14 +364,14 @@ export const forgotPassword = async (req: Request, res: Response) => {
       message: resetUrl, // This will be used in your HTML template
     });
 
-    res.json({ message: "Reset link sent to your email!" });
+    return res.status(200).json({ success: true, message: "Reset link sent to your email!" });
   } catch (error) {
     console.error("FORGOT PASSWORD ERROR:", error);
-    res.status(500).json({ message: "Failed to process forgot password request" });
+    return res.status(500).json({ success: false, message: "Failed to process forgot password request" });
   }
 };
 
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
   const { token } = req.params; // Token from the URL
   const { password } = req.body; // New password from the form
 
@@ -381,7 +388,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Token is invalid or has expired" });
+      return res.status(400).json({ success: false, message: "Token is invalid or has expired" });
     }
 
     // 3. Update password (hash it first!) and clear token fields
@@ -393,9 +400,9 @@ export const resetPassword = async (req: Request, res: Response) => {
       resetPasswordExpires: null,
     });
 
-    res.json({ message: "Password updated successfully! You can now log in." });
+    return res.status(200).json({ success: true, message: "Password updated successfully! You can now log in." });
   } catch (error) {
     console.error("RESET PASSWORD ERROR:", error);
-    res.status(500).json({ message: "Failed to reset password" });
+    return res.status(500).json({ success: false, message: "Failed to reset password" });
   }
 };
