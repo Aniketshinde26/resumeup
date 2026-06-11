@@ -1,3 +1,6 @@
+import { User } from "../models";
+import Coverletter from "../models/Coverletter";
+
 // Core blueprints for all responses
 interface BaseSuccessResponse {
   success: true;
@@ -33,7 +36,7 @@ export type GetAllCoverLettersResponse = ApiResponse<{
 }>;
 
 export type CoverLetterResponse = ApiResponse<{
-  coverletter: any; 
+  coverletter: Coverletter; 
 }>;
 
 // Shares generic structure since deletions just return success & message
@@ -45,10 +48,15 @@ interface AuthUserPayload {
   email: string;
   fullname: string;
   picture?: string;
+
 }
 
 export type RegisterUserResponse = ApiResponse<{
-  user: any; // Or swap with your User instance type later
+  user: {
+    id: number;
+    fullname: string;
+    email: string;
+  };
 }>;
 
 export type LoginUserResponse = ApiResponse<{
@@ -61,6 +69,4 @@ export type RefreshTokenResponse = ApiResponse<{
   accessToken: string;
 }>;
 
-// Endpoints that only return a message (like forgotPassword, resetPassword, logoutUser) 
-// can completely share our existing generic ApiResponse type!
 export type AuthMessageResponse = ApiResponse;

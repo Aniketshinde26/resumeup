@@ -1,4 +1,3 @@
-
 import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcrypt";
@@ -8,7 +7,16 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
 import { UserAttributes } from "../types/UserTypes";
-import {RegisterUserResponse, LoginUserResponse, AuthMessageResponse, RefreshTokenResponse} from "../types/ResponseTypes";
+import { RegisterUserResponse, LoginUserResponse, AuthMessageResponse, RefreshTokenResponse } from "../types/ResponseTypes";
+import { Op } from "sequelize"; // Imported cleanly for resetPassword
+
+const isProduction = process.env.NODE_ENV === "production";
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: "lax" as const,
+};
 
 const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
@@ -25,27 +33,26 @@ const generateRefreshToken = (user: UserAttributes) => {
     { expiresIn: "7d" }
   );
 };
+
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-export const registerUser = async (req: Request, res: 
-  Response<RegisterUserResponse>): Promise<Response> => {
+// --- REGISTER USER ---
+export const registerUser = async (req: Request, res: Response<RegisterUserResponse>): Promise<Response> => {
   try {
     const { fullname, email, password } = req.body;
 
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser) {
-      if (
-        existingUser.googleId &&
-        (!existingUser.password || existingUser.password === "")
-      ) {
+      if (existingUser.googleId && (!existingUser.password || existingUser.password === "")) {
         const hashedPassword = await bcrypt.hash(password, 10);
         await existingUser.update({ password: hashedPassword, fullname });
+        
         return res.status(200).json({
           success: true,
           message: "Password added to your Google account!",
-          user: existingUser,
+          user: { id: existingUser.id, email: existingUser.email, fullname: existingUser.fullname },
         });
       }
       return res.status(400).json({ success: false, message: "Email already exists" });
@@ -57,12 +64,19 @@ export const registerUser = async (req: Request, res:
       email,
       password: hashedPassword,
     });
-    return res.status(201).json({ success: true, message: "User registered", user: newUser });
+
+    return res.status(201).json({ 
+      success: true, 
+      message: "User registered", 
+      user: { id: newUser.id, email: newUser.email, fullname: newUser.fullname } 
+    });
   } catch (error) {
-   return res.status(500).json({ success: false, message: "Error registering user" });
+    console.error("REGISTER ERROR:", error);
+    return res.status(500).json({ success: false, message: "Error registering user" });
   }
 };
 
+// --- LOGIN USER ---
 export const loginUser = async (req: Request, res: Response<LoginUserResponse>) => {
   try {
     const { email, password } = req.body;
@@ -77,7 +91,7 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
       return res.status(400).json({ success: false, message: "User not found" });
     }
 
-  if (!user.password || user.password === "") {
+    if (!user.password || user.password === "") {
       return res.status(400).json({
         success: false,
         message: "This account was created via Google Login. Please use the 'Sign in with Google' button.",
@@ -94,18 +108,8 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
 
     await user.update({ refreshToken });
 
-    // Save both cookies
-    res.cookie("token", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    res.cookie("token", accessToken, cookieOptions);
+    res.cookie("refreshToken", refreshToken, cookieOptions);
 
     return res.json({
       success: true,
@@ -120,6 +124,7 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
   }
 };
 
+// --- GOOGLE LOGIN ---
 export const googleLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
   const { id_token } = req.body;
 
@@ -152,8 +157,7 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
       console.log(`New user registered via Google: ${email}`);
     } else if (!user.googleId) {
       await user.update({ googleId });
-      
-      (`Existing user linked with Google ID: ${email}`);
+      console.log(`Existing user linked with Google ID: ${email}`);
     }
 
     const accessToken = generateAccessToken(user);
@@ -161,17 +165,8 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
 
     await user.update({ refreshToken });
 
-    res.cookie("token", accessToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
+    res.cookie("token", accessToken, cookieOptions);
+    res.cookie("refreshToken", refreshToken, cookieOptions);
 
     return res.status(200).json({
       success: true,
@@ -187,14 +182,12 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
     });
   } catch (error) {
     console.error("GOOGLE LOGIN ERROR:", error);
-
     const errorMessage = error instanceof Error ? error.message : String(error);
-    return res
-      .status(401)
-      .json({ success: false, message: "Failed to authenticate with Google", error: errorMessage});
+    return res.status(401).json({ success: false, message: "Failed to authenticate with Google", error: errorMessage });
   }
 };
 
+// --- REFRESH ACCESS TOKEN ---
 export const refreshAccessToken = async (req: Request, res: Response<RefreshTokenResponse>) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
@@ -216,11 +209,7 @@ export const refreshAccessToken = async (req: Request, res: Response<RefreshToke
 
     const newAccessToken = generateAccessToken(user);
 
-    res.cookie("token", newAccessToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
+    res.cookie("token", newAccessToken, cookieOptions);
 
     return res.json({
       success: true,
@@ -228,37 +217,37 @@ export const refreshAccessToken = async (req: Request, res: Response<RefreshToke
       accessToken: newAccessToken,
     });
   } catch (error) {
-    return res
-      .status(403)
-      .json({ success: false, message: "Refresh token expired or invalid" });
+    return res.status(403).json({ success: false, message: "Refresh token expired or invalid" });
   }
 };
 
+// --- LOGOUT USER ---
 export const logoutUser = async (req: Request, res: Response<AuthMessageResponse>) => {
-  const refreshToken = req.cookies.refreshToken;
+  try {
+    const refreshToken = req.cookies.refreshToken;
 
-  if (refreshToken) {
-    const user = await User.findOne({ where: { refreshToken } });
-    if (user) {
-      await user.update({ refreshToken: null });
+    if (refreshToken) {
+      const user = await User.findOne({ where: { refreshToken } });
+      if (user) {
+        await user.update({ refreshToken: null });
+      }
     }
+  } catch (error) {
+    console.error("LOGOUT DATABASE ERROR:", error);
+  } finally {
+    res.clearCookie("token", cookieOptions);
+    res.clearCookie("refreshToken", cookieOptions);
+    return res.json({ success: true, message: "Logged out successfully" });
   }
-
-  res.clearCookie("token");
-  res.clearCookie("refreshToken");
-
-  return res.json({ success: true, message: "Logged out successfully" });
 };
 
-
-
+// --- GITHUB LOGIN ---
 export const githubLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
   const { code } = req.body;
 
   if (!code) return res.status(400).json({ success: false, message: "Missing GitHub Code" });
 
   try {
-    // 1. Exchange code for access token
     const tokenResponse = await axios.post(
       "https://github.com/login/oauth/access_token",
       {
@@ -272,7 +261,6 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
     const accessToken = tokenResponse.data.access_token;
     if (!accessToken) throw new Error("GitHub token exchange failed");
 
-    // 2. Fetch User Data (Parallel calls save time!)
     const [userRes, emailRes] = await Promise.all([
       axios.get("https://api.github.com/user", {
         headers: { Authorization: `Bearer ${accessToken}`, "User-Agent": "ResumeUp" }
@@ -285,34 +273,23 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
     const { id: githubId, name, avatar_url: picture } = userRes.data;
     const primaryEmail = emailRes.data.find((e: any) => e.primary)?.email || emailRes.data[0].email;
 
-  // 3. Database Operations (Explicit version)
-let user = await User.findOne({ where: { email: primaryEmail } });
+    let user = await User.findOne({ where: { email: primaryEmail } });
 
-if (!user) {
-  // CREATE new user
-  user = await User.create({
-    email: primaryEmail,
-    fullname: name || "GitHub User",
-    githubId: String(githubId),
-    password: "", 
-  } as UserAttributes);
+    if (!user) {
+      user = await User.create({
+        email: primaryEmail,
+        fullname: name || "GitHub User",
+        githubId: String(githubId),
+        password: "", 
+      } as UserAttributes);
+    } else if (!user.githubId) {
+      await user.update({ githubId: String(githubId) });
+    }
 
-} else if (!user.githubId) {
-  // UPDATE existing user found by email
-  await user.update({ githubId: String(githubId) });
-}
-
-    // 4. Token Generation & Cookies
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
 
     await user.update({ refreshToken: newRefreshToken });
-
-    const cookieOptions = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax" as const,
-    };
 
     res.cookie("token", newAccessToken, cookieOptions);
     res.cookie("refreshToken", newRefreshToken, cookieOptions);
@@ -327,12 +304,11 @@ if (!user) {
 
   } catch (error: any) {
     console.error("GitHub Auth Error:", error.message);
-    return res.status(401).json({ success: false, message: "Authentication failed",error: error.message });
+    return res.status(401).json({ success: false, message: "Authentication failed", error: error.message });
   }
 };
 
-// --- PASSWORD RESET LOGIC ---
-
+// --- FORGOT PASSWORD ---
 export const forgotPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
   const { email } = req.body;
 
@@ -340,28 +316,22 @@ export const forgotPassword = async (req: Request, res: Response<AuthMessageResp
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      // Security: Don't confirm if user exists, just send a generic message
       return res.status(200).json({ success: true, message: "If an account exists with that email, a reset link has been sent." });
     }
 
-    // 1. Generate a random reset token (Plain text for email)
     const resetToken = crypto.randomBytes(32).toString("hex");
-
-    // 2. Hash the token for storage in the DB
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
-    // 3. Save to DB with 1-hour expiry
     await user.update({
       resetPasswordToken: hashedToken,
-      resetPasswordExpires: new Date(Date.now() + 3600000), // 1 hour from now
+      resetPasswordExpires: new Date(Date.now() + 3600000),
     });
 
-    // 4. Send the email with the PLAIN token
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     await sendEmail({
       email: user.email,
       subject: "Password Reset Request - ResumeUp",
-      message: resetUrl, // This will be used in your HTML template
+      message: resetUrl,
     });
 
     return res.status(200).json({ success: true, message: "Reset link sent to your email!" });
@@ -371,19 +341,18 @@ export const forgotPassword = async (req: Request, res: Response<AuthMessageResp
   }
 };
 
+// --- RESET PASSWORD ---
 export const resetPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
-  const { token } = req.params; // Token from the URL
-  const { password } = req.body; // New password from the form
+  const { token } = req.params;
+  const { password } = req.body;
 
   try {
-    // 1. Hash the token from the URL to compare it with the DB version
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    // 2. Find user with valid token and not expired
     const user = await User.findOne({
       where: {
         resetPasswordToken: hashedToken,
-        resetPasswordExpires: { [require("sequelize").Op.gt]: new Date() }, // Check if expiry > current time
+        resetPasswordExpires: { [Op.gt]: new Date() },
       },
     });
 
@@ -391,7 +360,6 @@ export const resetPassword = async (req: Request, res: Response<AuthMessageRespo
       return res.status(400).json({ success: false, message: "Token is invalid or has expired" });
     }
 
-    // 3. Update password (hash it first!) and clear token fields
     const hashedPassword = await bcrypt.hash(password, 10);
     
     await user.update({
