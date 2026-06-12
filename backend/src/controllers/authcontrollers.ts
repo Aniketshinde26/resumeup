@@ -106,17 +106,28 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
+    // Save the refresh token to the database
     await user.update({ refreshToken });
 
-    res.cookie("token", accessToken, cookieOptions);
-    res.cookie("refreshToken", refreshToken, cookieOptions);
+    // 1. Send the REFRESH TOKEN in a secure, httpOnly cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // true in production (HTTPS)
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days matching token expiration
+    });
 
+    // 2. Return ONLY the accessToken and user data in the JSON body
     return res.json({
       success: true,
       message: "Login successful",
-      accessToken,
-      refreshToken,
-      user: { id: user.id, email: user.email, fullname: user.fullname },
+      accessToken, // Frontend reads this and keeps it in memory (React State/Zustand)
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        fullname: user.fullname,
+
+      },
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);
@@ -163,21 +174,27 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
+    // Save the refresh token to the database
     await user.update({ refreshToken });
 
-    res.cookie("token", accessToken, cookieOptions);
-    res.cookie("refreshToken", refreshToken, cookieOptions);
+    // 1. Send the REFRESH TOKEN in your secure, httpOnly cookie
+    res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions, // Keeps your custom options (like domain, etc.)
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
+    // 2. Return ONLY the accessToken and user payload in the JSON body
     return res.status(200).json({
       success: true,
       message: "Google login successful",
-      accessToken,
-      refreshToken,
+      accessToken, // Safe for frontend memory
       user: {
         id: user.id,
         email: user.email,
         fullname: user.fullname,
-        picture,
+        picture: picture || undefined, // Kept safe and clean
       },
     });
   } catch (error) {
@@ -258,15 +275,15 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
       { headers: { Accept: "application/json" } }
     );
 
-    const accessToken = tokenResponse.data.access_token;
-    if (!accessToken) throw new Error("GitHub token exchange failed");
+    const githubAccessToken = tokenResponse.data.access_token; // Renamed slightly to avoid confusion with your app's token
+    if (!githubAccessToken) throw new Error("GitHub token exchange failed");
 
     const [userRes, emailRes] = await Promise.all([
       axios.get("https://api.github.com/user", {
-        headers: { Authorization: `Bearer ${accessToken}`, "User-Agent": "ResumeUp" }
+        headers: { Authorization: `Bearer ${githubAccessToken}`, "User-Agent": "ResumeUp" }
       }),
       axios.get("https://api.github.com/user/emails", {
-        headers: { Authorization: `Bearer ${accessToken}`, "User-Agent": "ResumeUp" }
+        headers: { Authorization: `Bearer ${githubAccessToken}`, "User-Agent": "ResumeUp" }
       })
     ]);
 
@@ -289,17 +306,28 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
 
+    // Save the refresh token to your database
     await user.update({ refreshToken: newRefreshToken });
 
-    res.cookie("token", newAccessToken, cookieOptions);
-    res.cookie("refreshToken", newRefreshToken, cookieOptions);
+    // 1. Send the long-lived REFRESH TOKEN in your secure, httpOnly cookie
+    res.cookie("refreshToken", newRefreshToken, {
+      ...cookieOptions,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
+    // 2. Return ONLY the accessToken and user payload in the JSON body
     return res.status(200).json({
       success: true,
       message: "GitHub login successful",
-      user: { id: user.id, email: user.email, fullname: user.fullname, picture },
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
+      accessToken: newAccessToken, // Perfectly safe for frontend state
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        fullname: user.fullname, 
+        picture 
+      },
     });
 
   } catch (error: any) {

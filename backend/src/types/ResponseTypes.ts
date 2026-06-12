@@ -1,4 +1,4 @@
-import { User } from "../models";
+import { Resume, User } from "../models";
 import Coverletter from "../models/Coverletter";
 
 // Core blueprints for all responses
@@ -21,17 +21,17 @@ export type ApiResponse<T = {}> = (BaseSuccessResponse & T) | ErrorResponse;
 
 export type GetAllResumesResponse = ApiResponse<{
   count: number;
-  resumes: any[]; 
+  resumes: Resume[]; 
   isGuest: boolean;
 }>;
 
 export type ResumeResponse = ApiResponse<{
-  resume: any; 
+  resume: Resume;
 }>;
 
 export type GetAllCoverLettersResponse = ApiResponse<{
   count: number;
-  coverletters: any[]; 
+  coverletters: Coverletter[]; 
   isGuest: boolean;
 }>;
 
@@ -61,7 +61,7 @@ export type RegisterUserResponse = ApiResponse<{
 
 export type LoginUserResponse = ApiResponse<{
   accessToken: string;
-  refreshToken: string;
+ 
   user: AuthUserPayload;
 }>;
 
