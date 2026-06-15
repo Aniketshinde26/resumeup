@@ -1,4 +1,4 @@
-import type { CoverLetter, Resume } from "./templateindex";
+import type { coverLetter, Resume } from "./templateindex";
 
 
  interface ApiResponse<T> {
@@ -31,13 +31,13 @@ interface CreateResumeResponse {
 interface FetchCoverLettersResponse {
   message: string;
   count : number;
-  coverletters: CoverLetter[];
+  coverletters:coverLetter[];
   isGuest?: boolean;
 }
 
 interface CoverLetterByIdResponse {
   message: string;
-  coverletter: CoverLetter;
+  coverletter: coverLetter;
 }
 
 interface DeleteCoverLetterResponse {
@@ -46,7 +46,7 @@ interface DeleteCoverLetterResponse {
 
 interface CreateCoverLetterResponse {
   message: string;
-  coverletter: CoverLetter;
+  coverletter: coverLetter;
 }
 
 

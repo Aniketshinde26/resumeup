@@ -22,7 +22,7 @@ const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET as string,
-    { expiresIn: "10m" }
+    { expiresIn: "30s" }
   );
 };
 
@@ -189,12 +189,11 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
     return res.status(200).json({
       success: true,
       message: "Google login successful",
-      accessToken, // Safe for frontend memory
+      accessToken, 
       user: {
         id: user.id,
         email: user.email,
         fullname: user.fullname,
-        picture: picture || undefined, // Kept safe and clean
       },
     });
   } catch (error) {
@@ -225,8 +224,6 @@ export const refreshAccessToken = async (req: Request, res: Response<RefreshToke
     }
 
     const newAccessToken = generateAccessToken(user);
-
-    res.cookie("token", newAccessToken, cookieOptions);
 
     return res.json({
       success: true,

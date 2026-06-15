@@ -5,6 +5,7 @@ import Coverletter from "../models/Coverletter";
 interface BaseSuccessResponse {
   success: true;
   message: string;
+  accessToken?: string; // Optional for auth responses that issue tokens
 }
 
 export interface ErrorResponse {
@@ -60,8 +61,7 @@ export type RegisterUserResponse = ApiResponse<{
 }>;
 
 export type LoginUserResponse = ApiResponse<{
-  accessToken: string;
- 
+  // accessToken: string;
   user: AuthUserPayload;
 }>;
 

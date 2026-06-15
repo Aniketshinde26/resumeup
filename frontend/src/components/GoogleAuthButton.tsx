@@ -10,9 +10,13 @@ export default function GoogleAuthButton() {
 
   const handleCredentialResponse = async (response: any) => {
     try {
-      await api.post("/auth/google", {
+      const res = await api.post("/auth/google", {
         id_token: response.credential,
       });
+
+      if (res.data && res.data.accessToken) {
+        api.defaults.headers.common["Authorization"] = `Bearer ${res.data.accessToken}`;
+      }
       navigate("/home");
     } catch (error: any) {
       alert("Google login failed.");

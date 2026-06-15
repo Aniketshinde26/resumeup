@@ -1,7 +1,7 @@
 // src/hooks/useGithubAuth.ts
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import api from "../api/axios"; // Use your configured instance
+import api,{setAccessToken} from "../api/axios"; // Use your configured instance
 import { initiateGithubLogin } from "../services/githubAuth";
 export const useGithubAuth = () => {
   const [searchParams] = useSearchParams();
@@ -28,6 +28,7 @@ export const useGithubAuth = () => {
           const response = await api.post("auth/github", { code });
 
           if (response.status === 200) {
+            setAccessToken(response.data.accessToken);
             navigate("/home", { replace: true });
           }
         } catch (error) {
