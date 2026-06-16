@@ -12,6 +12,7 @@ export interface UserAttributes {
   updatedAt?: Date; 
   resetPasswordToken?: string | null;
   resetPasswordExpires?: Date | null;
+  passwordChangedAt?: Date | null;
 }
 
 export interface UserCreationAttributes

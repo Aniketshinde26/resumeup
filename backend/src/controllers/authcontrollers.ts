@@ -344,6 +344,34 @@ export const forgotPassword = async (req: Request, res: Response<AuthMessageResp
       return res.status(200).json({ success: true, message: "If an account exists with that email, a reset link has been sent." });
     }
 
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    const coolDownPeriodInMs = process.env.NODE_ENV === "development" 
+  ? 2 * 60 * 1000  // 2 minutes
+  : 7 * 24 * 60 * 60 * 1000; // 7 days configuration
+    const currentTime = Date.now();
+
+    // 🚨 GUARD 1: New Account Filter (Check registration age)
+    const accountAgeInMs = currentTime - new Date(user.createdAt).getTime();
+    if (accountAgeInMs < coolDownPeriodInMs) {
+      const daysRemaining = Math.ceil((coolDownPeriodInMs - accountAgeInMs) / oneDayInMs);
+      return res.status(403).json({
+        success: false,
+        message: `Security Limit: New accounts must wait 7 days before modifying credentials. Try again in ${daysRemaining} day(s).`
+      });
+    }
+
+    // 🚨 GUARD 2: Recent Reset Filter (Check if they reset it too recently)
+    if (user.passwordChangedAt) {
+      const timeSinceLastChange = currentTime - new Date(user.passwordChangedAt).getTime();
+      
+      if (timeSinceLastChange < coolDownPeriodInMs) {
+        const daysRemaining = Math.ceil((coolDownPeriodInMs - timeSinceLastChange) / oneDayInMs);
+        return res.status(403).json({
+          success: false,
+          message: `Security Limit: You recently changed your password. You can request another reset link in ${daysRemaining} day(s).`
+        });
+      }
+    }
     const resetToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
@@ -391,6 +419,7 @@ export const resetPassword = async (req: Request, res: Response<AuthMessageRespo
       password: hashedPassword,
       resetPasswordToken: null,
       resetPasswordExpires: null,
+      passwordChangedAt: new Date(), 
     });
 
     return res.status(200).json({ success: true, message: "Password updated successfully! You can now log in." });

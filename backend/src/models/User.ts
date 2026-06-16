@@ -17,6 +17,7 @@ class User
   public githubId!: string |null; 
   public resetPasswordToken!: string | null;
   public resetPasswordExpires!: Date | null;
+  public passwordChangedAt!: Date | null;
 }
 
 User.init(
@@ -60,6 +61,10 @@ User.init(
     resetPasswordExpires: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    passwordChangedAt:{
+      type:DataTypes.DATE,
+      allowNull:true,
     },
   },
   {

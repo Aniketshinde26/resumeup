@@ -39,7 +39,6 @@ interface CoverLetterByIdResponse {
   message: string;
   coverletter: coverLetter;
 }
-
 interface DeleteCoverLetterResponse {
   message: string;
 }

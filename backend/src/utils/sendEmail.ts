@@ -8,7 +8,7 @@ export const sendEmail = async (options: any) => {
         port: Number(process.env.EMAIL_PORT) || 465,
         secure: true,
         auth: {
-            user: 'apikey', 
+            user: process.env.EMAIL_FROM, 
             pass: process.env.EMAIL_PASS,
         },
     });
