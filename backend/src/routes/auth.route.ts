@@ -12,9 +12,7 @@ import {
 import { verifyToken } from "../middleware/authmiddleware";
 import { getMe } from "../controllers/usercontroller";
 import { sendEmail } from "../utils/sendEmail";
-import { testEmailController } from "../controllers/authemail";
 const router = Router();
-router.post("/test-email", testEmailController);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);

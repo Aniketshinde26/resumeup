@@ -333,6 +333,7 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
   }
 };
 
+
 // --- FORGOT PASSWORD ---
 export const forgotPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
   const { email } = req.body;
@@ -345,18 +346,28 @@ export const forgotPassword = async (req: Request, res: Response<AuthMessageResp
     }
 
     const oneDayInMs = 24 * 60 * 60 * 1000;
-    const coolDownPeriodInMs = process.env.NODE_ENV === "development" 
-  ? 2 * 60 * 1000  // 2 minutes
-  : 7 * 24 * 60 * 60 * 1000; // 7 days configuration
+    const isDev = process.env.NODE_ENV === "development";
+    
+    // 🛠️ FIX 1: Aligning cooldown configs correctly
+    const coolDownPeriodInMs = isDev 
+      ? 2 * 60 * 1000        // 2 minutes for local dev testing
+      : 7 * oneDayInMs;      // 7 days for production security
+
     const currentTime = Date.now();
 
     // 🚨 GUARD 1: New Account Filter (Check registration age)
     const accountAgeInMs = currentTime - new Date(user.createdAt).getTime();
     if (accountAgeInMs < coolDownPeriodInMs) {
-      const daysRemaining = Math.ceil((coolDownPeriodInMs - accountAgeInMs) / oneDayInMs);
+      const timeRemaining = coolDownPeriodInMs - accountAgeInMs;
+      
+      // 🛠️ FIX 2: Dynamic unit rendering so Dev shows minutes/seconds and Prod shows days
+      const unitRemaining = isDev
+        ? `${Math.ceil(timeRemaining / (60 * 1000))} minute(s)`
+        : `${Math.ceil(timeRemaining / oneDayInMs)} day(s)`;
+
       return res.status(403).json({
         success: false,
-        message: `Security Limit: New accounts must wait 7 days before modifying credentials. Try again in ${daysRemaining} day(s).`
+        message: `Security Limit: New accounts must wait before modifying credentials. Try again in ${unitRemaining}.`
       });
     }
 
@@ -365,13 +376,20 @@ export const forgotPassword = async (req: Request, res: Response<AuthMessageResp
       const timeSinceLastChange = currentTime - new Date(user.passwordChangedAt).getTime();
       
       if (timeSinceLastChange < coolDownPeriodInMs) {
-        const daysRemaining = Math.ceil((coolDownPeriodInMs - timeSinceLastChange) / oneDayInMs);
+        const timeRemaining = coolDownPeriodInMs - timeSinceLastChange;
+        
+        // 🛠️ FIX 3: Dynamic unit rendering here too
+        const unitRemaining = isDev
+          ? `${Math.ceil(timeRemaining / (60 * 1000))} minute(s)`
+          : `${Math.ceil(timeRemaining / oneDayInMs)} day(s)`;
+
         return res.status(403).json({
           success: false,
-          message: `Security Limit: You recently changed your password. You can request another reset link in ${daysRemaining} day(s).`
+          message: `Security Limit: You recently changed your password. You can request another reset link in ${unitRemaining}.`
         });
       }
     }
+    
     const resetToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
