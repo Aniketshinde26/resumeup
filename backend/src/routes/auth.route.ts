@@ -20,7 +20,7 @@ router.post("/google", googleLogin);
 router.get("/me", verifyToken, getMe);
 router.post("/refresh", refreshAccessToken);
 router.post("/forgot-password", forgotPassword);
-router.patch("/reset-password/:token", resetPassword);
+router.post("/reset-password/:token", resetPassword);
 router.post("/github", githubLogin);
 router.get("/protected", verifyToken, (req, res) => {
   res.json({
