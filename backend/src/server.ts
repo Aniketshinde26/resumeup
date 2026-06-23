@@ -8,11 +8,15 @@ import authRoutes from "./routes/auth.route";
 import dashboardRoutes from "./routes/dashboard.route";
 import resumeRoutes from "./routes/resume.route";
 import coverletterRoutes from "./routes/coverletter.route";
-
-// Single import - loads everything!
 import "./models";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const app = express();
+app.use(helmet());
+
+
+
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
@@ -30,16 +34,24 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// 2. DOS/Spam Protection
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,                 // Limit each IP to 100 requests per 15 mins
+  handler: (req, res) => {
+    res.status(429).json({ 
+      error: "Too many requests from this IP, please try again later." 
+    });
+  }
+});
+app.use("/api/", apiLimiter);
 app.use(express.json());
 app.use(cookieParser());
-
 app.use("/api/auth", authRoutes);
-
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
-
 app.use("/api/cover-letters", coverletterRoutes);
-
 app.get("/", (req, res) => {
   res.json({ message: "ResumeUp backend is running!" });
 });
