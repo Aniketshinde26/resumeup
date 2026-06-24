@@ -109,15 +109,18 @@ export default function Register() {
             </div>
 
             {/* RIGHT SECTION: FORM CONTAINER */}
-            <div className="lg:w-[50%] bg-(--color-card-right) p-10 pt-16 sm:pt-20 flex flex-col justify-between relative border-r border-(--color-border-subtle)"> 
+            <div className="lg:w-[50%] bg-(--color-card-right) p-6 sm:p-10 relative border-r border-(--color-border-subtle) flex flex-col justify-center items-center"> 
               
-              {/* Dynamic ActionPanel alignment strategy */}
-              <div className="w-full flex justify-end mb-6 lg:mb-0 lg:absolute lg:top-6 lg:right-6 lg:w-auto z-20">
-                <ActionPanel />
-              </div>
+              {/* Form Container - Perfectly centered layout */}
+              <div className="w-full max-w-sm mx-auto flex flex-col justify-center my-auto py-6">
+                
+                {/* Action Panel - Centered and shifted higher flow */}
+                <div className="flex justify-center mb-5 -mt-4">
+                  <ActionPanel />
+                </div>
 
-              <div className="w-full max-w-sm mx-auto my-auto">
-                <div className="mb-8">
+                {/* Heading Section */}
+                <div className="mb-8 text-center lg:text-left">
                   <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-sign-in)' }}>
                     {t('create_account')}
                   </h1>
@@ -127,11 +130,11 @@ export default function Register() {
                 </div>
 
                 {/* Social Registration Rows */}
-                <div className="flex items-center gap-3 mb-6 w-full max-w-[350px] mx-auto">
+                <div className="flex items-center gap-3 mb-6 w-full">
                   <div className="flex-1 transform hover:scale-[1.01] transition-all">
                     <GoogleAuthButton />
                   </div>
-                 
+                  
                   <button 
                     type="button" 
                     onClick={() => handleSocialClick('GitHub')} 

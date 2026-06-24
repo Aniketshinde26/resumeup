@@ -21,6 +21,7 @@ return (
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email</label>
           <input
+          
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

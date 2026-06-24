@@ -28,12 +28,18 @@ export default function PasswordInput({
         placeholder={placeholder}
         disabled={disabled}
         className={`
-          w-full rounded-xl border border-black/10
-          bg-white px-4 py-3 pr-11 text-sm
-          placeholder:text-gray-700
-          focus:bg-white/[0.05] focus:border-brand-primary/50
+          w-full rounded-xl border border-slate-200 dark:border-slate-700
+          bg-slate-50 dark:bg-slate-800 px-4 py-3 pr-11 text-sm
+          text-slate-900 dark:text-white
+          placeholder:text-slate-300 dark:placeholder:text-slate-500
+          focus:bg-white dark:focus:bg-slate-700 focus:border-brand-primary/50
           outline-none transition-all
           disabled:opacity-50 disabled:cursor-not-allowed
+          
+          /* Clears aggressive browser autofill background overrides */
+          autofill:shadow-[inset_0_0_0_1000px_rgba(248,250,252,1)]
+          dark:autofill:shadow-[inset_0_0_0_1000px_rgba(30,41,59,1)]
+          
           ${inputClassName}
         `}
       />
@@ -42,7 +48,7 @@ export default function PasswordInput({
         type="button"
         onClick={toggleVisibility}
         disabled={disabled}
-        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-black focus:outline-none disabled:opacity-0"
+        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none disabled:opacity-0"
       >
         {isVisible ? (
           // Eye Off Icon

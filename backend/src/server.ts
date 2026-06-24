@@ -52,6 +52,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/cover-letters", coverletterRoutes);
+
 app.get("/", (req, res) => {
   res.json({ message: "ResumeUp backend is running!" });
 });
