@@ -22,7 +22,7 @@ const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET as string,
-    { expiresIn: "30s" }
+    { expiresIn: "15m" }
   );
 };
 
@@ -110,12 +110,10 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
     await user.update({ refreshToken });
 
     // 1. Send the REFRESH TOKEN in a secure, httpOnly cookie
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true in production (HTTPS)
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days matching token expiration
-    });
+ res.cookie("refreshToken", refreshToken, {
+  ...cookieOptions,
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+})
 
     // 2. Return ONLY the accessToken and user data in the JSON body
     return res.json({
@@ -178,12 +176,10 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
     await user.update({ refreshToken });
 
     // 1. Send the REFRESH TOKEN in your secure, httpOnly cookie
-    res.cookie("refreshToken", refreshToken, {
-      ...cookieOptions, // Keeps your custom options (like domain, etc.)
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+ res.cookie("refreshToken", refreshToken, {
+  ...cookieOptions,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
     // 2. Return ONLY the accessToken and user payload in the JSON body
     return res.status(200).json({
@@ -204,6 +200,8 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
 };
 
 // --- REFRESH ACCESS TOKEN ---
+// backend/controllers/authController.ts
+
 export const refreshAccessToken = async (req: Request, res: Response<RefreshTokenResponse>) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
@@ -223,7 +221,11 @@ export const refreshAccessToken = async (req: Request, res: Response<RefreshToke
       return res.status(403).json({ success: false, message: "Invalid refresh token" });
     }
 
-    const newAccessToken = generateAccessToken(user);
+    //  FIX: Convert the Sequelize instance into a plain JavaScript object
+    const plainUserData = user.get({ plain: true }) as UserAttributes;
+
+    // Pass the clean object to generate a valid, uncorrupted JWT
+    const newAccessToken = generateAccessToken(plainUserData);
 
     return res.json({
       success: true,
@@ -307,12 +309,13 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
     await user.update({ refreshToken: newRefreshToken });
 
     // 1. Send the long-lived REFRESH TOKEN in your secure, httpOnly cookie
-    res.cookie("refreshToken", newRefreshToken, {
-      ...cookieOptions,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+ // Save the refresh token to your database
+await user.update({ refreshToken: newRefreshToken });
+
+res.cookie("refreshToken", newRefreshToken, {
+  ...cookieOptions,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
     // 2. Return ONLY the accessToken and user payload in the JSON body
     return res.status(200).json({

@@ -1,25 +1,30 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import api from "../api/axios";
+import api, { setAccessToken } from "../api/axios";
 
 const ProtectedRoute = () => {
-  // null = loading, true = logged in, false = logged out
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // We call your existing route. Axios sends the cookie automatically.
-        await api.get("/auth/protected");
+        // 1. First, get a fresh access token using the httpOnly refresh cookie
+        const { data } = await api.post("/auth/refresh");
+        
+        // 2. Fill the memory vault BEFORE anything else renders
+        setAccessToken(data.accessToken);
+        
         setIsAuthorized(true);
       } catch (error) {
+        // Refresh cookie is missing or expired — user must log in
+        setAccessToken(null);
         setIsAuthorized(false);
       }
     };
+
     checkAuth();
   }, []);
 
-  // While checking with the server, show a simple loading state
   if (isAuthorized === null) {
     return (
       <div className="flex h-screen items-center justify-center">

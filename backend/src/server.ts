@@ -13,7 +13,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
 const app = express();
-app.use(helmet());
+
 
 
 
@@ -28,14 +28,16 @@ const corsOptions = {
     "X-Requested-With",
     "Accept",
     "Origin",
+    "X-Retry-Attempted",
   ],
   exposedHeaders: ["Set-Cookie"],
   maxAge: 86400,
 };
-
+app.use(helmet());
 app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
 
-// 2. DOS/Spam Protection
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,                 // Limit each IP to 100 requests per 15 mins
@@ -46,8 +48,7 @@ const apiLimiter = rateLimit({
   }
 });
 app.use("/api/", apiLimiter);
-app.use(express.json());
-app.use(cookieParser());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
@@ -63,7 +64,7 @@ const startServer = async () => {
   await connectDB();
   
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter : true });
     console.log("Database synced successfully");
   } catch (error) {
     console.error("Sequelize sync error:", error);

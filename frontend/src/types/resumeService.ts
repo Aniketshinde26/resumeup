@@ -26,6 +26,7 @@ export const ResumeService = {
      * @throws Will throw an error if the API request fails.    
      */
     getResumeById: async (id: string): Promise<ResumeByIdResponse> => {
+        await new Promise((resolve) => setTimeout(resolve,0)); // Simulate a 500ms delay
         const response = await api.get<ResumeByIdResponse>(`/resumes/${id}`);
         return response.data;
     },
@@ -50,10 +51,10 @@ export const ResumeService = {
          * @returns {Promise<CreateResumeResponse>} An object containing a success message and the created resume data.
          * @throws Will throw an error if the API request fails.    
          */
-    createResume: async (payload: { title: string; templateId: string; data: ResumeData |Record<string, never>; }): Promise<CreateResumeResponse> => {
-        const response = await api.post<CreateResumeResponse>("/resumes", payload);
-        return response.data;
-    },      
+createResume: async (payload: { title: string; templateId: string; data: ResumeData | Record<string, never>; }): Promise<CreateResumeResponse> => {
+    const response = await api.post<CreateResumeResponse>("/resumes", payload);
+    return response.data;
+},      
 
 }
 

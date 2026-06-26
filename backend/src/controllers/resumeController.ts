@@ -9,7 +9,6 @@ import { GetAllResumesResponse, ResumeResponse, DeleteResponse } from "../types/
  */
 export const createResume = async (
   req: AuthRequest,
-  // We define the allowed JSON bodies here
   res: Response<ResumeResponse >
 ): Promise<Response> => {
   try {
@@ -87,40 +86,42 @@ export const getAllResumes = async (
  * @return Single resume if found and belongs to user (200), 404 if not found, 401 if unauthorized
   */
 
-export const getResumeById = async (
-  req: AuthRequest,
-  res: Response<ResumeResponse>
-): Promise<Response> => {   
-  
+// backend/controllers/resumeController.ts (or wherever your route logic lives)
+
+export const getResumeById = async (req: Request, res: Response) => {
   try {
-    // Intentional error to test error handling
-    if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
     const { id } = req.params;
-
-    const resume = await Resume.findOne({
-      where: {
-        id,
-        userId: req.user.id,
-      },
-    });
-
-    if (!resume) {
-      return res.status(404).json({ success: false, message: "Resume not found" });
+    
+    // 🛡️ Guard 1: Ensure req.user exists and force convert the ID to a standard Number
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Authentication required" });
     }
 
-    // Pass directly to .json() to let TypeScript validate the structure
-    return res.status(200).json({
-      success: true,
-      message: "Resume fetched successfully",
-      resume,
+    const authenticatedUserId = Number(req.user.id);
+
+    // Find the resume by ID first
+    const resume = await Resume.findByPk(id);
+
+    // 🛡️ Guard 2: If the resume doesn't exist at all, return a 404, NOT a 401
+    if (!resume) {
+      return res.status(404).json({ message: "Resume not found" });
+    }
+
+    // 🛡️ Guard 3: If the resume belongs to a different user, return a 403 Forbidden
+    if (Number(resume.userId) !== authenticatedUserId) {
+      console.log(`❌ Owner Mismatch: Resume belongs to ${resume.userId}, Request came from ${authenticatedUserId}`);
+      return res.status(403).json({ message: "You do not have permission to view this resume" });
+    }
+
+    // If all checks pass, return the data safely
+    return res.json({ 
+      success: true, 
+      resume 
     });
 
   } catch (error) {
-    console.error("GET RESUME BY ID ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to fetch resume" });
+    console.error("GET RESUME ERROR:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
