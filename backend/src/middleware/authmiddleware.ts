@@ -15,6 +15,7 @@ declare module "express" {
 export const verifyToken = (
   req: Request,
   res: Response,
+  
   next: NextFunction
 ) => {
   // 🛰️ DEFENSIVE GUARD: Look for BOTH lowercase 'authorization' and capitalized 'Authorization'

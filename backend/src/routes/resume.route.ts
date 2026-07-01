@@ -18,3 +18,4 @@ router.get("/:id", optionalToken, getResumeById);
 router.put("/:id", verifyToken, updateResume);
 router.delete("/:id", verifyToken, deleteResume);
 export default router;
+

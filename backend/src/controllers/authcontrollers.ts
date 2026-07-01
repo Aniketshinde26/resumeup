@@ -231,6 +231,11 @@ export const refreshAccessToken = async (req: Request, res: Response<RefreshToke
       success: true,
       message: "Access token refreshed",
       accessToken: newAccessToken,
+      user:{
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+      },
     });
   } catch (error) {
     return res.status(403).json({ success: false, message: "Refresh token expired or invalid" });
@@ -248,15 +253,18 @@ export const logoutUser = async (req: Request, res: Response<AuthMessageResponse
         await user.update({ refreshToken: null });
       }
     }
-  } catch (error) {
-    console.error("LOGOUT DATABASE ERROR:", error);
-  } finally {
-    res.clearCookie("token", cookieOptions);
+    
+    // Clear cookies cleanly upon a successful programmatic request
     res.clearCookie("refreshToken", cookieOptions);
     return res.json({ success: true, message: "Logged out successfully" });
+
+  } catch (error) {
+    console.error("LOGOUT DATABASE ERROR:", error);
+    // Even if database update fails, clear cookies so user isn't trapped in an un-loggable state
+    res.clearCookie("refreshToken", cookieOptions);
+    return res.status(500).json({ success: false, message: "Error clearing session smoothly" });
   }
 };
-
 // --- GITHUB LOGIN ---
 export const githubLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
   const { code } = req.body;

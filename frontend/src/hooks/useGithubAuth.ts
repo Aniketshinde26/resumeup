@@ -3,9 +3,11 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api,{setAccessToken} from "../api/axios"; // Use your configured instance
 import { initiateGithubLogin } from "../services/githubAuth";
+import { useAuth } from "../context/AuthContext";
 export const useGithubAuth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const {login} = useAuth();
   const hasCalled = useRef(false);
 
   const handleSocialClick = (platform: string) => {
@@ -28,7 +30,7 @@ export const useGithubAuth = () => {
           const response = await api.post("auth/github", { code });
 
           if (response.status === 200) {
-            setAccessToken(response.data.accessToken);
+            login(response.data.user, response.data.accessToken);
             navigate("/home", { replace: true });
           }
         } catch (error) {

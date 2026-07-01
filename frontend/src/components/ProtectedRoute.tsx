@@ -1,31 +1,13 @@
-import { useEffect, useState } from "react";
+// src/components/ProtectedRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
-import api, { setAccessToken } from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = () => {
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+  // Use the global centralized auth state instead of local state + useEffect
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // 1. First, get a fresh access token using the httpOnly refresh cookie
-        const { data } = await api.post("/auth/refresh");
-        
-        // 2. Fill the memory vault BEFORE anything else renders
-        setAccessToken(data.accessToken);
-        
-        setIsAuthorized(true);
-      } catch (error) {
-        // Refresh cookie is missing or expired — user must log in
-        setAccessToken(null);
-        setIsAuthorized(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  if (isAuthorized === null) {
+  // 1. While the app is doing its single initial startup handshake, show loading
+  if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
         Loading...
@@ -33,7 +15,8 @@ const ProtectedRoute = () => {
     );
   }
 
-  return isAuthorized ? <Outlet /> : <Navigate to="/login" replace />;
+  // 2. If the check finishes and no user session was recovered, send to login
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

@@ -5,16 +5,11 @@ interface PromiseObject {
   reject: (error: any) => void;
 }
 
-type RetryableRequest = InternalAxiosRequestConfig &{
-  _retry?: boolean;
-}
-
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
-  withCredentials: true, // 🍪 Critical for HttpOnly cookies
+  withCredentials: true, 
 });
 
-// The single source of truth for your short-lived access token
 let accessTokenInMemory: string | null = null;
 
 export const setAccessToken = (token: string | null) => {
@@ -38,12 +33,11 @@ const processQueue = (error: any, token: string | null = null) => {
 // 🛰️ OUTBOUND REQUEST INTERCEPTOR
 api.interceptors.request.use(
   (config) => {
-    // Force read directly from memory variable on every single outbound call
     if (accessTokenInMemory && config.headers) {
       config.headers.set("Authorization", `Bearer ${accessTokenInMemory}`);
     }
 
-      console.log("📤 [Request]:", config.method?.toUpperCase(), config.url,
+    console.log("📤 [Request]:", config.method?.toUpperCase(), config.url,
       "| Auth:", config.headers?.get("Authorization") ? "SET" : "MISSING"
     );
     return config;
@@ -55,14 +49,18 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as RetryableRequest;
+    const originalRequest = error.config;
 
-    if (
-      error.response?.status === 401 &&
-      originalRequest &&
-      !(originalRequest as any)._retry // 🛡️ Check custom header instead of _retry property
-    ) {
-      // If a refresh is already happening, queue up subsequent requests (like the Builder page fetch)
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    // 🛡️ FIX 1: Read retry lock flags safely via headers to guarantee persistence across retries
+    const hasRetried = originalRequest.headers?.get("X-Retry-Attempted") === "true";
+
+    if (error.response?.status === 401 && !hasRetried) {
+      
+      // Queue up overlapping concurrent requests while processing the first refresh token transaction
       if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -76,9 +74,9 @@ api.interceptors.response.use(
           .catch((err) => Promise.reject(err));
       }
 
-      // 🔑 Lock this specific request using an explicit transaction header property
+      // Lock this request instantly using custom headers
       if (originalRequest.headers) {
-       (originalRequest as any)._retry = true;
+        originalRequest.headers.set("X-Retry-Attempted", "true");
       }
       
       isRefreshing = true;
@@ -86,7 +84,6 @@ api.interceptors.response.use(
       try {
         console.log("🔄 [Interceptor]: Access token expired. Refreshing...");
         
-        // Use an isolated axios call to ensure clean header state
         const response = await axios.post(
           "http://localhost:5000/api/auth/refresh",
           {},
@@ -95,7 +92,6 @@ api.interceptors.response.use(
         
         const { accessToken } = response.data;
 
-        // Sync local storage / memory vault immediately
         setAccessToken(accessToken); 
         
         if (originalRequest.headers) {
@@ -103,20 +99,19 @@ api.interceptors.response.use(
         }
 
         isRefreshing = false;
-        
-        // Flush out queued actions with the updated token value
         processQueue(null, accessToken);
 
         console.log("🚀 [Interceptor]: Retrying initial transaction chain.");
-          console.log("🔁 [Interceptor retry]: Headers being sent:", 
-            originalRequest.headers?.get("Authorization")
-        );
         return api(originalRequest);
       } catch (refreshError) {
         isRefreshing = false;
         processQueue(refreshError, null);
         setAccessToken(null);
-        window.location.href = "/login"; 
+        
+        // Prevent application breakage during standard route execution logs
+        if (typeof window !== "undefined") {
+          window.location.href = "/login"; 
+        }
         return Promise.reject(refreshError);
       }
     }

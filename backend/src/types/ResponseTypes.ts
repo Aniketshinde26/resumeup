@@ -67,6 +67,7 @@ export type LoginUserResponse = ApiResponse<{
 
 export type RefreshTokenResponse = ApiResponse<{
   accessToken: string;
+  user: AuthUserPayload;
 }>;
 
 export type AuthMessageResponse = ApiResponse;

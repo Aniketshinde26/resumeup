@@ -11,7 +11,7 @@ import {
 } from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
 import { getMe } from "../controllers/usercontroller";
-import { sendEmail } from "../utils/sendEmail";
+import { oauthLimiter } from "../middleware/rateLimiter";
 const router = Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);

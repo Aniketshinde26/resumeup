@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export default function GoogleAuthButton() {
   const googleButtonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
+  const { login } = useAuth();
   const handleCredentialResponse = async (response: any) => {
     try {
       const res = await api.post("/auth/google", {
@@ -17,6 +18,7 @@ export default function GoogleAuthButton() {
       if (res.data && res.data.accessToken) {
         api.defaults.headers.common["Authorization"] = `Bearer ${res.data.accessToken}`;
       }
+      login(res.data.user, res.data.accessToken);
       navigate("/home");
     } catch (error: any) {
       alert("Google login failed.");
