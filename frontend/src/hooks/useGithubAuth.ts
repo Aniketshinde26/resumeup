@@ -1,7 +1,7 @@
 // src/hooks/useGithubAuth.ts
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import api,{setAccessToken} from "../api/axios"; // Use your configured instance
+import api from "../api/axios"; // Use your configured instance
 import { initiateGithubLogin } from "../services/githubAuth";
 import { useAuth } from "../context/AuthContext";
 export const useGithubAuth = () => {

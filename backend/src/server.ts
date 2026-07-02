@@ -10,7 +10,6 @@ import resumeRoutes from "./routes/resume.route";
 import coverletterRoutes from "./routes/coverletter.route";
 import "./models";
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
 
 const app = express();
 
@@ -38,16 +37,16 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,                 // Limit each IP to 100 requests per 15 mins
-  handler: (req, res) => {
-    res.status(429).json({ 
-      error: "Too many requests from this IP, please try again later." 
-    });
-  }
-});
-app.use("/api/", apiLimiter);
+// const apiLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100,                 // Limit each IP to 100 requests per 15 mins
+//   handler: (req, res) => {
+//     res.status(429).json({ 
+//       error: "Too many requests from this IP, please try again later." 
+//     });
+//   }
+// });
+// app.use("/api/", apiLimiter);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);

@@ -9,13 +9,14 @@ import {
   updateResume,
   deleteResume,
 } from "../controllers/resumeController";
+import { builderLimiter } from "../middleware/rateLimiter";
 
 const router = Router();
 
 router.post("/", verifyToken, createResume);
 router.get("/", optionalToken, getAllResumes);
 router.get("/:id", optionalToken, getResumeById);
-router.put("/:id", verifyToken, updateResume);
+router.put("/:id", builderLimiter, verifyToken, updateResume);
 router.delete("/:id", verifyToken, deleteResume);
 export default router;
 

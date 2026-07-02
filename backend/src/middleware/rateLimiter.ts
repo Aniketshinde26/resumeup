@@ -18,7 +18,7 @@ const config = {
     },
     builder: {
         windowMs: 1 * 60 * 1000, 
-        max: 30, 
+        max: 5, 
         message: "You are saving documents too quickly. Please wait a moment."
     }
 };
