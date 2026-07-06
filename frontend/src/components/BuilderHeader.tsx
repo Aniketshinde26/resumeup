@@ -14,7 +14,7 @@ interface BuilderHeaderProps {
 
 export default function BuilderHeader({
   productName,
-  productSuffix = "Up",
+  productSuffix = "Pro",
   accentColor,
   buttonColor,
   docTitle,

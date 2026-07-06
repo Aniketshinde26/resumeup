@@ -1,11 +1,13 @@
 // hooks/useLogin.ts
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import api,{setAccessToken} from "../api/axios";
+import api from "../api/axios";
+import {useAuth} from "../context/AuthContext";
 import type { AuthResponse } from "../types/user";
 import { initiateGithubLogin } from "../services/githubAuth";
 export const useLogin = () => {
   const navigate = useNavigate();
+  const {login} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +25,7 @@ export const useLogin = () => {
       });
 
    if (res.data.accessToken) {
-  setAccessToken(res.data.accessToken); // 🔑 Lock it in memory vault
+  login(res.data.user,res.data.accessToken); // 🔑 Lock it in memory vault
   navigate("/home", { replace: true });
 }
     } catch (err: any) {

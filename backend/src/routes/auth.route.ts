@@ -11,7 +11,7 @@ import {
 } from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
 // import { getMe } from "../controllers/usercontroller";
-import { authLimiter, oauthLimiter } from "../middleware/rateLimiter";
+import { authLimiter, oauthLimiter, forgotPasswordLimiter } from "../middleware/rateLimiter";
 const router = Router();
 router.post("/register", authLimiter, registerUser);
 router.post("/login", authLimiter, loginUser);
@@ -19,7 +19,7 @@ router.post("/logout", logoutUser);
 router.post("/google", oauthLimiter, googleLogin);
 // router.get("/me", verifyToken, getMe);
 router.post("/refresh", refreshAccessToken);
-router.post("/forgot-password", forgotPassword);
+router.post("/forgot-password", forgotPasswordLimiter, forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 router.post("/github", oauthLimiter, githubLogin);
 router.get("/protected", verifyToken, (req, res) => {

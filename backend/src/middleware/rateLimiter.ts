@@ -20,6 +20,11 @@ const config = {
         windowMs: 1 * 60 * 1000, 
         max: 5, 
         message: "You are saving documents too quickly. Please wait a moment."
+    },
+    forgotpassword: {
+        windowMs: 1 * 60  * 1000,
+        max: 5,
+        message: "You have already sent request"
     }
 };
 
@@ -48,4 +53,9 @@ export const dashboardLimiter = rateLimit({
 export const builderLimiter = rateLimit({
     ...config.builder,
     handler: createHandler(config.builder.message)
+});
+
+export const forgotPasswordLimiter = rateLimit({
+    ...config.forgotpassword,
+    handler: createHandler(config.forgotpassword.message)
 });

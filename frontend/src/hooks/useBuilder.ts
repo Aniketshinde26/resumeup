@@ -6,7 +6,6 @@ import type { ResumeByIdResponse } from "../types/api";
 import { createEmptyResumeData } from "../types/templateindex";
 import {ResumeService} from "../types/resumeService";
 const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
-import axios from "../api/axios";
 export const useBuilder = () => {
   const { id } = useParams<{ id: string }>();
  
