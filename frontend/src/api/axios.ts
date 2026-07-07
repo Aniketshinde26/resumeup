@@ -1,5 +1,10 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 
+// Extend the Axios config interface slightly to avoid TypeScript compiler complaints
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
+
 interface PromiseObject {
   resolve: (token: string) => void;
   reject: (error: any) => void;
@@ -49,16 +54,14 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as CustomAxiosRequestConfig;
 
     if (!originalRequest) {
       return Promise.reject(error);
     }
 
-    // 🛡️ FIX 1: Read retry lock flags safely via headers to guarantee persistence across retries
-    const hasRetried = originalRequest.headers?.get("X-Retry-Attempted") === "true";
-
-    if (error.response?.status === 401 && !hasRetried) {
+    // 🛡️ CRITICAL FIX: Read retry lock directly from the config root, NOT headers
+    if (error.response?.status === 401 && !originalRequest._retry) {
       
       // Queue up overlapping concurrent requests while processing the first refresh token transaction
       if (isRefreshing) {
@@ -74,11 +77,8 @@ api.interceptors.response.use(
           .catch((err) => Promise.reject(err));
       }
 
-      // Lock this request instantly using custom headers
-      if (originalRequest.headers) {
-        originalRequest.headers.set("X-Retry-Attempted", "true");
-      }
-      
+      // Lock this request instantly right on the root config object
+      originalRequest._retry = true;
       isRefreshing = true;
 
       try {
@@ -108,7 +108,6 @@ api.interceptors.response.use(
         processQueue(refreshError, null);
         setAccessToken(null);
         
-        // Prevent application breakage during standard route execution logs
         if (typeof window !== "undefined") {
           window.location.href = "/login"; 
         }

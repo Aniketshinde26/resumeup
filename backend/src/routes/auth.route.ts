@@ -22,13 +22,12 @@ router.post("/refresh", refreshAccessToken);
 router.post("/forgot-password", forgotPasswordLimiter, forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 router.post("/github", oauthLimiter, githubLogin);
-router.get("/protected", verifyToken, (req, res) => {
-  res.json({
-    message: "Token is Valid",
-    user: req.user,
-  });
-});
 
-
-
+// using refresh instead of /protected route to verify token and get user info
+// router.get("/protected", verifyToken, (req, res) => {
+//   res.json({
+//     message: "Token is Valid",
+//     user: req.user,
+//   });
+// });
 export default router;
