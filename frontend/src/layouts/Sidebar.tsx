@@ -38,18 +38,14 @@ export default function DashboardLayout() {
 
 const handleLogout = async () => {
     try {
-      // 1. Fire the standard engine process 
       await logout();
-      // If successful, redirect right away
       navigate("/login");
-    } catch (error: any) {
-      console.error("Sidebar caught logout error:", error);
-      
-      // 2. If blocked by the rate limiter (or any network error), 
-      // let the toast run its animation first before pushing the user out!
+    } catch (err) {
+      console.warn("Logout request was rate limited by backend.");
+      // If rate limited, wait 1 second so the toast message handles its entrance animation smoothly
       setTimeout(() => {
         navigate("/login");
-      }, 800); // 800ms gives the popup plenty of time to glide into view safely
+      }, 1000);
     }
   };
 

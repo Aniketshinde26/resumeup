@@ -26,7 +26,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <I18nextProvider i18n={i18n}>
-          <Toaster position="top-right" reverseOrder={false} />
+          <Toaster position="top-right" reverseOrder={false} containerStyle = {{ zIndex: 99999 }} />
           <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
             <Routes>
               {/* Public Routes */}

@@ -33,15 +33,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userData);
   };
 
-  const logout = async () => {
+const logout = async () => {
     try {
       await api.post('/auth/logout');
-      
+      setUser(null);
+      setAccessToken(null);
     } catch (err) {
       console.error("Logout request failed:", err);
-    } finally {
-      setUser(null);
-      setAccessToken(null); // Clears from context and Axios instance cleanly
+      // 🛠️ CRITICAL FIX: Re-throw the error so the Sidebar's catch block knows it failed!
+      throw err; 
     }
   };
 

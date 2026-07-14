@@ -73,9 +73,10 @@ api.interceptors.response.use(
           fontWeight: '600',
           borderRadius: '12px',
         },
+       
       });
 
-      
+       return Promise.reject(error);
     }
 
     if (!originalRequest) {
