@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check} from "lucide-react";
 import { useTranslation } from "react-i18next";
-import api from "../api/axios";
 import ThemeToggle from "../components/ThemeToggle";
+import { useAuth } from "../context/AuthContext";
 
 export default function DashboardLayout() {
   const { pathname } = useLocation();
@@ -11,7 +11,7 @@ export default function DashboardLayout() {
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'sidebar' });
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
-
+  const { logout } = useAuth();
   const languages = [
     { code: 'en', label: 'English' },
     { code: 'hi', label: 'हिन्दी' },
@@ -36,14 +36,20 @@ export default function DashboardLayout() {
 
   ];
 
-  const handleLogout = async () => {
+const handleLogout = async () => {
     try {
-      await api.post("/auth/logout");
-    } catch (error) {
-      console.error("Error during server logout:", error);
-    } finally {
-      localStorage.removeItem("token");
+      // 1. Fire the standard engine process 
+      await logout();
+      // If successful, redirect right away
       navigate("/login");
+    } catch (error: any) {
+      console.error("Sidebar caught logout error:", error);
+      
+      // 2. If blocked by the rate limiter (or any network error), 
+      // let the toast run its animation first before pushing the user out!
+      setTimeout(() => {
+        navigate("/login");
+      }, 800); // 800ms gives the popup plenty of time to glide into view safely
     }
   };
 

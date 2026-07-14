@@ -86,7 +86,7 @@ export const getAllResumes = async (
  * @return Single resume if found and belongs to user (200), 404 if not found, 401 if unauthorized
   */
 
-// backend/controllers/resumeController.ts (or wherever your route logic lives)
+
 
 export const getResumeById = async (req: Request, res: Response) => {
   try {

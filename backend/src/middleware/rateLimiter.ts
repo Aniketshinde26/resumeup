@@ -25,6 +25,16 @@ const config = {
         windowMs: 1 * 60  * 1000,
         max: 5,
         message: "You have already sent request"
+    },
+    logout:{
+        windowMs: 1 * 60 * 1000,
+        max: 10,
+        message: "Too many logout attempts. Please try again later."
+    },
+    refresh:{
+        windowMs: 15 * 60 * 1000,
+        max: 40,
+        message: "Too many refresh attempts. Please try again later."
     }
 };
 
@@ -34,7 +44,7 @@ const createHandler = (customMessage: string) => {
     };
 };
 
-// Fixed syntax below (removed trailing '{' from the skip lines)
+
 export const authLimiter = rateLimit({
     ...config.auth,
     handler: createHandler(config.auth.message)
@@ -58,4 +68,14 @@ export const builderLimiter = rateLimit({
 export const forgotPasswordLimiter = rateLimit({
     ...config.forgotpassword,
     handler: createHandler(config.forgotpassword.message)
+});
+
+export const logoutLimiter = rateLimit({
+    ...config.logout,
+    handler: createHandler(config.logout.message)
+});
+
+export const refreshLimiter = rateLimit({
+    ...config.refresh,
+    handler: createHandler(config.refresh.message)
 });

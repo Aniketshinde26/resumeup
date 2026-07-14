@@ -1,4 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import toast from "react-hot-toast"; // 🛠️ 1. IMPORT TOAST AT THE TOP
 
 // Extend the Axios config interface slightly to avoid TypeScript compiler complaints
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -55,6 +56,27 @@ api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
+
+    // 🛠️ 2. GLOBAL RATE LIMIT CATCHER (429)
+    if (error.response?.status === 429) {
+      // Safely access the custom message sent by your backend createHandler wrapper
+      const responseData = error.response.data as { error?: string };
+      const rateLimitMessage = responseData?.error || "Too many requests. Please slow down.";
+
+      // Fire the toast alert visually inside the browser UI view layer
+      toast.error(rateLimitMessage, {
+        duration: 4000, // Stays visible for 4 seconds
+        id: "rate-limit-toast", // Fixed unique ID avoids stacking duplicate overlays if hammered quickly
+        style: {
+          background: '#1e293b', // Matches a dark slate color panel theme
+          color: '#fff',
+          fontWeight: '600',
+          borderRadius: '12px',
+        },
+      });
+
+      
+    }
 
     if (!originalRequest) {
       return Promise.reject(error);

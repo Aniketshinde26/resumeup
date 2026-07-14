@@ -19,12 +19,14 @@ import CoverLetterBuilder from "./pages/CoverLetterBuilder";
 import CoverLetterPreview from "./pages/CoverLetterPreview";
 import { ThemeProvider } from "./context/ThemeContext"; 
 import { AuthProvider } from "./context/AuthContext";
+import {Toaster} from "react-hot-toast";
 
 export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <I18nextProvider i18n={i18n}>
+          <Toaster position="top-right" reverseOrder={false} />
           <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
             <Routes>
               {/* Public Routes */}

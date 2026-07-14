@@ -11,14 +11,13 @@ import {
 } from "../controllers/authcontrollers";
 import { verifyToken } from "../middleware/authmiddleware";
 // import { getMe } from "../controllers/usercontroller";
-import { authLimiter, oauthLimiter, forgotPasswordLimiter } from "../middleware/rateLimiter";
+import { authLimiter, oauthLimiter, forgotPasswordLimiter, logoutLimiter,refreshLimiter } from "../middleware/rateLimiter";
 const router = Router();
 router.post("/register", authLimiter, registerUser);
 router.post("/login", authLimiter, loginUser);
-router.post("/logout", logoutUser);
+router.post("/logout", logoutLimiter, logoutUser);
 router.post("/google", oauthLimiter, googleLogin);
-// router.get("/me", verifyToken, getMe);
-router.post("/refresh", refreshAccessToken);
+router.post("/refresh", refreshLimiter, refreshAccessToken);
 router.post("/forgot-password", forgotPasswordLimiter, forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 router.post("/github", oauthLimiter, githubLogin);
@@ -28,6 +27,7 @@ router.post("/github", oauthLimiter, githubLogin);
 //   res.json({
 //     message: "Token is Valid",
 //     user: req.user,
+
 //   });
 // });
 export default router;
