@@ -39,8 +39,8 @@ export default function Login() {
             <div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
               <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 2px)`, backgroundSize: '24px 24px' }} />
               {/* Larger Glowing Blobs */}
-              <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-brand-primary/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/10 rounded-full blur-2xl" />
+              <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-yellow-500/15 rounded-full blur-3xl" />
+              <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/20 rounded-full blur-2xl" />
 
               <div className="relative z-10">
                 <div className="flex items-center gap-2.5 mb-8">

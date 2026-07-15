@@ -21,8 +21,10 @@ export default function CoverLetterDashboard() {
     } = useCoverLetterDashboard();
 
   return (
+    <>
+    <div className="-m-8">
  <GridBackground>
-    <div className="p-8" max-w-7xl mx-auto>
+    <div className="p-8 max-w-7xl mx-auto w-full">
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6 text-(--color-text)"> {t('start_new')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -91,7 +93,12 @@ export default function CoverLetterDashboard() {
            </section>
 
 
-<CreateItemModal
+
+    </div>
+    </GridBackground>
+    </div>
+
+    <CreateItemModal
     isOpen={isModalOpen}
     onClose={() => {setIsModalOpen(false)}}
     onCreate={handleCreateCoverLetter}
@@ -99,7 +106,6 @@ export default function CoverLetterDashboard() {
     type="Cover Letter"
 
   />
-    </div>
-    </GridBackground>
+    </>
   );
 }

@@ -22,8 +22,10 @@ export default function Dashboard() {
   } = useDashboard();
 
   return (
+    <>
+    <div className="-m-8">
     <GridBackground>
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto w-full">
       {/* 1. START NEW Section */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-(--color-text)">
@@ -96,15 +98,18 @@ export default function Dashboard() {
           </SkeletonWrapper>
         </div>
       </section>
-
-      <CreateItemModal
+    </div>
+    </GridBackground>
+    </div>
+<CreateItemModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreate={handleCreate}
         isLoading={isLoading}
         type="Resume"
       />
-    </div>
-    </GridBackground>
+
+
+    </>
   );
 }
