@@ -14,8 +14,7 @@ export const useForgotPassword = () => {
     setError("");
 
     try {
-      // Note: In the future, replace the hardcoded URL with your env variable
-// src/hooks/useForgotPassword.ts
+      
 const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });      setMessage(response.data.message);
     } catch (err: any) {
       setError(err.response?.data?.message || "Something went wrong. Please try again.");

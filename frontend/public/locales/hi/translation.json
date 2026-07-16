@@ -74,6 +74,19 @@
     "saved": "सहेजा गया",
     "download_pdf": "पीडीएफ डाउनलोड करें",
   "changes_unsaved": "बदलाव सहेजे नहीं गए"
+  },
+  "forgotpassword": {
+    "reset_password": "पासवर्ड रीसेट करें",
+    "enter_email_receive_reset_link": "रीसेट लिंक प्राप्त करने के लिए अपना ईमेल दर्ज करें।",
+    "email": "ईमेल",
+    "enter_email": "जैसे: alex@work.com",
+    "send_reset_link": "रीसेट लिंक भेजें",
+    "sending": "भेजा जा रहा है...",
+    "remembered_it": "याद आ गया?",
+    "back_to_sign_in": "साइन इन पर वापस जाएं",
+    "reset_link_sent_success": "रीसेट लिंक आपके ईमेल पर भेज दिया गया है!"
   }
+
+
 }
   

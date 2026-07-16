@@ -73,6 +73,16 @@
     "saved":"Saved",
     "download_pdf":"Download PDF",
     "changes_unsaved":"Changes Unsaved"
-  }
-  
+  },
+  "forgotpassword":{
+    "reset_password": "Reset Password",
+    "enter_email_receive_reset_link": "Enter your email to receive a reset link.",
+    "email": "Email",
+    "enter_email": "e.g. alex@work.com",
+    "send_reset_link": "Send Reset Link",
+    "sending": "Sending...",
+    "remembered_it": "Remembered it?",
+    "back_to_sign_in": "Back to Sign In",
+    "reset_link_sent_success": "Reset link sent to your email!"
+  } 
 }

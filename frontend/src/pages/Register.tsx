@@ -24,19 +24,22 @@ export default function Register() {
   const { handleSocialClick } = useGithubAuth();
 
   return (
+    <>
+    
     <GridBackground>
-      <div className="flex items-center justify-center p-4 sm:p-6 font-sans">    
-        <div className="w-full max-w-7xl flex flex-col">
+     
+<div className="min-h-screen w-full p-4 sm:p-8 max-w-7xl mx-auto flex items-center justify-center font-sans"> 
+         <div className="w-full flex-col">
           
           <div className="flex flex-col lg:flex-row w-full min-h-[700px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
             
             {/* LEFT SECTION: BRAND & SHOWCASE */}
             <div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
-              <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 2px)`, backgroundSize: '24px 24px' }} />
+              {/* <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 2px)`, backgroundSize: '24px 24px' }} /> */}
               
               {/* Glowing Blobs */}
-              <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-brand-primary/10 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/10 rounded-full blur-2xl" />
+              <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-yellow-500/15 rounded-full blur-3xl animate-pulse" />
+              <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/20 rounded-full blur-2xl" />
 
               <div className="relative z-10">
                 {/* Logo */}
@@ -219,6 +222,9 @@ export default function Register() {
           
         </div>
       </div>
+            
     </GridBackground>
+  
+    </>
   );
 }

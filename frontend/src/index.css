@@ -66,5 +66,6 @@ body {
   background-color: var(--color-brand-surface);
   color: var(--color-text-main);
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 

@@ -72,5 +72,18 @@
     "saved": "बचत गरियो",
     "download_pdf": "PDF डाउनलोड गर्नुहोस्",
     "changes_unsaved": "परिवर्तनहरू बचत भएका छैनन्"
+  },
+  "forgotpassword": {
+    "reset_password": "पासवर्ड रिसेट गर्नुहोस्",
+    "enter_email_receive_reset_link": "रिसेट लिंक प्राप्त गर्न आफ्नो इमेल प्रविष्ट गर्नुहोस्।",
+    "email": "इमेल",
+    "enter_email": "जस्तै: alex@work.com",
+    "send_reset_link": "रिसेट लिंक पठाउनुहोस्",
+    "sending": "पठाउँदै...",
+    "remembered_it": "याद आयो?",
+    "back_to_sign_in": "साइन इनमा फिर्ता जानुहोस्",
+    "reset_link_sent_success": "रिसेट लिङ्क तपाईंको इमेलमा पठाइएको छ!"
   }
+
+
 }
