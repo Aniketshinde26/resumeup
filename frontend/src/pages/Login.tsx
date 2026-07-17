@@ -30,10 +30,10 @@ export default function Login() {
 
   return (
     <>
-    <div className="-m-3">
+    <div className="-m-2">
     <GridBackground>
-      <div className="p-8 max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-center p-4 sm:p-6 font-sans">    
+      <div className="p-3 max-w-7xl mx-auto w-full">
+      <div className="flex items-center justify-center p-2 sm:p-8 font-sans">    
         
         <div className="w-full max-w-7xl flex flex-col">
           <div className="flex flex-col lg:flex-row w-full min-h-[700px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)]">        
