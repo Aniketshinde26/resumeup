@@ -1,6 +1,7 @@
 import rateLimit from 'express-rate-limit';
 
 const config = {
+    
     auth: {
         windowMs: 15 * 60 * 1000, 
         max: 5, 
@@ -35,6 +36,11 @@ const config = {
         windowMs: 15 * 60 * 1000,
         max: 40,
         message: "Too many refresh attempts. Please try again later."
+    },
+    login:{
+        windowMs: 1 * 60 * 1000,
+        max: 2,
+        message: "Too many login attempts. Please try again later."
     }
 };
 
@@ -43,7 +49,6 @@ const createHandler = (customMessage: string) => {
         res.status(429).json({ error: customMessage });
     };
 };
-
 
 export const authLimiter = rateLimit({
     ...config.auth,
@@ -77,5 +82,12 @@ export const logoutLimiter = rateLimit({
 
 export const refreshLimiter = rateLimit({
     ...config.refresh,
-    handler: createHandler(config.refresh.message)
+    handler: createHandler(config.refresh.
+        message)
+});
+
+
+export const loginLimiter = rateLimit({
+    ...config.login,
+    handler: createHandler(config.login.message)
 });

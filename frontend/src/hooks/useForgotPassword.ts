@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios"; 
 
 export const useForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -14,10 +14,13 @@ export const useForgotPassword = () => {
     setError("");
 
     try {
-      
-const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });      setMessage(response.data.message);
+     
+      const response = await api.post("/auth/forgot-password", { email }); 
+      setMessage(response.data.message);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      if (err.response?.status !== 429) {
+        setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
