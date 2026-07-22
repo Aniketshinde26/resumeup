@@ -41,7 +41,18 @@ const config = {
         windowMs: 1 * 60 * 1000,
         max: 2,
         message: "Too many login attempts. Please try again later."
+    },
+    resumecreation:{
+        windowMs: 1 * 60 * 1000,
+        max: 10,
+        message: "You are creating resumes too quickly. Please wait a moment."
+    },
+    deleteResume:{
+        windowMs: 1 * 60 * 1000,
+        max: 20,
+        message: "You are deleting resumes too quickly. Please wait a moment."
     }
+
 };
 
 const createHandler = (customMessage: string) => {
@@ -86,8 +97,17 @@ export const refreshLimiter = rateLimit({
         message)
 });
 
-
 export const loginLimiter = rateLimit({
     ...config.login,
     handler: createHandler(config.login.message)
+});
+
+export const resumeCreationLimiter = rateLimit({
+    ...config.resumecreation,
+    handler: createHandler(config.resumecreation.message)
+});
+
+export const deleteResumeLimiter = rateLimit({
+    ...config.deleteResume,
+    handler: createHandler(config.deleteResume.message)
 });

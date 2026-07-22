@@ -47,7 +47,7 @@ export const useDashboard = () => {
       
     } catch (err) {
       console.error("Creation failed", err);
-      alert("Could not create resume. Please try again.");
+
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +66,6 @@ export const useDashboard = () => {
       console.log("Resume deleted successfully");
     } catch (err) {
       console.error("Failed to delete resume", err);
-      alert("Failed to delete resume. Please try again."); 
     } 
   };  
   

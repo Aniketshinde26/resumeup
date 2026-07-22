@@ -30,7 +30,7 @@ export default function Login() {
 
   return (
     <>
-    <div className="-m-2">
+    <div className="-m-1">
     <GridBackground>
       <div className="p-3 max-w-7xl mx-auto w-full">
       <div className="flex items-center justify-center p-2 sm:p-8 font-sans">    

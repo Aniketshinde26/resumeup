@@ -1,4 +1,4 @@
-// src/routes/resume.route.ts
+  // src/routes/resume.route.ts
 import { Router } from "express";
 import { verifyToken } from "../middleware/authmiddleware";
 import { optionalToken } from "../middleware/authmiddleware";
@@ -9,14 +9,14 @@ import {
   updateResume,
   deleteResume,
 } from "../controllers/resumeController";
-import { builderLimiter } from "../middleware/rateLimiter";
+import { builderLimiter, resumeCreationLimiter, deleteResumeLimiter } from "../middleware/rateLimiter";
 
 const router = Router();
 
-router.post("/", verifyToken, createResume);
+router.post("/", verifyToken, resumeCreationLimiter, createResume);
 router.get("/", optionalToken, getAllResumes);
 router.get("/:id", optionalToken, getResumeById);
 router.put("/:id", verifyToken, updateResume);
-router.delete("/:id", verifyToken, deleteResume);
+router.delete("/:id", verifyToken, deleteResumeLimiter, deleteResume);
 export default router;
 
