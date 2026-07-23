@@ -9,7 +9,6 @@ import {
   forgotPassword,
   resetPassword,
 } from "../controllers/authcontrollers";
-import { verifyToken } from "../middleware/authmiddleware";
 import { authLimiter, oauthLimiter, forgotPasswordLimiter, logoutLimiter,refreshLimiter, loginLimiter } from "../middleware/rateLimiter";
 const router = Router();
 router.post("/register", authLimiter, registerUser);

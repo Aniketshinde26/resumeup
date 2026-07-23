@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { verifyToken } from "../middleware/authmiddleware";
-import { optionalToken } from "../middleware/authmiddleware";
+import { optionalToken, verifyToken } from "../middleware/authmiddleware";
 import {
   getAllCoverLetters,createCoverLetter,updateCoverLetter,deleteCoverLetter,getCoverLetterById
 } from "../controllers/coverletterContoller";
+import { coverLetterBuilderLimiter, CoverLetterCreationLimiter, deleteCoverLetterLimiter, getCoverLettersLimiter, getSingleCoverLetterLimiter } from "../middleware/rateLimiter";  
 
 const router = Router();    
-router.post("/", verifyToken, createCoverLetter);
-router.get("/", optionalToken, getAllCoverLetters);
-router.get("/:id", optionalToken, getCoverLetterById);
-router.put("/:id", verifyToken, updateCoverLetter);
-router.delete("/:id", verifyToken, deleteCoverLetter);
+router.post("/", verifyToken, CoverLetterCreationLimiter, createCoverLetter);
+router.get("/", optionalToken, getCoverLettersLimiter, getAllCoverLetters);
+router.get("/:id", optionalToken, getSingleCoverLetterLimiter, getCoverLetterById);
+router.put("/:id", verifyToken, coverLetterBuilderLimiter, updateCoverLetter);
+router.delete("/:id", verifyToken, deleteCoverLetterLimiter,deleteCoverLetter);
 export default router;
 
 
