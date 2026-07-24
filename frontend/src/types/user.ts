@@ -6,7 +6,6 @@ export interface User {
   createdAt?: string;
 }
 
-// You can also define your Auth state here
 export interface AuthResponse {
   accessToken: string;
   user: User;

@@ -1,5 +1,5 @@
-import rateLimit from 'express-rate-limit';
-import { CoverLetter } from '../models';
+import rateLimit, {ipKeyGenerator}from 'express-rate-limit';
+
 
 const config = {
     auth: {
@@ -91,7 +91,6 @@ const config = {
 
 };
 
-
 const createHandler = (customMessage: string) => {
     return (req: any, res: any) => {
         res.status(429).json({ error: customMessage });
@@ -100,7 +99,12 @@ const createHandler = (customMessage: string) => {
 
 // Dynamic key generator: Uses User ID if logged in, falls back to IP address
 const getUserOrIpKey = (req: any) => {
-    return req.user?.id || req.user?._id ? `user_${req.user.id || req.user._id}` : req.ip;
+    const userId = req.user?.id || req.user?._id;
+    if (userId) {
+        return `user_${userId}`;
+    }
+    // Wraps raw req.ip with ipKeyGenerator to safely format IPv4 & IPv6 addresses
+    return ipKeyGenerator(req.ip || '');
 };
 
 // --- IP-BASED LIMITERS (For Unauthenticated Routes) ---
