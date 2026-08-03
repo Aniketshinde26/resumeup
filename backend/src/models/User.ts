@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../config/db";
 import { UserAttributes, UserCreationAttributes } from "../types/UserTypes";
 
@@ -12,12 +12,13 @@ class User
   public password!: string;
   public refreshToken!: string | null;
   public googleId!: string | null;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public githubId!: string |null; 
+  public githubId!: string | null; 
   public resetPasswordToken!: string | null;
   public resetPasswordExpires!: Date | null;
+  public resetPasswordRequestedAt!: Date | null; // 👈 1. Added class property
   public passwordChangedAt!: Date | null;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 User.init(
@@ -62,18 +63,20 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true,
     },
-    passwordChangedAt:{
-      type:DataTypes.DATE,
-      allowNull:true,
+    resetPasswordRequestedAt: { // 👈 2. Added Sequelize column definition
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    passwordChangedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {
     sequelize,
     modelName: "User",
     tableName: "users",
-  },
-  
-
+  }
 );
 
 export default User;

@@ -42,7 +42,6 @@ const handleLogout = async () => {
       navigate("/login");
     } catch (err) {
       console.warn("Logout request was rate limited by backend.");
-      // If rate limited, wait 1 second so the toast message handles its entrance animation smoothly
       setTimeout(() => {
         navigate("/login");
       }, 1000);

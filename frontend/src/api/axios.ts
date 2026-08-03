@@ -60,8 +60,8 @@ api.interceptors.response.use(
     // 🛠️ 2. GLOBAL RATE LIMIT CATCHER (429)
     if (error.response?.status === 429) {
       // Safely access the custom message sent by your backend createHandler wrapper
-      const responseData = error.response.data as { error?: string };
-      const rateLimitMessage = responseData?.error || "Too many requests. Please slow down.";
+      const responseData = error.response.data as { message?: string; error?: string };
+      const rateLimitMessage = responseData?.message || responseData?.error || "Too many requests. Please slow down.";
 
       // Fire the toast alert visually inside the browser UI view layer
       toast.error(rateLimitMessage, {

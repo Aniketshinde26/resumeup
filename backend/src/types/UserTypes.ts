@@ -7,12 +7,14 @@ export interface UserAttributes {
   password: string;
   refreshToken: string | null;
   googleId: string | null;
-  githubId:string|null;
+  githubId: string | null;
   createdAt?: Date; 
   updatedAt?: Date; 
   resetPasswordToken?: string | null;
   resetPasswordExpires?: Date | null;
   passwordChangedAt?: Date | null;
+  resetPasswordRequestedAt?: Date | null;
+
 }
 
 export interface UserCreationAttributes

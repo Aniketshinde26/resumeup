@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import type { CoverLetter } from "../types/templateindex";
+import type { coverLetter } from "../types/templateindex";
 import type { CreateCoverLetterResponse, DeleteCoverLetterResponse, FetchCoverLettersResponse } from "../types/api";
 
 export const useCoverLetterDashboard = () => {
-  const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
+  const [coverLetters, setCoverLetters] = useState<coverLetter[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState("");   
   const [isModalOpen, setIsModalOpen] = useState(false);  

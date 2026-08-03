@@ -8,7 +8,7 @@ import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
 import { UserAttributes } from "../types/UserTypes";
 import { RegisterUserResponse, LoginUserResponse, AuthMessageResponse, RefreshTokenResponse } from "../types/ResponseTypes";
-import { Op } from "sequelize"; // Imported cleanly for resetPassword
+import { Op } from "sequelize"; 
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -92,6 +92,7 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
       return res.status(400).json({ success: false, message: "User not found" });
     }
 
+
     if (!user.password || user.password === "") {
       return res.status(400).json({
         success: false,
@@ -107,20 +108,18 @@ export const loginUser = async (req: Request, res: Response<LoginUserResponse>) 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // Save the refresh token to the database
     await user.update({ refreshToken });
-
-    // 1. Send the REFRESH TOKEN in a secure, httpOnly cookie
+   
  res.cookie("refreshToken", refreshToken, {
   ...cookieOptions,
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 7 * 24 * 60 * 60 * 1000, 
 })
 
-    // 2. Return ONLY the accessToken and user data in the JSON body
+   
     return res.json({
       success: true,
       message: "Login successful",
-      accessToken, // Frontend reads this and keeps it in memory (React State/Zustand)
+      accessToken,
       user: { 
         id: user.id, 
         email: user.email, 
@@ -173,16 +172,15 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // Save the refresh token to the database
+    
     await user.update({ refreshToken });
 
-    // 1. Send the REFRESH TOKEN in your secure, httpOnly cookie
+
  res.cookie("refreshToken", refreshToken, {
   ...cookieOptions,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
-    // 2. Return ONLY the accessToken and user payload in the JSON body
     return res.status(200).json({
       success: true,
       message: "Google login successful",
@@ -201,7 +199,6 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
 };
 
 // --- REFRESH ACCESS TOKEN ---
-// backend/controllers/authController.ts
 
 export const refreshAccessToken = async (req: Request, res: Response<RefreshTokenResponse>) => {
   try {
@@ -222,10 +219,7 @@ export const refreshAccessToken = async (req: Request, res: Response<RefreshToke
       return res.status(403).json({ success: false, message: "Invalid refresh token" });
     }
 
-    //  FIX: Convert the Sequelize instance into a plain JavaScript object
     const plainUserData = user.get({ plain: true }) as UserAttributes;
-
-    // Pass the clean object to generate a valid, uncorrupted JWT
     const newAccessToken = generateAccessToken(plainUserData);
 
     return res.json({
@@ -255,13 +249,11 @@ export const logoutUser = async (req: Request, res: Response<AuthMessageResponse
       }
     }
     
-    // Clear cookies cleanly upon a successful programmatic request
     res.clearCookie("refreshToken", cookieOptions);
     return res.json({ success: true, message: "Logged out successfully" });
 
   } catch (error) {
     console.error("LOGOUT DATABASE ERROR:", error);
-    // Even if database update fails, clear cookies so user isn't trapped in an un-loggable state
     res.clearCookie("refreshToken", cookieOptions);
     return res.status(500).json({ success: false, message: "Error clearing session smoothly" });
   }
@@ -314,11 +306,8 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
 
-    // Save the refresh token to your database
-    await user.update({ refreshToken: newRefreshToken });
 
-    // 1. Send the long-lived REFRESH TOKEN in your secure, httpOnly cookie
- // Save the refresh token to your database
+
 await user.update({ refreshToken: newRefreshToken });
 
 res.cookie("refreshToken", newRefreshToken, {
@@ -326,11 +315,10 @@ res.cookie("refreshToken", newRefreshToken, {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
-    // 2. Return ONLY the accessToken and user payload in the JSON body
     return res.status(200).json({
       success: true,
       message: "GitHub login successful",
-      accessToken: newAccessToken, // Perfectly safe for frontend state
+      accessToken: newAccessToken, 
       user: { 
         id: user.id, 
         email: user.email, 
@@ -347,82 +335,91 @@ res.cookie("refreshToken", newRefreshToken, {
 
 
 // --- FORGOT PASSWORD ---
-export const forgotPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
-  const { email } = req.body;
+export const forgotPassword = async (req: Request, res: Response): Promise<Response> => {
+  console.log("-----------------------------------------");
+  console.log("1. 🚀 HIT FORGOT PASSWORD CONTROLLER");
 
   try {
-    const user = await User.findOne({ where: { email } });
-
-    if (!user) {
-      return res.status(200).json({ success: true, message: "If an account exists with that email, a reset link has been sent." });
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
     }
 
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    const isDev = process.env.NODE_ENV === "development";
-    
-    // 🛠️ FIX 1: Aligning cooldown configs correctly
-    const coolDownPeriodInMs = isDev 
-      ? 2 * 60 * 1000        // 2 minutes for local dev testing
-      : 7 * oneDayInMs;      // 7 days for production security
-
+    const sanitizedEmail = email.toLowerCase().trim();
     const currentTime = Date.now();
+    const isDev = process.env.NODE_ENV === "development";
 
-    // 🚨 GUARD 1: New Account Filter (Check registration age)
-    const accountAgeInMs = currentTime - new Date(user.createdAt).getTime();
-    if (accountAgeInMs < coolDownPeriodInMs) {
-      const timeRemaining = coolDownPeriodInMs - accountAgeInMs;
-      
-      // 🛠️ FIX 2: Dynamic unit rendering so Dev shows minutes/seconds and Prod shows days
-      const unitRemaining = isDev
-        ? `${Math.ceil(timeRemaining / (60 * 1000))} minute(s)`
-        : `${Math.ceil(timeRemaining / oneDayInMs)} day(s)`;
+    const user = await User.findOne({ where: { email: sanitizedEmail } });
 
-      return res.status(403).json({
-        success: false,
-        message: `Security Limit: New accounts must wait before modifying credentials. Try again in ${unitRemaining}.`
+    // Security practice: Return 200 generic message so attackers can't probe for registered emails
+    if (!user) {
+      console.log("⚠️ User not found in DB. Returning generic success message.");
+      return res.status(200).json({
+        success: true,
+        message: "If an account with that email exists, a password reset link has been sent.",
       });
     }
 
-    // 🚨 GUARD 2: Recent Reset Filter (Check if they reset it too recently)
-    if (user.passwordChangedAt) {
-      const timeSinceLastChange = currentTime - new Date(user.passwordChangedAt).getTime();
-      
-      if (timeSinceLastChange < coolDownPeriodInMs) {
-        const timeRemaining = coolDownPeriodInMs - timeSinceLastChange;
-        
-        // 🛠️ FIX 3: Dynamic unit rendering here too
-        const unitRemaining = isDev
-          ? `${Math.ceil(timeRemaining / (60 * 1000))} minute(s)`
-          : `${Math.ceil(timeRemaining / oneDayInMs)} day(s)`;
+    // Cooldown check (0ms in dev, 2 minutes in production to prevent spamming)
+    const coolDownPeriodInMs = isDev ? 0 : 2 * 60 * 1000;
 
-        return res.status(403).json({
+    console.log("2. 🔍 CHECKING DB TIMESTAMP:", user.resetPasswordRequestedAt);
+
+    if (coolDownPeriodInMs > 0 && user.resetPasswordRequestedAt) {
+      const lastRequestTime = new Date(user.resetPasswordRequestedAt).getTime();
+      const timeSinceLastRequest = currentTime - lastRequestTime;
+
+      console.log("3. ⏱️ TIME SINCE LAST REQUEST (ms):", timeSinceLastRequest);
+
+      if (timeSinceLastRequest < coolDownPeriodInMs) {
+        console.log("❌ BLOCKED BY DB COOLDOWN!");
+        return res.status(429).json({
           success: false,
-          message: `Security Limit: You recently changed your password. You can request another reset link in ${unitRemaining}.`
+          message: "Please wait 2 minutes before requesting another reset email.",
         });
       }
     }
-    
+
+    console.log("4. ✅ PASSED DB CHECK - GENERATING TOKEN...");
+
     const resetToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    const resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     await user.update({
       resetPasswordToken: hashedToken,
-      resetPasswordExpires: new Date(Date.now() + 3600000),
+      resetPasswordExpires,
+      resetPasswordRequestedAt: new Date(),
     });
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
+
+    console.log("5. ✉️ SENDING EMAIL TO:", user.email);
+
     await sendEmail({
       email: user.email,
-      subject: "Password Reset Request - ResumeUp",
+      subject: "ResumeUp - Password Reset Link",
       message: resetUrl,
     });
 
-    return res.status(200).json({ success: true, message: "Reset link sent to your email!" });
-  } catch (error) {
-    console.error("FORGOT PASSWORD ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to process forgot password request" });
+    console.log("6. 🎉 EMAIL SENT SUCCESSFULLY VIA BREVO!");
+
+    return res.status(200).json({
+      success: true,
+      message: "If an account with that email exists, a password reset link has been sent.",
+    });
+
+  } catch (error: any) {
+    console.error("Forgot password error:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
   }
 };
+
+
 
 // --- RESET PASSWORD ---
 export const resetPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
@@ -449,6 +446,7 @@ export const resetPassword = async (req: Request, res: Response<AuthMessageRespo
       password: hashedPassword,
       resetPasswordToken: null,
       resetPasswordExpires: null,
+      refreshToken: null, 
       passwordChangedAt: new Date(), 
     });
 

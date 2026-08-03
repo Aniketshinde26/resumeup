@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios"; 
 
+
 export const useForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -14,13 +15,12 @@ export const useForgotPassword = () => {
     setError("");
 
     try {
-     
       const response = await api.post("/auth/forgot-password", { email }); 
       setMessage(response.data.message);
     } catch (err: any) {
-      if (err.response?.status !== 429) {
-        setError(err.response?.data?.message || "Something went wrong. Please try again.");
-      }
+      // 🛠️ FIX: Capture backend error message for ALL status codes (including 429)
+      const serverMessage = err.response?.data?.message || "Something went wrong. Please try again.";
+      setError(serverMessage);
     } finally {
       setLoading(false);
     }

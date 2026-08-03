@@ -47,7 +47,7 @@ const startServer = async () => {
   await connectDB();
   
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.sync(); // Use alter: true to update the schema without dropping tables
     console.log("Database synced successfully");
   } catch (error) {
     console.error("Sequelize sync error:", error);

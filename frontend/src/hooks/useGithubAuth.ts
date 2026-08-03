@@ -1,4 +1,3 @@
-// src/hooks/useGithubAuth.ts
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios"; // Use your configured instance
@@ -12,7 +11,7 @@ export const useGithubAuth = () => {
 
   const handleSocialClick = (platform: string) => {
     if (platform === 'GitHub') {
-      initiateGithubLogin(); // This triggers the external redirect
+      initiateGithubLogin();
     } else {
       console.log(`${platform} coming soon`);
     }

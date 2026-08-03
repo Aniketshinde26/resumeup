@@ -1,25 +1,55 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-dotenv.config(); 
+import { BrevoClient } from "@getbrevo/brevo";
+import dotenv from "dotenv";
 
-export const sendEmail = async (options: any) => {
-    const transporter = nodemailer.createTransport({
-   host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_PORT) || 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL_FROM, 
-            pass: process.env.EMAIL_PASS,
-        },
+dotenv.config();
+
+if (!process.env.BREVO_API_KEY) {
+  console.error("⚠️ CRITICAL: BREVO_API_KEY is missing from process.env!");
+}
+
+// Initialize Brevo Client
+const brevo = new BrevoClient({
+  apiKey: process.env.BREVO_API_KEY || "",
+});
+
+export const sendEmail = async (options: { email: string; subject: string; message: string }) => {
+  console.log("✉️ Sending email via Brevo API to:", options.email);
+
+  try {
+    const result = await brevo.transactionalEmails.sendTransacEmail({
+      subject: options.subject,
+      sender: {
+        name: "ResumeUp Support",
+        email: process.env.EMAIL_FROM || "support@resumeup.dev",
+      },
+      to: [{ email: options.email }],
+      htmlContent: `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+          <h2 style="color: #1e293b; margin-bottom: 16px;">Password Reset Request</h2>
+          <p style="color: #475569; font-size: 15px; line-height: 1.5;">
+            We received a request to reset your password for your <strong>ResumeUp</strong> account.
+          </p>
+          <div style="text-align: center; margin: 28px 0;">
+            <a href="${options.message}" 
+               style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;">
+              Reset Password
+            </a>
+          </div>
+          <p style="color: #64748b; font-size: 13px; line-height: 1.4;">
+            This link is valid for <strong>1 hour</strong>. If you did not request a password reset, please ignore this email.
+          </p>
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
+          <p style="color: #94a3b8; font-size: 12px; text-align: center;">
+            &copy; ${new Date().getFullYear()} ResumeUp. All rights reserved.
+          </p>
+        </div>
+      `,
     });
 
-    const mailOptions = {
-        from: `"ResumeUp Support" <${process.env.EMAIL_FROM}>`,
-        to: options.email,
-        subject: options.subject,
-        text: options.message,
-        html: `<b>Reset Link:</b> <a href="${options.message}">${options.message}</a>`,
-    };
-
-    return await transporter.sendMail(mailOptions);
+    console.log("✅ BREVO SUCCESS! Message ID:", result.messageId);
+    return result;
+  } catch (err: any) {
+    console.error("❌ BREVO SDK EXCEPTION:", err.body || err.message || err);
+    throw new Error(err.body?.message || err.message || "Failed to send email via Brevo");
+  }
 };
