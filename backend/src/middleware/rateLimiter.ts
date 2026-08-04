@@ -19,13 +19,13 @@ const config = {
         message: "Too many social login attempts. Please try again in 15 minutes."
     },
     forgotpassword: {
-        windowMs: 1 * 60 *1000, // 15 mins (IP Guard)
+        windowMs: 5 * 60 *1000, // 15 mins (IP Guard)
         max:2,
         message: "Too many forgot password requests. Please try again in 1 minutes."
     },
     resetPassword: {
-        windowMs: 15 * 60 * 1000, // 15 mins
-        max: 1,
+        windowMs: 5 * 60 * 1000, // 15 mins
+        max: 2,
         message: "Too many password reset attempts. Please try again in 15 minutes."
     },
     refresh: {

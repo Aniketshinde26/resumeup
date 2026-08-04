@@ -82,7 +82,20 @@
     "sending": "पठाउँदै...",
     "remembered_it": "याद आयो?",
     "back_to_sign_in": "साइन इनमा फिर्ता जानुहोस्",
-    "reset_link_sent_success": "रिसेट लिङ्क तपाईंको इमेलमा पठाइएको छ!"
+    "reset_link_sent_success": "रिसेट लिङ्क तपाईंको इमेलमा पठाइएको छ!",
+    "limit_notice_title": "सुरक्षा सूचना",
+    "limit_notice_desc": "स्पाम रोक्नका लागि, पासवर्ड रिसेट अनुरोधहरू प्रति खाता हरेक २४ घण्टामा एक पटकमा सीमित छन्।"
+  },
+"resetpassword": {
+    "new_password": "नयाँ पासवर्ड",
+    "set_new_password_desc": "पुन: पहुँच प्राप्त गर्न तल आफ्नो नयाँ खाताको पासवर्ड सेट गर्नुहोस्।",
+    "new_password_label": "नयाँ पासवर्ड",
+    "confirm_password_label": "पासवर्ड पुष्टि गर्नुहोस्",
+    "updating": "अपडेट हुँदैछ...",
+    "reset_password_btn": "पासवर्ड रिसेट गर्नुहोस्",
+    "redirecting": "पुनःनिर्देशित हुँदैछ...",
+    "back_to": "फर्कनुहोस्",
+    "sign_in": "साइन इन"
   }
 
 

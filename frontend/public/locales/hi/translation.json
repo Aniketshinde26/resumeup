@@ -84,7 +84,20 @@
     "sending": "भेजा जा रहा है...",
     "remembered_it": "याद आ गया?",
     "back_to_sign_in": "साइन इन पर वापस जाएं",
-    "reset_link_sent_success": "रीसेट लिंक आपके ईमेल पर भेज दिया गया है!"
+    "reset_link_sent_success": "रीसेट लिंक आपके ईमेल पर भेज दिया गया है!",
+    "limit_notice_title": "सुरक्षा सूचना",
+  "limit_notice_desc": "स्पैम से बचने के लिए, पासवर्ड रीसेट अनुरोध प्रति खाता हर 24 घंटे में एक बार तक सीमित हैं।"
+  },
+  "resetpassword": {
+    "new_password": "नया पासवर्ड",
+    "set_new_password_desc": "पुनः पहुँच प्राप्त करने के लिए नीचे अपना नया खाता पासवर्ड सेट करें।",
+    "new_password_label": "नया पासवर्ड",
+    "confirm_password_label": "पासवर्ड की पुष्टि करें",
+    "updating": "अपडेट हो रहा है...",
+    "reset_password_btn": "पासवर्ड रीसेट करें",
+    "redirecting": "रीडायरेक्ट किया जा रहा है...",
+    "back_to": "वापस जाएं",
+    "sign_in": "साइन इन"
   }
 
 

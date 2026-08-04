@@ -83,6 +83,19 @@
     "sending": "Sending...",
     "remembered_it": "Remembered it?",
     "back_to_sign_in": "Back to Sign In",
-    "reset_link_sent_success": "Reset link sent to your email!"
-  } 
+    "reset_link_sent_success": "Reset link sent to your email!",
+    "limit_notice_title":"Security Notice",
+    "limit_notice_desc": "To prevent spam, password reset requests are limited to once every 24 hours per account."
+  },
+  "resetpassword": {
+    "new_password": "New Password",
+    "set_new_password_desc": "Set your new account password below to regain access.",
+    "new_password_label": "New Password",
+    "confirm_password_label": "Confirm Password",
+    "updating": "Updating...",
+    "reset_password_btn": "Reset Password",
+    "redirecting": "Redirecting...",
+    "back_to": "Back to",
+    "sign_in": "Sign In"
+  }
 }
