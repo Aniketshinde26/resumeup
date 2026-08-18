@@ -4,13 +4,13 @@ import api from "../api/axios";
 import { 
   COVER_LETTER_TEMPLATES_MAP, 
   createEmptyCoverLetterData, 
-  type coverLetter, 
+  type CoverLetter, 
   type CoverLetterData 
 } from "../types/templateindex";
 
 export default function CoverLetterPreview() {
   const { id } = useParams<{ id: string }>();
-  const [coverLetter, setCoverLetter] = useState<coverLetter | null>(null);
+  const [coverLetter, setCoverLetter] = useState<CoverLetter | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

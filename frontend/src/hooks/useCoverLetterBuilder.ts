@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import api from "../api/axios";
 import type { CoverLetterByIdResponse } from "../types/api";
-import type { CoverLetterData, coverLetter } from "../types/templateindex";
+import type { CoverLetterData, CoverLetter } from "../types/templateindex";
 
 export const useCoverLetterBuilder = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [coverLetter, setCoverLetter] = useState<coverLetter | null>(null);
+  const [coverLetter, setCoverLetter] = useState<CoverLetter | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -18,7 +18,7 @@ export const useCoverLetterBuilder = () => {
   const updateData = (newData: Partial<CoverLetterData>) => {
     setIsDirty(true);
     setSaveError(null);
-    setCoverLetter((prev: coverLetter | null) => {
+    setCoverLetter((prev: CoverLetter | null) => {
       if (!prev) return null;
       return {
         ...prev,
@@ -147,7 +147,7 @@ export const useCoverLetterBuilder = () => {
   ) => {
     setIsDirty(true);
     setSaveError(null);
-    setCoverLetter((prev: coverLetter | null) => {
+    setCoverLetter((prev: CoverLetter | null) => {
       if (!prev) return null;
       return {
         ...prev,
