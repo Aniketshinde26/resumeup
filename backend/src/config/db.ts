@@ -10,19 +10,24 @@ export const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT) || 4000,
     dialect: "mysql",
-    logging: false,
+    logging: process.env.NODE_ENV === "development" ? console.log : false,
     dialectOptions: {
-      ssl: process.env.DB_SSL === "true" ? {
-        require: true,
-        rejectUnauthorized: true,
-      } : undefined,
+      ssl:
+        process.env.DB_SSL === "true"
+          ? {
+              require: true,
+              rejectUnauthorized: true,
+            }
+          : undefined,
     },
-  }
+  },
 );
 
 export const connectDB = async () => {
   try {
     await sequelize.authenticate();
+
+    await sequelize.sync();
   } catch (err) {
     console.error("DB connection error:", err);
     process.exit(1);
