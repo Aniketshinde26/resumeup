@@ -1,16 +1,6 @@
 import { Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
-interface BuilderHeaderProps {
-  productName: string; 
-  productSuffix?: string; 
-  accentColor: string; 
-  buttonColor: string; 
-  docTitle: string;
-  isSaving: boolean;
-  isDirty: boolean;
-  onSave: () => void;
-  onDownload: () => void;
-}
+import type { BuilderHeaderProps } from "../types/layoutprops";
 
 export default function BuilderHeader({
   productName,

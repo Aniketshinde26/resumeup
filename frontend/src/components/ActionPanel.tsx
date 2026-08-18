@@ -1,10 +1,9 @@
 import React from 'react';
 import ThemeToggle from "./ThemeToggle";
 import LanguageToggle from "./LanguageToggle";
+import type { ActionPanelProps } from "../types/layoutprops";
 
-interface ActionPanelProps {
-  className?: string;
-}
+
 
 const ActionPanel: React.FC<ActionPanelProps> = ({ className = "" }) => {
   return (

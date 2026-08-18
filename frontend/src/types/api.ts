@@ -1,53 +1,58 @@
-import type { coverLetter, Resume } from "./templateindex";
+import type { CoverLetter, Resume } from "./templateindex";
 
-
- interface ApiResponse<T> {
+export interface BaseApiResponse {
   success: boolean;
   message: string;
-  data: T; 
 }
 
- interface FetchResumesResponse {
-  message: string;
-  count : number;
+export interface ApiResponse<T> extends BaseApiResponse {
+  data: T;
+}
+
+export type MessageResponse = BaseApiResponse;
+
+export interface FetchResumesResponse extends BaseApiResponse {
+  count: number;
   resumes: Resume[];
   isGuest?: boolean;
 }
 
- interface ResumeByIdResponse {
-  message: string;
+export interface ResumeByIdResponse extends BaseApiResponse {
   resume: Resume;
 }
 
-interface DeleteResumeResponse {
-  message: string;
+export interface CreateResumeResponse extends BaseApiResponse {
+  resume: Resume;
 }
 
-interface CreateResumeResponse {
-  message: string;
-  resume: Resume; 
+export interface UpdateResumeResponse extends BaseApiResponse {
+  resume: Resume;
 }
 
-interface FetchCoverLettersResponse {
-  message: string;
-  count : number;
-  coverletters:coverLetter[];
+export type DeleteResumeResponse = BaseApiResponse;
+
+export interface FetchCoverLettersResponse extends BaseApiResponse {
+  count: number;
+  coverletters: CoverLetter[];
   isGuest?: boolean;
 }
 
-interface CoverLetterByIdResponse {
-  message: string;
-  coverletter: coverLetter;
-}
-interface DeleteCoverLetterResponse {
-  message: string;
+export interface CoverLetterByIdResponse extends BaseApiResponse {
+  coverletter: CoverLetter;
 }
 
-interface CreateCoverLetterResponse {
-  message: string;
-  coverletter: coverLetter;
+export interface CreateCoverLetterResponse extends BaseApiResponse {
+  coverletter: CoverLetter;
 }
 
+export interface UpdateCoverLetterResponse extends BaseApiResponse {
+  coverletter: CoverLetter;
+}
 
+export type DeleteCoverLetterResponse = BaseApiResponse;
 
-export type { ApiResponse, FetchResumesResponse, ResumeByIdResponse, DeleteResumeResponse, CreateResumeResponse, FetchCoverLettersResponse, CoverLetterByIdResponse, DeleteCoverLetterResponse, CreateCoverLetterResponse };
+export interface GoogleCredentialResponse {
+  credential: string;
+}
+
+export interface ForgotPasswordResponse extends BaseApiResponse {}

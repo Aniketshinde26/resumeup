@@ -1,14 +1,8 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import type { CreateItemModalProps } from "../types/layoutprops";
 
-interface CreateItemModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreate: (title: string) => void;
-  isLoading: boolean;
-  type: "Resume" | "Cover Letter"; 
-}
 
 export default function CreateItemModal({
   isOpen,
@@ -33,7 +27,6 @@ export default function CreateItemModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-[var(--color-brand-card)] rounded-2xl w-full max-w-md p-8 shadow-2xl zoom-in duration-200">
         
-        {/* Dynamic Heading */}
         <h2 className="text-2xl font-bold text-[var(--color-text-main)]">
           {t('create_new')} {type === "Resume" ? t('resume', 'Resume') : t('cover_letter', 'Cover Letter')}
         </h2>
@@ -43,7 +36,6 @@ export default function CreateItemModal({
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            {/* Dynamic Label */}
             <label className="block text-sm font-medium text-[var(--color-text-main)] mb-2">
               {type === "Resume" ? t('resume', 'Resume') : t('cover_letter', 'Cover Letter')} {t('title')}
             </label>

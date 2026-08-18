@@ -2,7 +2,6 @@ import type { CoverLetterData } from "../types/templateindex";
 
 export default function ElegantSerifTemplate({ data }: { data: CoverLetterData }) {
   return (
-    // Changed padding from 1.5in to 12 (roughly 3rem) to save space
     <div id="cover-letter-template" className="w-full h-full bg-[#fff] p-12 font-serif flex flex-col">
       <div className="border-b-[1px] border-stone-200 pb-8 mb-8 flex justify-between items-end shrink-0">
         <div>
@@ -19,7 +18,6 @@ export default function ElegantSerifTemplate({ data }: { data: CoverLetterData }
         </div>
       </div>
 
-      {/* Increased max-width to 2xl so paragraphs are shallower (shorter height) */}
       <div className="max-w-2xl mx-auto flex-1">
         <div className="mb-8 text-stone-500 text-sm italic">
           <p>{data.letter?.date}</p>
@@ -29,7 +27,6 @@ export default function ElegantSerifTemplate({ data }: { data: CoverLetterData }
           </div>
         </div>
 
-        {/* Reduced text size slightly and adjusted leading for better fit */}
         <div className="text-[14px] leading-[1.6] text-stone-800 space-y-5 antialiased">
           <p className="font-semibold text-stone-900">{data.letter?.salutation}</p>
           {data.letter?.bodyParagraphs?.map((p, i) => (
@@ -39,7 +36,6 @@ export default function ElegantSerifTemplate({ data }: { data: CoverLetterData }
           ))}
         </div>
 
-        {/* Reduced top margin from mt-20 to mt-10 */}
         <div className="mt-10 pb-4">
           <p className="font-sans text-[11px] uppercase tracking-widest text-stone-400 mb-2">
             {data.letter?.closing || "Sincerely,"}

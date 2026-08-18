@@ -11,14 +11,11 @@ export default function ForgotPassword() {
     <GridBackground>
       <div className="min-h-screen w-full p-4 sm:p-8 flex items-center justify-center font-sans">
         
-        {/* Expanded Centered Card */}
         <div className="w-full max-w-xl relative overflow-hidden rounded-[2.5rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_25px_70px_-15px_rgba(0,0,0,0.25)] p-10 sm:p-14">
           
-          {/* Ambient Glow Effects */}
           <div className="absolute top-[-20%] right-[-10%] w-72 h-72 bg-brand-primary/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-[-20%] left-[-10%] w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Header & Logo */}
           <div className="mb-8 text-center relative z-10">
             <div className="flex items-center justify-center gap-2.5 mb-4">
               <div className="w-8 h-8 bg-brand-primary rounded-xl flex items-center justify-center shadow-md">
@@ -40,7 +37,6 @@ export default function ForgotPassword() {
             </p>
           </div>
 
-          {/* 24-HOUR SECURITY NOTICE BOX */}
           <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm flex items-start gap-3 relative z-10">
             <span className="text-lg leading-none">⚠️</span>
             <div className="space-y-1">
@@ -56,7 +52,6 @@ export default function ForgotPassword() {
             </div>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleForgotPassword} className="space-y-5 relative z-10">
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
@@ -81,7 +76,6 @@ export default function ForgotPassword() {
             </button>
           </form>
 
-          {/* Alerts */}
           {message && (
             <p className="mt-5 text-sm text-green-600 font-medium text-center bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border border-green-100 dark:border-green-800 relative z-10">
               {message === "Reset link sent to your email!" ? t('reset_link_sent_success') : message}
@@ -93,7 +87,6 @@ export default function ForgotPassword() {
             </p>
           )}
 
-          {/* Footer Link */}
           <p className="mt-8 text-center text-base relative z-10" style={{ color: 'var(--color-sign-in)' }}>
             {t('remembered_it')}{' '}
             <Link to="/login" className="text-inherit font-bold underline">

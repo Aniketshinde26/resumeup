@@ -7,7 +7,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
       className="w-[210mm] min-h-[297mm] bg-white p-[20mm] font-serif text-center overflow-hidden box-border"
       style={{ margin: "0 auto" }}
     >
-      {/* HEADER */}
       <header className="border-b-2 border-black pb-4 mb-8">
         {data.personal?.image && (
           <div className="mb-4 flex justify-center">
@@ -26,7 +25,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </p>
       </header>
 
-      {/* CONTACT INFO */}
       <div className="flex justify-center gap-4 text-[10px] mb-10 text-slate-500 uppercase tracking-widest">
         {data.personal?.email && <span>{data.personal.email}</span>}
         {data.personal?.phone && (
@@ -43,7 +41,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         )}
       </div>
 
-      {/* SUMMARY */}
       {data.personal?.summary && (
         <section className="text-left mb-10">
           <p className="text-sm leading-relaxed text-slate-700 italic">
@@ -52,7 +49,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </section>
       )}
 
-      {/* EXPERIENCE SECTION */}
       {data.experience && data.experience.length > 0 && (
         <section className="text-left mb-10">
           <h2 className="font-bold border-b border-black mb-6 text-sm tracking-[0.2em] uppercase">
@@ -79,7 +75,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </section>
       )}
 
-      {/* DYNAMIC PROJECTS / RESEARCH SECTION */}
       {data.projects && data.projects.length > 0 && (
         <section className="text-left mb-10">
           <h2 className="font-bold border-b border-black mb-6 text-sm tracking-[0.2em] uppercase">
@@ -111,7 +106,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </section>
       )}
 
-      {/* EDUCATION SECTION */}
       {data.education && data.education.length > 0 && (
         <section className="text-left mb-10">
           <h2 className="font-bold border-b border-black mb-6 text-sm tracking-[0.2em] uppercase">
@@ -129,7 +123,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </section>
       )}
 
-      {/* CERTIFICATIONS SECTION */}
       {data.certifications && data.certifications.length > 0 && (
         <section className="text-left mb-10">
           <h2 className="font-bold border-b border-black mb-4 text-sm tracking-[0.2em] uppercase">
@@ -149,9 +142,7 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
         </section>
       )}
 
-      {/* LANGUAGES & SKILLS SIDE-BY-SIDE */}
       <div className="grid grid-cols-2 gap-10">
-        {/* DYNAMIC SKILLS */}
         <section className="text-left">
           <h2 className="font-bold border-b border-black mb-4 text-sm tracking-[0.2em] uppercase">
             {data.sectionTitles?.skills || "Core Skills"}
@@ -168,7 +159,6 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
           </div>
         </section>
 
-        {/* LANGUAGES */}
         {data.languages && data.languages.length > 0 && (
           <section className="text-left">
             <h2 className="font-bold border-b border-black mb-4 text-sm tracking-[0.2em] uppercase">

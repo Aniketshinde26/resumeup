@@ -11,7 +11,6 @@ export default function NeoProfessionalTemplate({
       className="w-[210mm] min-h-[297mm] bg-white font-sans text-slate-800 flex flex-col overflow-hidden box-border shadow-lg"
       style={{ margin: "0 auto" }}
     >
-      {/* HEADER SECTION */}
       <header className="bg-slate-50 p-10 border-b-4 border-indigo-600 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase leading-none">
@@ -52,9 +51,7 @@ export default function NeoProfessionalTemplate({
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* LEFT COLUMN - MAIN (65%) */}
         <main className="flex-[1.8] p-10 overflow-hidden border-r border-slate-100">
-          {/* PROFILE / SUMMARY */}
           {data.personal?.summary && (
             <section className="mb-10 no-break">
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-4">
@@ -66,7 +63,6 @@ export default function NeoProfessionalTemplate({
             </section>
           )}
 
-          {/* WORK EXPERIENCE */}
           <section className="mb-10">
             <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
               {data.sectionTitles?.experience || "Work Experience"}
@@ -93,7 +89,6 @@ export default function NeoProfessionalTemplate({
             </div>
           </section>
 
-          {/* DYNAMIC PROJECTS / PROCEDURES */}
           {data.projects && data.projects.length > 0 && (
             <section className="no-break">
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
@@ -131,9 +126,7 @@ export default function NeoProfessionalTemplate({
           )}
         </main>
 
-        {/* RIGHT COLUMN - ASIDE (35%) */}
         <aside className="flex-1 bg-white p-10 flex flex-col gap-10 overflow-hidden">
-          {/* DYNAMIC SKILLS */}
           <section className="no-break">
             <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
               {data.sectionTitles?.skills || "Skills"}
@@ -150,7 +143,6 @@ export default function NeoProfessionalTemplate({
             </div>
           </section>
 
-          {/* EDUCATION */}
           <section className="no-break">
             <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
               Education
@@ -172,7 +164,6 @@ export default function NeoProfessionalTemplate({
             </div>
           </section>
 
-          {/* LANGUAGES */}
           {data.languages && data.languages.length > 0 && (
             <section className="no-break">
               <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
@@ -196,7 +187,6 @@ export default function NeoProfessionalTemplate({
             </section>
           )}
 
-          {/* CERTIFICATIONS */}
           {data.certifications && data.certifications.length > 0 && (
             <section className="no-break">
               <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">

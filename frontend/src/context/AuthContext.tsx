@@ -1,26 +1,16 @@
-// src/context/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-// 🛠️ FIX: Import your custom instance AND its exposed setAccessToken function!
 import api, { setAccessToken as setAxiosToken } from '../api/axios'; 
-
-interface AuthContextType {
-  user: any;
-  loading: boolean;
-  login: (userData: any, token: string) => void;
-  logout: () => Promise<void>;
-  setAccessToken: (token: string | null) => void;
-  getAccessToken: () => string | null;
-}
+import type { AuthContextType } from '../types/auth';
+import type { User } from '../types/user';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 let memoryToken: string | null = null;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 🛠️ FIX: Sync token both locally in memory AND down to the axios instance
   const setAccessToken = (token: string | null) => {
     memoryToken = token;
     setAxiosToken(token); 
@@ -28,8 +18,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const getAccessToken = () => memoryToken;
 
-  const login = (userData: any, token: string) => {
-    setAccessToken(token); // Sets token first (and syncs it to Axios)
+  const login = (userData: User, token: string) => {
+    setAccessToken(token); 
     setUser(userData);
   };
 
@@ -40,7 +30,6 @@ const logout = async () => {
       setAccessToken(null);
     } catch (err) {
       console.error("Logout request failed:", err);
-      // 🛠️ CRITICAL FIX: Re-throw the error so the Sidebar's catch block knows it failed!
       throw err; 
     }
   };
@@ -48,12 +37,11 @@ const logout = async () => {
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const response = await api.post('/auth/refresh');
+        const response = await api.post<{ user: User; accessToken: string }>('/auth/refresh');
         
         setUser(response.data.user);
-        setAccessToken(response.data.accessToken); // Populates token on load
+        setAccessToken(response.data.accessToken); 
       } catch (error) {
-        console.log("No active session found on initialization.");
       } finally {
         setLoading(false);
       }

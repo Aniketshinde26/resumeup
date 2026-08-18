@@ -3,7 +3,6 @@ import type { CoverLetterData } from "../types/templateindex";
 export default function SwissMonoTemplate({ data }: { data: CoverLetterData }) {
   return (
     <div id="cover-letter-template" className="w-full h-full bg-[#fdfdfd] p-16 font-mono text-xs">
-      {/* Updated Header Grid: 12 columns for better control */}
       <div className="grid grid-cols-12 gap-4 mb-20 border-b border-zinc-100 pb-10">
         <div className="col-span-7">
           <h1 className="text-3xl font-black uppercase mb-2 tracking-tighter">
@@ -12,7 +11,6 @@ export default function SwissMonoTemplate({ data }: { data: CoverLetterData }) {
           <p className="text-zinc-500 tracking-widest">RESUME / COVER LETTER</p>
         </div>
         
-        {/* Sender Info - Given more space (col-span-3) */}
         <div className="col-span-3 border-l border-zinc-200 pl-4">
           <p className="font-bold mb-2 text-zinc-400">SENDER</p>
           <div className="space-y-1 break-words">
@@ -22,7 +20,6 @@ export default function SwissMonoTemplate({ data }: { data: CoverLetterData }) {
           </div>
         </div>
 
-        {/* Date Info - col-span-2 */}
         <div className="col-span-2 border-l border-zinc-200 pl-4">
           <p className="font-bold mb-2 text-zinc-400">DATE</p>
           <p>{data.letter?.date}</p>

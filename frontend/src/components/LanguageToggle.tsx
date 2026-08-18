@@ -13,7 +13,6 @@ const LanguageSelector = () => {
     { code: 'nep', label: 'नेपाली' }
   ];
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -28,7 +27,6 @@ const LanguageSelector = () => {
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* Trigger Button */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -41,7 +39,6 @@ const LanguageSelector = () => {
         <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 py-2 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl animate-in fade-in zoom-in duration-200">
           {languages.map((lang) => (

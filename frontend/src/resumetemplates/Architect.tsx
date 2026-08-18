@@ -9,7 +9,6 @@ export default function ProfessionalSplitTemplate({
     <div
       id="resume-template"
 className="w-full h-full bg-white flex font-sans text-slate-800"    >
-      {/* LEFT COLUMN - Primary Content (Experience & Projects) */}
       <main className="flex-[1.6] p-12 pr-8 bg-white">
         <header className="mb-10">
           <h1 className="text-5xl font-black text-slate-900 tracking-tighter uppercase">
@@ -60,7 +59,6 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
           </div>
         </section>
 
-        {/* DYNAMIC PROJECTS / PROCEDURES SECTION */}
         {data.projects && data.projects.length > 0 && (
           <section>
             <h2 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -78,7 +76,6 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
                       {proj.name}
                     </h3>
                     {proj.link && (
-                      /* Smart Link Logic: If it looks like a URL, make it a link. Otherwise, show as text label */
                       proj.link.startsWith('http') ? (
                         <a
                           href={proj.link}
@@ -105,7 +102,6 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
         )}
       </main>
 
-      {/* RIGHT COLUMN */}
       <aside className="flex-1 bg-slate-50 border-l border-slate-100 p-10 flex flex-col gap-10">
         {data.personal?.image && (
           <img
@@ -130,7 +126,6 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
           </div>
         </section>
 
-        {/* DYNAMIC SKILLS SECTION */}
         <section>
           <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">
             {data.sectionTitles?.skills || "Expertise"}

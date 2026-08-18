@@ -1,19 +1,19 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import api from "../api/axios"; // Use your configured instance
+import api from "../api/axios";
 import { initiateGithubLogin } from "../services/githubAuth";
 import { useAuth } from "../context/AuthContext";
+import type { AuthResponse } from "../types/user";
+
 export const useGithubAuth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const {login} = useAuth();
+  const { login } = useAuth();
   const hasCalled = useRef(false);
 
   const handleSocialClick = (platform: string) => {
-    if (platform === 'GitHub') {
+    if (platform === "GitHub") {
       initiateGithubLogin();
-    } else {
-      console.log(`${platform} coming soon`);
     }
   };
 
@@ -22,17 +22,18 @@ export const useGithubAuth = () => {
 
     if (code && !hasCalled.current) {
       hasCalled.current = true;
-      
+
       const handleAuth = async () => {
         try {
-          // Use the relative path. Ensure your Axios baseURL is correct!
-          const response = await api.post("auth/github", { code });
+          const response = await api.post<AuthResponse>("auth/github", {
+            code,
+          });
 
           if (response.status === 200) {
             login(response.data.user, response.data.accessToken);
             navigate("/home", { replace: true });
           }
-        } catch (error) {
+        } catch (error: unknown) {
           console.error("GitHub Login Failed:", error);
           navigate("/login?error=github_failed");
         }
@@ -40,7 +41,7 @@ export const useGithubAuth = () => {
 
       handleAuth();
     }
-  }, [searchParams, navigate]);
+  }, [searchParams, navigate, login]);
 
-  return{handleSocialClick};
+  return { handleSocialClick };
 };

@@ -1,23 +1,31 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Resume from "../models/Resume";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { GetAllResumesResponse, ResumeResponse, DeleteResponse } from "../types/ResponseTypes";/**
- * @desc Create a new resume for the authenticated user
- * @param req Authenticated request
- * @param res Express response
- * @returns Created resume (201)
- */
+import {
+  NotFoundError,
+  BadRequestError,
+  UnauthorizedError,
+} from "../utils/AppError";
+import {
+  GetAllResumesResponse,
+  ResumeResponse,
+  DeleteResponse,
+} from "../types/ResponseTypes";
+
 export const createResume = async (
   req: AuthRequest,
-  res: Response<ResumeResponse >
-): Promise<Response> => {
+  res: Response<ResumeResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
+      throw new UnauthorizedError();
     }
     const { title, templateId, data } = req.body;
     if (!title || !templateId || !data) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+      throw new BadRequestError(
+        "Missing required fields: title, templateId, or data",
+      );
     }
     const resume = await Resume.create({
       userId: req.user.id,
@@ -25,29 +33,21 @@ export const createResume = async (
       templateId,
       data,
     });
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "Resume created successfully",
-      resume, 
+      resume,
     });
-
   } catch (error) {
-    console.error("CREATE RESUME ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to create resume" });
+    next(error);
   }
 };
 
-/**
- * @desc Get all resumes for the authenticated user (or guest mode if no user)
- * @param req Authenticated request or guest request (via optionalToken middleware)
- * @param res Express response
- * @returns All resumes for the authenticated user or guest mode data (200)
- */
-
 export const getAllResumes = async (
-  req: Request, // Note: Ensure your Request type handles .user (use AuthRequest if needed)
-  res: Response<GetAllResumesResponse>
-): Promise<Response> => {
+  req: AuthRequest,
+  res: Response<GetAllResumesResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (req.user) {
       const resumes = await Resume.findAll({
@@ -55,8 +55,7 @@ export const getAllResumes = async (
         order: [["createdAt", "DESC"]],
       });
 
-      // Pass the object directly; TypeScript validates it against GetAllResumesResponse
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: "User resumes fetched successfully",
         count: resumes.length,
@@ -65,89 +64,65 @@ export const getAllResumes = async (
       });
     }
 
-    // Guest mode return
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Guest mode active",
       count: 0,
       resumes: [],
       isGuest: true,
     });
-
   } catch (error) {
-    console.error("GET ALL RESUMES ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to fetch resumes" });
+    next(error);
   }
 };
-/**
- * @desc Get a single resume by ID for the authenticated user
- * @param req Authenticated request with resume ID in params
- * @param res Express response
- * @return Single resume if found and belongs to user (200), 404 if not found, 401 if unauthorized
-  */
 
-
-
-export const getResumeById = async (req: Request, res: Response) => {
+export const getResumeById = async (
+  req: AuthRequest,
+  res: Response<ResumeResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
+    if (!req.user) {
+      throw new UnauthorizedError();
+    }
+
     const { id } = req.params;
-    
-    // 🛡️ Guard 1: Ensure req.user exists and force convert the ID to a standard Number
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ message: "Authentication required" });
-    }
-
-    const authenticatedUserId = Number(req.user.id);
-
-    // Find the resume by ID first
-    const resume = await Resume.findByPk(id);
-
-    // 🛡️ Guard 2: If the resume doesn't exist at all, return a 404, NOT a 401
-    if (!resume) {
-      return res.status(404).json({ message: "Resume not found" });
-    }
-
-    // 🛡️ Guard 3: If the resume belongs to a different user, return a 403 Forbidden
-    if (Number(resume.userId) !== authenticatedUserId) {
-      console.log(`❌ Owner Mismatch: Resume belongs to ${resume.userId}, Request came from ${authenticatedUserId}`);
-      return res.status(403).json({ message: "You do not have permission to view this resume" });
-    }
-
-    // If all checks pass, return the data safely
-    return res.json({ 
-      success: true, 
-      resume 
+    const resume = await Resume.findOne({
+      where: {
+        id,
+        userId: req.user.id,
+      },
     });
 
+    if (!resume) {
+      throw new NotFoundError("Resume not found");
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Resume fetched successfully",
+      resume,
+    });
   } catch (error) {
-    console.error("GET RESUME ERROR:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 };
-
-/**
- * @desc Update a resume by ID for the authenticated user
- * @param req Authenticated request with resume ID in params and updated data in body 
- * @param res Express response
- * @returns Updated resume data (200) or error if not found/unauthorized
- */
 
 export const updateResume = async (
   req: AuthRequest,
-  // 1. Inject the generic types into the Response
-  res: Response<ResumeResponse>
-): Promise<Response> => {
+  res: Response<ResumeResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
+      throw new UnauthorizedError();
     }
 
     const { id } = req.params;
     const { title, data } = req.body;
 
-    // Guard clause for validation
     if (!data) {
-      return res.status(400).json({ success: false, message: "Resume data is required" });
+      throw new BadRequestError("Resume data is required");
     }
 
     const resume = await Resume.findOne({
@@ -158,42 +133,32 @@ export const updateResume = async (
     });
 
     if (!resume) {
-      return res.status(404).json({ success: false, message: "Resume not found" });
+      throw new NotFoundError("Resume not found");
     }
 
-    // Perform the update
     await resume.update({
       title: title ?? resume.title,
       data,
     });
 
-    // 2. Return the success response directly
-    // TypeScript ensures this matches the resumeByIdResponse interface
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Resume updated successfully",
       resume,
     });
-
   } catch (error) {
-    console.error("UPDATE RESUME ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to update resume" });
+    next(error);
   }
 };
 
-/**
- * @desc Delete a resume by ID for the authenticated user
- * @param req Authenticated request with resume ID in params
- * @param res Express response
- * @returns Success message (200) or error if not found/unauthorized
- */
 export const deleteResume = async (
   req: AuthRequest,
-  res: Response<DeleteResponse>
-): Promise<Response> => {
+  res: Response<DeleteResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
+      throw new UnauthorizedError();
     }
 
     const { id } = req.params;
@@ -206,22 +171,16 @@ export const deleteResume = async (
     });
 
     if (!resume) {
-      return res.status(404).json({ success: false, message: "Resume not found" });
+      throw new NotFoundError("Resume not found");
     }
 
     await resume.destroy();
 
-    // No need for a separate payload variable
-    return res.status(200).json({ 
+    res.status(200).json({
       success: true,
-      message: "Resume deleted successfully" 
+      message: "Resume deleted successfully",
     });
-
   } catch (error) {
-    console.error("DELETE RESUME ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to delete resume" });
+    next(error);
   }
 };
-
-
-

@@ -19,14 +19,14 @@ import CoverLetterBuilder from "./pages/CoverLetterBuilder";
 import CoverLetterPreview from "./pages/CoverLetterPreview";
 import { ThemeProvider } from "./context/ThemeContext"; 
 import { AuthProvider } from "./context/AuthContext";
-import {Toaster} from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <I18nextProvider i18n={i18n}>
-          <Toaster position="top-right" reverseOrder={false} containerStyle = {{ zIndex: 99999 }} />
+          <Toaster position="top-right" reverseOrder={false} containerStyle={{ zIndex: 99999 }} />
           <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
             <Routes>
               {/* Public Routes */}
@@ -36,11 +36,13 @@ export default function App() {
               <Route path="/auth/github/callback" element={<GithubCallback />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
+              
+              {/* Builder is accessible for both guests (public templates) and authenticated users */}
+              <Route path="/builder/:id" element={<Builder />} />
 
               {/* Protected Routes Group */}
               <Route element={<ProtectedRoute />}>
                 {/* 1. Routes WITHOUT Sidebar */}
-                <Route path="/builder/:id" element={<Builder />} /> {/* Cleanly protected now */}
                 <Route path="/resume/preview/:id" element={<ResumePreview />} />
                 <Route path="/cover-letters/preview/:id" element={<CoverLetterPreview />} />
                 <Route path="/cover-letter-builder/:id" element={<CoverLetterBuilder />} />

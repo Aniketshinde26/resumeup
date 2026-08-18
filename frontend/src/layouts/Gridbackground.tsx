@@ -1,10 +1,4 @@
-import React from 'react';
-interface GridBackgroundProps {
-  children: React.ReactNode;
-  dotColor?: string; 
-  dotSize?: string; 
-  gapSize?: string;
-}
+import type {GridBackgroundProps} from "../types/layoutprops";
 
 const GridBackground = ({ 
   children, 

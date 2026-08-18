@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom"; // 🔑 1. Import Link
-import type { AuthFooterProps } from "./AuthFooterProps";
+import { Link } from "react-router-dom"; 
+import type { AuthFooterProps } from "../../types/layoutprops";
 
 export const AuthFooter = ({ label, linkText, href }: AuthFooterProps) => (
   <p className="text-sm text-text-muted">
-    {label} {/* 🔑 2. Change <a> to <Link> and 'href' to 'to' */}
+    {label} 
     <Link
       to={href}
       className="

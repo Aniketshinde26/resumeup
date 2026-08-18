@@ -11,22 +11,34 @@ import MinimalistBorderTemplate from "../coverlettertemplates/MinimalBorder";
 import ModernExecutiveTemplate from "../coverlettertemplates/ModernExecutive";
 import SwissMonoTemplate from "../coverlettertemplates/SwissMono";
 import ElegantSerifTemplate from "../coverlettertemplates/ElegantSerif";
-export const TEMPLATES: Record<string, React.FC<any>> = {
+
+export interface ResumeTemplateProps {
+  data: ResumeData;
+}
+
+export interface CoverLetterTemplateProps {
+  data: CoverLetterData;
+}
+
+export const TEMPLATES: Record<string, React.FC<ResumeTemplateProps>> = {
   modern: ModernTemplate,
   minimal: MinimalTemplate,
   minimalcorporate: CorporateTemplate,
   architect: ArchitectTemplate,
   neoprofessional: NeoProfessionalTemplate,
-  moderntech: ModernTech, 
+  moderntech: ModernTech,
 };
 
-export const COVER_LETTER_TEMPLATES_MAP: Record<string, React.FC<any>> = {
+export const COVER_LETTER_TEMPLATES_MAP: Record<
+  string,
+  React.FC<CoverLetterTemplateProps>
+> = {
   classiccover: ProfessionalSplitCoverLetter,
   moderncover: ModernMinimalCoverLetter,
   minimalbordercover: MinimalistBorderTemplate,
-  modernexecutivecover:ModernExecutiveTemplate,
-  swissmonocover:SwissMonoTemplate,
-  elegantserifcover:ElegantSerifTemplate
+  modernexecutivecover: ModernExecutiveTemplate,
+  swissmonocover: SwissMonoTemplate,
+  elegantserifcover: ElegantSerifTemplate,
 };
 
 export const TEMPLATE_LIST = [
@@ -39,13 +51,12 @@ export const TEMPLATE_LIST = [
 ];
 
 export const COVER_LETTER_TEMPLATES = [
- { id: "classiccover", name: "Classic Cover Letter" },
+  { id: "classiccover", name: "Classic Cover Letter" },
   { id: "moderncover", name: "Modern Minimalist" },
   { id: "minimalbordercover", name: "Minimalist Border" },
-  {id:"modernexecutivecover",name:"Modern Executive"},
-  {id:"swissmonocover",name:"Swiss Mono"},
-  {id:"elegantserifcover",name:"Elegant Serif"}
-
+  { id: "modernexecutivecover", name: "Modern Executive" },
+  { id: "swissmonocover", name: "Swiss Mono" },
+  { id: "elegantserifcover", name: "Elegant Serif" },
 ];
 
 export interface PersonalInfo {
@@ -77,34 +88,37 @@ export interface ResumeData {
   experience: Experience[];
   education: Education[];
   sectionTitles?: {
-    skills: string;
-    projects: string;
+    skills?: string;
+    projects?: string;
     experience?: string;
-    additionalSkills: string;
+    additionalSkills?: string;
   };
   skills: string[];
   additionalSkills?: string[];
-projects?: { 
-    name: string; 
-    description: string; 
+  projects?: {
+    name: string;
+    description: string;
     link?: string;
-    type?: 'project' | 'procedure' | 'case_study'; 
+    type?: "project" | "procedure" | "case_study";
   }[];
-    languages?: { name: string; proficiency: string }[];
+  languages?: { name: string; proficiency: string }[];
   certifications?: { name: string; issuer: string; date: string }[];
 }
-export interface coverLetter {
+export interface CoverLetter {
   Id: string;
+  userId?: number;
   Title: string;
   TemplateId: string;
-  Data: any; // You can create a CoverLetterData interface later
+  updatedAt?: string;
+  Data: CoverLetterData;
 }
 
-// Interface for the Resume object itself (as stored in DB)
 export interface Resume {
   id: string;
+  userId?: number;
   title: string;
   templateId: string;
+  updatedAt?: string;
   data: ResumeData;
 }
 
@@ -116,6 +130,7 @@ export interface CoverLetterData {
     phone: string;
     location: string;
     image?: string;
+    summary: string;
   };
   recipient: {
     company: string;
@@ -129,22 +144,56 @@ export interface CoverLetterData {
     bodyParagraphs: string[];
     closing: string;
   };
-
-  
 }
 export const createEmptyResumeData = (): ResumeData => ({
-  personal: { fullName: "", jobTitle: "", email: "", phone: "", location: "", summary: "" },
+  personal: {
+    fullName: "",
+    jobTitle: "",
+    email: "",
+    phone: "",
+    location: "",
+    summary: "",
+  },
   experience: [],
   education: [],
   skills: [],
   projects: [],
   certifications: [],
-  languages: []
+  languages: [],
 });
 
-export const createEmptyResume = (id: string, title: string, templateId: string): Resume => ({
+export function createEmptyCoverLetterData(): CoverLetterData {
+  return {
+    personal: {
+      fullName: "",
+      jobTitle: "",
+      email: "",
+      phone: "",
+      location: "",
+      summary: "",
+    },
+    recipient: {
+      company: "",
+      hiringManager: "",
+      address: "",
+    },
+    letter: {
+      date: "",
+      subject: "",
+      salutation: "",
+      bodyParagraphs: [],
+      closing: "",
+    },
+  };
+}
+
+export const createEmptyResume = (
+  id: string,
+  title: string,
+  templateId: string,
+): Resume => ({
   id,
   title,
   templateId,
-  data: createEmptyResumeData()
+  data: createEmptyResumeData(),
 });

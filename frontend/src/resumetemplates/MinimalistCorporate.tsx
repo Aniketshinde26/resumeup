@@ -6,9 +6,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
       id="resume-template"
       className="w-[210mm] min-h-[297mm] bg-white flex shadow-sm font-sans text-slate-800 box-border overflow-hidden"
     >
-      {/* LEFT SIDEBAR (1/3 of the page) */}
       <aside className="w-[75mm] bg-slate-900 text-white p-8 flex flex-col shrink-0">
-        {/* PHOTO */}
         {data.personal?.image && (
           <div className="mb-8 flex justify-center">
             <img
@@ -20,7 +18,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
         )}
 
         <div className="space-y-8">
-          {/* CONTACT */}
           <section>
             <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
               Contact
@@ -44,7 +41,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* DYNAMIC SKILLS SECTION */}
           <section>
             <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1 truncate">
               {data.sectionTitles?.skills || "Skills"}
@@ -61,7 +57,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* EDUCATION */}
           <section>
             <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
               Education
@@ -75,7 +70,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
             ))}
           </section>
 
-          {/* LANGUAGES */}
           {data.languages && data.languages.length > 0 && (
             <section>
               <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
@@ -101,9 +95,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
         </div>
       </aside>
 
-      {/* MAIN CONTENT (2/3 of the page) */}
       <main className="flex-1 p-10 flex flex-col">
-        {/* NAME & TITLE */}
         <header className="mb-10">
           <h1 className="text-5xl font-black text-slate-900 tracking-tighter uppercase">
             {data.personal?.fullName?.split(" ")[0]}
@@ -117,7 +109,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
           </p>
         </header>
 
-        {/* SUMMARY */}
         {data.personal?.summary && (
           <section className="mb-8">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3 flex items-center gap-3">
@@ -129,7 +120,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
           </section>
         )}
 
-        {/* EXPERIENCE */}
         <section className="mb-8">
           <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-3">
             Experience <span className="h-[2px] bg-slate-100 flex-1"></span>
@@ -160,7 +150,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
           </div>
         </section>
 
-        {/* DYNAMIC PROJECTS / RESEARCH SECTION */}
         {data.projects && data.projects.length > 0 && (
           <section className="mt-auto">
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-3">
@@ -178,7 +167,6 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
                       {proj.name}
                     </h3>
                     {proj.link && (
-                      /* Smart Label/Link Logic */
                       proj.link.startsWith('http') ? (
                         <a href={proj.link} className="text-[9px] text-blue-600 font-bold uppercase shrink-0 hover:underline">Link</a>
                       ) : (

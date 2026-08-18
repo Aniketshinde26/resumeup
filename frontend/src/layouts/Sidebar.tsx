@@ -55,7 +55,6 @@ return (
 <aside className="h-full bg-[var(--color-card-bg)] border-r border-[var(--color-border-subtle)] flex flex-col transition-all duration-300 ease-in-out group 
                   w-[80px] hover:w-[280px] shrink-0 z-[50] shadow-xl shadow-slate-200/50 dark:shadow-none">
         
-        {/* LOGO SECTION */}
         <div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
           <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
             <span className="text-white font-bold text-xs uppercase">R</span>
@@ -68,7 +67,6 @@ return (
           </div>
         </div>
 
-        {/* NAVIGATION */}
         <nav className="flex-1 px-4 space-y-2 mt-2 overflow-y-auto overflow-x-hidden">
           {menuItems.map((item) => {
             const isActive = pathname === item.path;
@@ -93,14 +91,12 @@ return (
           })}
         </nav>
 
-        {/* BOTTOM SECTION */}
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 shrink-0 space-y-1 relative" ref={langRef}>
           
      
   <ThemeToggle />
 
 
-          {/* MULTI-LANGUAGE DROPDOWN */}
           <div className="relative">
             {isLangOpen && (
               <div className="absolute bottom-full left-0 mb-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-2 z-[60] animate-in fade-in slide-in-from-bottom-2">
@@ -139,7 +135,6 @@ return (
             </button>
           </div>
 
-          {/* LOGOUT */}
           <button 
             onClick={handleLogout}
             className="flex items-center h-12 px-3 w-full text-slate-400 hover:text-red-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors whitespace-nowrap overflow-hidden rounded-xl"

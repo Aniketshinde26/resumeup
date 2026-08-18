@@ -1,50 +1,67 @@
 import api from "../api/axios";
-import type { CreateCoverLetterResponse, DeleteCoverLetterResponse, FetchCoverLettersResponse, CoverLetterByIdResponse } from "./api";
+import type {
+  CreateCoverLetterResponse,
+  UpdateCoverLetterResponse,
+  DeleteCoverLetterResponse,
+  FetchCoverLettersResponse,
+  CoverLetterByIdResponse,
+} from "./api";
 import type { CoverLetterData } from "./templateindex";
 
+export interface CreateCoverLetterPayload {
+  title: string;
+  templateId: string;
+  data: CoverLetterData | Record<string, never>;
+}
+
+export interface UpdateCoverLetterPayload {
+  title?: string;
+  templateId?: string;
+  data?: CoverLetterData;
+}
 
 export const CoverLetterService = {
+  getAllCoverLetters: async (): Promise<FetchCoverLettersResponse> => {
+    const response = await api.get<FetchCoverLettersResponse>("/cover-letters");
+    return response.data;
+  },
 
-    /**
-     * Fetches all cover letters for the current user.
-     * @returns {Promise<FetchCoverLettersResponse>} An object containing the list of cover letters, count, and an optional isGuest flag.
-     * @throws Will throw an error if the API request fails.    
-     */
-    getAllCoverLetters: async (): Promise<FetchCoverLettersResponse> => {
-        const response = await api.get<FetchCoverLettersResponse>("/coverletters");
-        return response.data;
-    },
+  getCoverLetterById: async (
+    id: string | number,
+  ): Promise<CoverLetterByIdResponse> => {
+    const response = await api.get<CoverLetterByIdResponse>(
+      `/cover-letters/${id}`,
+    );
+    return response.data;
+  },
 
-    /**
-     * Fetches a cover letter by its ID.
-     * @param {string} id - The ID of the cover letter to fetch.
-     * @returns {Promise<CoverLetterByIdResponse>} An object containing the fetched cover letter.
-     * @throws Will throw an error if the API request fails.
-     */
-    getCoverLetterById: async (id: string): Promise<CoverLetterByIdResponse> => {
-        const response = await api.get<CoverLetterByIdResponse>(`/coverletters/${id}`);
-        return response.data;
-    },
+  createCoverLetter: async (
+    payload: CreateCoverLetterPayload,
+  ): Promise<CreateCoverLetterResponse> => {
+    const response = await api.post<CreateCoverLetterResponse>(
+      "/cover-letters",
+      payload,
+    );
+    return response.data;
+  },
 
-    /**
-     * Deletes a cover letter by its ID.
-     * @param {string} id - The ID of the cover letter to delete.
-     * @returns {Promise<DeleteCoverLetterResponse>} An object containing the result of the deletion.
-     * @throws Will throw an error if the API request fails.
-     */
-    deleteCoverLetterById: async (id: string): Promise<DeleteCoverLetterResponse> => {
-        const response = await api.delete<DeleteCoverLetterResponse>(`/coverletters/${id}`);
-        return response.data;
-    },
+  updateCoverLetter: async (
+    id: string | number,
+    payload: UpdateCoverLetterPayload,
+  ): Promise<UpdateCoverLetterResponse> => {
+    const response = await api.put<UpdateCoverLetterResponse>(
+      `/cover-letters/${id}`,
+      payload,
+    );
+    return response.data;
+  },
 
-    /**
-     * Creates a new cover letter.
-     * @param {Object} payload - The data for the new cover letter.
-     * @returns {Promise<CreateCoverLetterResponse>} An object containing the created cover letter.
-     * @throws Will throw an error if the API request fails.
-     */
-    createCoverLetter: async (payload: { title: string; templateId: string; data: CoverLetterData | Record<string, never>; }): Promise<CreateCoverLetterResponse> => {
-        const response = await api.post<CreateCoverLetterResponse>("/coverletters", payload);
-        return response.data;
-    },
-}
+  deleteCoverLetterById: async (
+    id: string | number,
+  ): Promise<DeleteCoverLetterResponse> => {
+    const response = await api.delete<DeleteCoverLetterResponse>(
+      `/cover-letters/${id}`,
+    );
+    return response.data;
+  },
+};

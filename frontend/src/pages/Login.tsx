@@ -38,10 +38,8 @@ export default function Login() {
         <div className="w-full max-w-7xl flex flex-col">
           <div className="flex flex-col lg:flex-row w-full min-h-[700px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)]">        
             
-            {/* LEFT SECTION */}
             <div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
-              {/* <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 2px)`, backgroundSize: '24px 24px' }} /> */}
-              {/* Larger Glowing Blobs */}
+           
               <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-yellow-500/15 rounded-full blur-3xl" />
               <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/20 rounded-full blur-2xl" />
 
@@ -102,18 +100,14 @@ export default function Login() {
               </div>
             </div>
 
-           {/* RIGHT SECTION */}
 <div className="lg:w-[50%] bg-(--color-card-right) p-6 sm:p-10 relative border-r border-(--color-border-subtle) flex flex-col justify-center items-center"> 
   
-  {/* Form Container - Everything inside here is perfectly centered */}
   <div className="w-full max-w-sm mx-auto flex flex-col justify-center my-auto py-6">
     
-    {/* Action Panel - Now centered directly above the form layout flow */}
     <div className="flex justify-center mb-8">
       <ActionPanel />
     </div>
 
-    {/* Heading Section */}
     <div className="mb-10 text-center lg:text-left">
       <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-sign-in)' }}>
         {t('sign_in')}
@@ -121,7 +115,6 @@ export default function Login() {
       <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{t('welcome_back_please_enter_your_details')}</p>
     </div>
 
-    {/* Social Logins */}
     <div className="flex items-center gap-3 mb-8 w-full">
       <div className="flex-1 transform hover:scale-[1.01] transition-all">
         <GoogleAuthButton />

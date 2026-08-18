@@ -51,11 +51,7 @@ export default function SelectionPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {tools.map((tool) => (
                 <Link to={tool.path} key={tool.id} className="group">
-                  {/* 
-                    THE FIX: 
-                    - Added "border" with light-mode ("border-slate-200/60") and dark-mode ("dark:border-slate-800/80") utility classes.
-                    - Fixed the hover shadows so they don't look overly intense or white in dark mode.
-                  */}
+                 
                   <div className="h-full bg-(--color-form-in) border border-slate-200/80 dark:border-slate-200/80 p-8 rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-black/30 transition-all duration-300 flex flex-col items-start">
                     <div className={`p-4 rounded-2xl ${tool.color} text-white mb-6 shadow-lg shadow-current/20`}>
                       {tool.icon}

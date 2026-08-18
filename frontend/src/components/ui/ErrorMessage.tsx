@@ -1,6 +1,4 @@
-interface ErrorProps {
-  message: string;
-}
+import type { ErrorProps } from "../../types/layoutprops";
 
 export const ErrorMessage = ({ message }: ErrorProps) => (
   <div className="flex items-center gap-3 bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm transition-all animate-in fade-in slide-in-from-top-2">

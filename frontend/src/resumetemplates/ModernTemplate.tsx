@@ -7,7 +7,6 @@ export default function Modern({ data }: { data: ResumeData }) {
       className="w-[210mm] min-h-[297mm] bg-white font-sans text-slate-800 flex flex-col overflow-hidden box-border"
       style={{ margin: "0 auto" }}
     >
-      {/* DARK HEADER */}
       <header className="bg-[#1a1f2c] text-white p-[12mm] flex justify-between items-center shrink-0">
         <div className="space-y-1">
           <h1 className="text-4xl font-light tracking-tight">
@@ -32,10 +31,8 @@ export default function Modern({ data }: { data: ResumeData }) {
       </header>
 
       <div className="flex flex-1">
-        {/* MAIN CONTENT (LEFT) */}
         <main className="flex-[1.6] p-[12mm] pr-6 flex flex-col gap-10">
           
-          {/* WORK EXPERIENCE */}
           <section>
             <div className="flex items-center gap-4 mb-6">
               <div className="h-1.5 w-10 bg-slate-900 rounded-full" />
@@ -47,7 +44,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             <div className="space-y-8 border-l-[1.5px] border-slate-100 ml-2">
               {data.experience?.map((exp, i) => (
                 <div key={i} className="relative pl-8">
-                  {/* Hollow Circle Bullet */}
                   <div className="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-2 border-slate-400 bg-white" />
                   
                   <div className="mb-2">
@@ -66,7 +62,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* DYNAMIC PROJECTS / RESEARCH */}
           {data.projects && data.projects.length > 0 && (
             <section>
               <div className="flex items-center gap-4 mb-6">
@@ -103,10 +98,8 @@ export default function Modern({ data }: { data: ResumeData }) {
           )}
         </main>
 
-        {/* SIDEBAR (RIGHT) */}
         <aside className="flex-1 bg-white p-[12mm] pl-6 border-l border-slate-100 flex flex-col gap-8">
           
-          {/* CONTACT */}
           <section>
             <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
               Contact
@@ -118,7 +111,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* SUMMARY */}
           {data.personal?.summary && (
             <section>
               <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
@@ -130,7 +122,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             </section>
           )}
 
-          {/* EDUCATION */}
           <section>
             <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
               Education
@@ -148,7 +139,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* DYNAMIC SKILLS */}
           <section>
             <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
               {data.sectionTitles?.skills || "Skills"}
@@ -165,7 +155,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* LANGUAGES */}
           {data.languages && data.languages.length > 0 && (
             <section>
               <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
@@ -186,7 +175,6 @@ export default function Modern({ data }: { data: ResumeData }) {
             </section>
           )}
 
-          {/* CERTIFICATIONS */}
           {data.certifications && data.certifications.length > 0 && (
             <section>
               <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">

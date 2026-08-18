@@ -1,7 +1,6 @@
 import { useGithubAuth } from "../hooks/useGithubAuth";
 
 export default function GithubCallback() {
-  // All the logic is tucked away inside this hook
   useGithubAuth();
 
   return (

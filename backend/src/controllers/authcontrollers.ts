@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -7,8 +7,26 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
 import { UserAttributes } from "../types/UserTypes";
-import { RegisterUserResponse, LoginUserResponse, AuthMessageResponse, RefreshTokenResponse } from "../types/ResponseTypes";
-import { Op } from "sequelize"; 
+import {
+  RegisterUserResponse,
+  LoginUserResponse,
+  AuthMessageResponse,
+  RefreshTokenResponse,
+} from "../types/ResponseTypes";
+import {
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  AppError,
+} from "../utils/AppError";
+import { Op } from "sequelize";
+
+interface GitHubEmail {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+  visibility: string | null;
+}
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -22,41 +40,54 @@ const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET as string,
-    { expiresIn: "15m" }
+    { expiresIn: "15m" },
   );
 };
 
 const generateRefreshToken = (user: UserAttributes) => {
   return jwt.sign(
-    
     { id: user.id, email: user.email },
     process.env.JWT_REFRESH_SECRET as string,
-    { expiresIn: "7d" }
+    { expiresIn: "7d" },
   );
 };
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-// --- REGISTER USER ---
-export const registerUser = async (req: Request, res: Response<RegisterUserResponse>): Promise<Response> => {
+export const registerUser = async (
+  req: Request,
+  res: Response<RegisterUserResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password } = req.body || {};
+    if (!fullname || !email || !password) {
+      throw new BadRequestError("Fullname, email, and password are required");
+    }
 
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser) {
-      if (existingUser.googleId && (!existingUser.password || existingUser.password === "")) {
+      if (
+        existingUser.googleId &&
+        (!existingUser.password || existingUser.password === "")
+      ) {
         const hashedPassword = await bcrypt.hash(password, 10);
         await existingUser.update({ password: hashedPassword, fullname });
-        
-        return res.status(200).json({
+
+        res.status(200).json({
           success: true,
           message: "Password added to your Google account!",
-          user: { id: existingUser.id, email: existingUser.email, fullname: existingUser.fullname },
+          user: {
+            id: existingUser.id,
+            email: existingUser.email,
+            fullname: existingUser.fullname,
+          },
         });
+        return;
       }
-      return res.status(400).json({ success: false, message: "Email already exists" });
+      throw new BadRequestError("Email already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -66,82 +97,86 @@ export const registerUser = async (req: Request, res: Response<RegisterUserRespo
       password: hashedPassword,
     });
 
-    return res.status(201).json({ 
-      success: true, 
-      message: "User registered", 
-      user: { id: newUser.id, email: newUser.email, fullname: newUser.fullname } 
+    res.status(201).json({
+      success: true,
+      message: "User registered",
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        fullname: newUser.fullname,
+      },
     });
   } catch (error) {
-    console.error("REGISTER ERROR:", error);
-    return res.status(500).json({ success: false, message: "Error registering user" });
+    next(error);
   }
 };
 
-// --- LOGIN USER ---
-export const loginUser = async (req: Request, res: Response<LoginUserResponse>) => {
+export const loginUser = async (
+  req: Request,
+  res: Response<LoginUserResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
 
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: "Email & password required" });
+      throw new BadRequestError("Email & password required");
     }
 
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: "User not found" });
+      throw new BadRequestError("Invalid email or password");
     }
 
-
     if (!user.password || user.password === "") {
-      return res.status(400).json({
-        success: false,
-        message: "This account was created via Google Login. Please use the 'Sign in with Google' button.",
-      });
+      throw new BadRequestError(
+        "This account was created via Google Login. Please use the 'Sign in with Google' button.",
+      );
     }
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res.status(400).json({ success: false, message: "Invalid password" });
+      throw new BadRequestError("Invalid email or password");
     }
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
     await user.update({ refreshToken });
-   
- res.cookie("refreshToken", refreshToken, {
-  ...cookieOptions,
-  maxAge: 7 * 24 * 60 * 60 * 1000, 
-})
 
-   
-    return res.json({
+    res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
       success: true,
       message: "Login successful",
       accessToken,
-      user: { 
-        id: user.id, 
-        email: user.email, 
+      user: {
+        id: user.id,
+        email: user.email,
         fullname: user.fullname,
-
       },
     });
   } catch (error) {
-    console.error("LOGIN ERROR:", error);
-    return res.status(500).json({ success: false, message: "Error logging in" });
+    next(error);
   }
 };
 
-// --- GOOGLE LOGIN ---
-export const googleLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
-  const { id_token } = req.body;
-
-  if (!id_token) {
-    return res.status(400).json({ success: false, message: "Missing Google ID Token" });
-  }
-
+export const googleLogin = async (
+  req: Request,
+  res: Response<LoginUserResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
+    const { id_token } = req.body || {};
+
+    if (!id_token) {
+      throw new BadRequestError("Missing Google ID Token");
+    }
+
     const ticket = await client.verifyIdToken({
       idToken: id_token,
       audience: GOOGLE_CLIENT_ID,
@@ -149,10 +184,10 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
 
     const payload = ticket.getPayload();
     if (!payload || !payload.email || !payload.sub) {
-      return res.status(401).json({ success: false, message: "Invalid Google Token Payload" });
+      throw new UnauthorizedError("Invalid Google Token Payload");
     }
 
-    const { sub: googleId, email, name: fullname, picture } = payload;
+    const { sub: googleId, email, name: fullname } = payload;
 
     let user = await User.findOne({ where: { email } });
 
@@ -163,28 +198,24 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
         googleId,
         password: "",
       } as UserAttributes);
-      console.log(`New user registered via Google: ${email}`);
     } else if (!user.googleId) {
       await user.update({ googleId });
-      console.log(`Existing user linked with Google ID: ${email}`);
     }
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    
     await user.update({ refreshToken });
 
+    res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
- res.cookie("refreshToken", refreshToken, {
-  ...cookieOptions,
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
-
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Google login successful",
-      accessToken, 
+      accessToken,
       user: {
         id: user.id,
         email: user.email,
@@ -192,55 +223,63 @@ export const googleLogin = async (req: Request, res: Response<LoginUserResponse>
       },
     });
   } catch (error) {
-    console.error("GOOGLE LOGIN ERROR:", error);
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return res.status(401).json({ success: false, message: "Failed to authenticate with Google", error: errorMessage });
+    next(error);
   }
 };
 
-// --- REFRESH ACCESS TOKEN ---
-
-export const refreshAccessToken = async (req: Request, res: Response<RefreshTokenResponse>) => {
+export const refreshAccessToken = async (
+  req: Request,
+  res: Response<RefreshTokenResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
+    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!refreshToken) {
-      return res.status(401).json({ success: false, message: "No refresh token provided" });
+      throw new UnauthorizedError("No refresh token provided");
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET as string
-    ) as { id: number; email: string };
+    let decoded: { id: number; email: string };
+    try {
+      decoded = jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET as string,
+      ) as { id: number; email: string };
+    } catch {
+      throw new ForbiddenError("Refresh token expired or invalid");
+    }
 
     const user = await User.findByPk(decoded.id);
 
     if (!user || user.refreshToken !== refreshToken) {
-      return res.status(403).json({ success: false, message: "Invalid refresh token" });
+      throw new ForbiddenError("Invalid refresh token");
     }
 
     const plainUserData = user.get({ plain: true }) as UserAttributes;
     const newAccessToken = generateAccessToken(plainUserData);
 
-    return res.json({
+    res.status(200).json({
       success: true,
       message: "Access token refreshed",
       accessToken: newAccessToken,
-      user:{
+      user: {
         id: user.id,
         email: user.email,
         fullname: user.fullname,
       },
     });
   } catch (error) {
-    return res.status(403).json({ success: false, message: "Refresh token expired or invalid" });
+    next(error);
   }
 };
 
-// --- LOGOUT USER ---
-export const logoutUser = async (req: Request, res: Response<AuthMessageResponse>) => {
+export const logoutUser = async (
+  req: Request,
+  res: Response<AuthMessageResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken = req.cookies?.refreshToken;
 
     if (refreshToken) {
       const user = await User.findOne({ where: { refreshToken } });
@@ -248,23 +287,27 @@ export const logoutUser = async (req: Request, res: Response<AuthMessageResponse
         await user.update({ refreshToken: null });
       }
     }
-    
-    res.clearCookie("refreshToken", cookieOptions);
-    return res.json({ success: true, message: "Logged out successfully" });
 
-  } catch (error) {
-    console.error("LOGOUT DATABASE ERROR:", error);
     res.clearCookie("refreshToken", cookieOptions);
-    return res.status(500).json({ success: false, message: "Error clearing session smoothly" });
+    res.status(200).json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    res.clearCookie("refreshToken", cookieOptions);
+    next(error);
   }
 };
-// --- GITHUB LOGIN ---
-export const githubLogin = async (req: Request, res: Response<LoginUserResponse>): Promise<Response> => {
-  const { code } = req.body;
 
-  if (!code) return res.status(400).json({ success: false, message: "Missing GitHub Code" });
-
+export const githubLogin = async (
+  req: Request,
+  res: Response<LoginUserResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
+    const { code } = req.body || {};
+
+    if (!code) {
+      throw new BadRequestError("Missing GitHub Code");
+    }
+
     const tokenResponse = await axios.post(
       "https://github.com/login/oauth/access_token",
       {
@@ -272,23 +315,39 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         code,
       },
-      { headers: { Accept: "application/json" } }
+      { headers: { Accept: "application/json" } },
     );
 
-    const githubAccessToken = tokenResponse.data.access_token; // Renamed slightly to avoid confusion with your app's token
-    if (!githubAccessToken) throw new Error("GitHub token exchange failed");
+    const githubAccessToken = tokenResponse.data.access_token;
+    if (!githubAccessToken) {
+      throw new UnauthorizedError("GitHub token exchange failed");
+    }
 
     const [userRes, emailRes] = await Promise.all([
-      axios.get("https://api.github.com/user", {
-        headers: { Authorization: `Bearer ${githubAccessToken}`, "User-Agent": "ResumeUp" }
+      axios.get<{ id: number; name: string | null; avatar_url: string }>(
+        "https://api.github.com/user",
+        {
+          headers: {
+            Authorization: `Bearer ${githubAccessToken}`,
+            "User-Agent": "ResumeUp",
+          },
+        },
+      ),
+      axios.get<GitHubEmail[]>("https://api.github.com/user/emails", {
+        headers: {
+          Authorization: `Bearer ${githubAccessToken}`,
+          "User-Agent": "ResumeUp",
+        },
       }),
-      axios.get("https://api.github.com/user/emails", {
-        headers: { Authorization: `Bearer ${githubAccessToken}`, "User-Agent": "ResumeUp" }
-      })
     ]);
 
     const { id: githubId, name, avatar_url: picture } = userRes.data;
-    const primaryEmail = emailRes.data.find((e: any) => e.primary)?.email || emailRes.data[0].email;
+    const primaryEmail =
+      emailRes.data.find((e) => e.primary)?.email || emailRes.data[0]?.email;
+
+    if (!primaryEmail) {
+      throw new BadRequestError("No verified email found from GitHub account");
+    }
 
     let user = await User.findOne({ where: { email: primaryEmail } });
 
@@ -297,7 +356,7 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
         email: primaryEmail,
         fullname: name || "GitHub User",
         githubId: String(githubId),
-        password: "", 
+        password: "",
       } as UserAttributes);
     } else if (!user.githubId) {
       await user.update({ githubId: String(githubId) });
@@ -306,43 +365,38 @@ export const githubLogin = async (req: Request, res: Response<LoginUserResponse>
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
 
+    await user.update({ refreshToken: newRefreshToken });
 
-
-await user.update({ refreshToken: newRefreshToken });
-
-res.cookie("refreshToken", newRefreshToken, {
-  ...cookieOptions,
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
-
-    return res.status(200).json({
-      success: true,
-      message: "GitHub login successful",
-      accessToken: newAccessToken, 
-      user: { 
-        id: user.id, 
-        email: user.email, 
-        fullname: user.fullname, 
-        picture 
-      },
+    res.cookie("refreshToken", newRefreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-  } catch (error: any) {
-    console.error("GitHub Auth Error:", error.message);
-    return res.status(401).json({ success: false, message: "Authentication failed", error: error.message });
+    res.status(200).json({
+      success: true,
+      message: "GitHub login successful",
+      accessToken: newAccessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+        picture,
+      },
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
-
-// --- FORGOT PASSWORD ---
-export const forgotPassword = async (req: Request, res: Response): Promise<Response> => {
-  console.log("-----------------------------------------");
-  console.log("1. 🚀 HIT FORGOT PASSWORD CONTROLLER");
-
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const { email } = req.body;
+    const { email } = req.body || {};
     if (!email) {
-      return res.status(400).json({ success: false, message: "Email is required" });
+      throw new BadRequestError("Email is required");
     }
 
     const sanitizedEmail = email.toLowerCase().trim();
@@ -351,40 +405,35 @@ export const forgotPassword = async (req: Request, res: Response): Promise<Respo
 
     const user = await User.findOne({ where: { email: sanitizedEmail } });
 
-    // Security practice: Return 200 generic message so attackers can't probe for registered emails
     if (!user) {
-      console.log("⚠️ User not found in DB. Returning generic success message.");
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
-        message: "If an account with that email exists, a password reset link has been sent.",
+        message:
+          "If an account with that email exists, a password reset link has been sent.",
       });
+      return;
     }
 
-    // Cooldown check (0ms in dev, 2 minutes in production to prevent spamming)
     const coolDownPeriodInMs = isDev ? 0 : 2 * 60 * 1000;
-
-    console.log("2. 🔍 CHECKING DB TIMESTAMP:", user.resetPasswordRequestedAt);
 
     if (coolDownPeriodInMs > 0 && user.resetPasswordRequestedAt) {
       const lastRequestTime = new Date(user.resetPasswordRequestedAt).getTime();
       const timeSinceLastRequest = currentTime - lastRequestTime;
 
-      console.log("3. ⏱️ TIME SINCE LAST REQUEST (ms):", timeSinceLastRequest);
-
       if (timeSinceLastRequest < coolDownPeriodInMs) {
-        console.log("❌ BLOCKED BY DB COOLDOWN!");
-        return res.status(429).json({
-          success: false,
-          message: "Please wait 2 minutes before requesting another reset email.",
-        });
+        throw new AppError(
+          "Please wait 2 minutes before requesting another reset email.",
+          429,
+        );
       }
     }
 
-    console.log("4. ✅ PASSED DB CHECK - GENERATING TOKEN...");
-
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
-    const resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    const resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000);
 
     await user.update({
       resetPasswordToken: hashedToken,
@@ -392,10 +441,8 @@ export const forgotPassword = async (req: Request, res: Response): Promise<Respo
       resetPasswordRequestedAt: new Date(),
     });
 
-    const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    const frontendUrl = process.env.FRONTEND_URL as string;
     const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
-
-    console.log("5. ✉️ SENDING EMAIL TO:", user.email);
 
     await sendEmail({
       email: user.email,
@@ -403,30 +450,29 @@ export const forgotPassword = async (req: Request, res: Response): Promise<Respo
       message: resetUrl,
     });
 
-    console.log("6. 🎉 EMAIL SENT SUCCESSFULLY VIA BREVO!");
-
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      message: "If an account with that email exists, a password reset link has been sent.",
+      message:
+        "If an account with that email exists, a password reset link has been sent.",
     });
-
-  } catch (error: any) {
-    console.error("Forgot password error:", error);
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Internal server error",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-
-
-// --- RESET PASSWORD ---
-export const resetPassword = async (req: Request, res: Response<AuthMessageResponse>): Promise<Response> => {
-  const { token } = req.params;
-  const { password } = req.body;
-
+export const resetPassword = async (
+  req: Request,
+  res: Response<AuthMessageResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
+    const { token } = req.params;
+    const { password } = req.body || {};
+
+    if (!password || typeof password !== "string" || password.trim() === "") {
+      throw new BadRequestError("New password is required");
+    }
+
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await User.findOne({
@@ -437,22 +483,24 @@ export const resetPassword = async (req: Request, res: Response<AuthMessageRespo
     });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: "Token is invalid or has expired" });
+      throw new BadRequestError("Token is invalid or has expired");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     await user.update({
       password: hashedPassword,
       resetPasswordToken: null,
       resetPasswordExpires: null,
-      refreshToken: null, 
-      passwordChangedAt: new Date(), 
+      refreshToken: null,
+      passwordChangedAt: new Date(),
     });
 
-    return res.status(200).json({ success: true, message: "Password updated successfully! You can now log in." });
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully! You can now log in.",
+    });
   } catch (error) {
-    console.error("RESET PASSWORD ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to reset password" });
+    next(error);
   }
 };

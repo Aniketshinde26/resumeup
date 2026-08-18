@@ -6,7 +6,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
       id="resume-template"
       className="mx-auto w-[210mm] min-h-[297mm] bg-white p-[10mm] font-sans overflow-hidden box-border relative shadow-2xl print:shadow-none"
     >
-      {/* HEADER */}
       <header className="flex justify-between items-center mb-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
         <div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
@@ -39,7 +38,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
         )}
       </header>
 
-      {/* SUMMARY */}
       {data.personal?.summary && (
         <section className="mb-8 px-2">
           <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
@@ -52,7 +50,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
       )}
 
       <div className="grid grid-cols-12 gap-8">
-        {/* MAIN COLUMN (Left) */}
         <div className="col-span-8 space-y-6">
           <section className="no-break">
             <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -76,7 +73,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
             </div>
           </section>
 
-          {/* DYNAMIC PROJECTS / RESEARCH SECTION */}
           {data.projects && data.projects.length > 0 && (
             <section className="no-break">
               <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -108,7 +104,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
           )}
         </div>
 
-        {/* SIDEBAR (Right) */}
         <div className="col-span-4 space-y-6">
           <section className="no-break">
             <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-4">
@@ -139,7 +134,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
             ))}
           </section>
 
-          {/* CERTIFICATIONS */}
           {data.certifications && data.certifications.length > 0 && (
             <section className="no-break">
               <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Certifications</h2>
@@ -154,7 +148,6 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
             </section>
           )}
 
-          {/* LANGUAGES */}
           {data.languages && data.languages.length > 0 && (
             <section className="no-break">
               <h2 className="text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] mb-3">Languages</h2>

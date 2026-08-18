@@ -1,4 +1,3 @@
-// components/TemplateTeaser.tsx
 import { PUBLIC_TEMPLATES } from "../constants/templates";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +12,7 @@ export default function TemplateTeaser() {
           <div 
             key={tpl.id} 
             className="group cursor-pointer max-w-[250px]"
-            onClick={() => navigate(`/builder/${tpl.id}`)} // Sends them straight to the editor
+            onClick={() => navigate(`/builder/${tpl.id}`)}
           >
             <div className="aspect-[1/1.41] rounded-xl border-2 border-slate-200 group-hover:border-green-500 transition-all overflow-hidden shadow-md">
               <img src={`/previews/${tpl.id}.png`} alt={tpl.name} className="w-full h-full object-cover" />

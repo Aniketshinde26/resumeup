@@ -1,13 +1,14 @@
-// hooks/useLogin.ts
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import api from "../api/axios";
-import {useAuth} from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import type { AuthResponse } from "../types/user";
 import { initiateGithubLogin } from "../services/githubAuth";
+
 export const useLogin = () => {
   const navigate = useNavigate();
-  const {login} = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +25,16 @@ export const useLogin = () => {
         password,
       });
 
-   if (res.data.accessToken) {
-  login(res.data.user,res.data.accessToken); // 🔑 Lock it in memory vault
-  navigate("/home", { replace: true });
-}
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed");
+      if (res.data.accessToken) {
+        login(res.data.user, res.data.accessToken);
+        navigate("/home", { replace: true });
+      }
+    } catch (err: unknown) {
+      if (axios.isAxiosError<{ message?: string }>(err)) {
+        setError(err.response?.data?.message || "Login failed");
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -43,6 +48,6 @@ export const useLogin = () => {
     isLoading,
     error,
     handleLogin,
-    initiateGithubLogin
+    initiateGithubLogin,
   };
 };

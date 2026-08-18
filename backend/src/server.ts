@@ -1,17 +1,25 @@
 import dotenv from "dotenv";
 dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { connectDB, sequelize } from "./config/db";
+import helmet from "helmet";
+
+import { connectDB } from "./config/db";
 import authRoutes from "./routes/auth.route";
 import dashboardRoutes from "./routes/dashboard.route";
 import resumeRoutes from "./routes/resume.route";
 import coverletterRoutes from "./routes/coverletter.route";
 import "./models";
-import helmet from "helmet";
+import { errorHandler } from "./middleware/errorHandler";
+
+if (!process.env.FRONTEND_URL) {
+  throw new Error("FRONTEND_URL environment variable is required");
+}
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
@@ -25,37 +33,31 @@ const corsOptions = {
     "Origin",
     "X-Retry-Attempted",
   ],
-  exposedHeaders: ["Set-Cookie"],
+  exposedHeaders: [],
   maxAge: 86400,
 };
+
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/cover-letters", coverletterRoutes);
 
-app.get("/", (req, res) => {
-  res.json({ message: "ResumeUp backend is running!" });
+app.get("/", (_req, res) => {
+  res.json({ success: true, message: "ResumeUp backend is running!" });
 });
-
-const PORT = process.env.PORT || 5000;
-
+app.use(errorHandler);
 const startServer = async () => {
-  await connectDB();
-  
   try {
-    await sequelize.sync(); // Use alter: true to update the schema without dropping tables
-    console.log("Database synced successfully");
+    await connectDB();
+    app.listen(PORT);
   } catch (error) {
-    console.error("Sequelize sync error:", error);
+    process.exit(1);
   }
-  
-  app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-  });
 };
 
 startServer();

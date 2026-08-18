@@ -33,16 +33,12 @@ export default function Register() {
           
           <div className="flex flex-col lg:flex-row w-full min-h-[700px] overflow-hidden rounded-[2rem] bg-(--color-card-bg) border border-(--color-border-subtle) shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)]">        
             
-            {/* LEFT SECTION: BRAND & SHOWCASE */}
             <div className="lg:w-[50%] bg-slate-100 p-10 sm:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-100">
-              {/* <div className="absolute inset-0 opacity-[0.7]" style={{ backgroundImage: `radial-gradient(#cbd5e1 1px, transparent 2px)`, backgroundSize: '24px 24px' }} /> */}
               
-              {/* Glowing Blobs */}
               <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-yellow-500/15 rounded-full blur-3xl animate-pulse" />
               <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-blue-500/20 rounded-full blur-2xl" />
 
               <div className="relative z-10">
-                {/* Logo */}
                 <div className="flex items-center gap-2.5 mb-8">
                   <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md">
                     <span className="text-white font-bold text-sm">R</span>
@@ -61,9 +57,7 @@ export default function Register() {
                 </h2>
               </div>
 
-              {/* Decorative Mockup Graphics Area */}
               <div className="mt-12 mb-8 relative px-4 hidden sm:block">
-                {/* Main Progress Card */}
                 <div className="relative z-10 bg-white rounded-2xl p-6 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-200/60 rotate-[-2deg] mb-4 max-w-sm mx-auto">
                   <div className="flex justify-between items-center mb-4">
                     <div className="space-y-1.5">
@@ -85,7 +79,6 @@ export default function Register() {
                   </div>
                 </div>
 
-                {/* Floating Glassmorphism Stats badge */}
                 <div className="absolute -top-6 left-[5%] z-30 bg-white/60 backdrop-blur-xl border border-white rounded-2xl p-4 shadow-2xl shadow-slate-200/50 rotate-[4deg] w-48">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
@@ -100,7 +93,6 @@ export default function Register() {
                   </div>
                 </div>
 
-                {/* Contextual Tag */}
                 <div className="absolute -bottom-2 right-[5%] z-30 bg-slate-900 text-white text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg">
                   {t('optimize_your_job_hunt')}
                 </div>
@@ -111,18 +103,14 @@ export default function Register() {
               </div>
             </div>
 
-            {/* RIGHT SECTION: FORM CONTAINER */}
             <div className="lg:w-[50%] bg-(--color-card-right) p-6 sm:p-10 relative border-r border-(--color-border-subtle) flex flex-col justify-center items-center"> 
               
-              {/* Form Container - Perfectly centered layout */}
               <div className="w-full max-w-sm mx-auto flex flex-col justify-center my-auto py-6">
                 
-                {/* Action Panel - Centered and shifted higher flow */}
                 <div className="flex justify-center mb-5 -mt-4">
                   <ActionPanel />
                 </div>
 
-                {/* Heading Section */}
                 <div className="mb-8 text-center lg:text-left">
                   <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-sign-in)' }}>
                     {t('create_account')}
@@ -132,7 +120,6 @@ export default function Register() {
                   </p>
                 </div>
 
-                {/* Social Registration Rows */}
                 <div className="flex items-center gap-3 mb-6 w-full">
                   <div className="flex-1 transform hover:scale-[1.01] transition-all">
                     <GoogleAuthButton />
@@ -158,7 +145,6 @@ export default function Register() {
                   <div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div>
                 </div>
 
-                {/* Form Input Block */}
                 <form onSubmit={handleRegister} className="space-y-4">
                   {error && <ErrorMessage message={error} />}
 

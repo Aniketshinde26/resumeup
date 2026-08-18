@@ -1,31 +1,33 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
-import toast from "react-hot-toast"; // 🛠️ 1. IMPORT TOAST AT THE TOP
+import toast from "react-hot-toast";
 
-// Extend the Axios config interface slightly to avoid TypeScript compiler complaints
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-interface PromiseObject {
+interface PromiseQueueItem {
   resolve: (token: string) => void;
-  reject: (error: any) => void;
+  reject: (error: unknown) => void;
 }
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
-  withCredentials: true, 
+  baseURL: API_BASE_URL,
+  withCredentials: true,
 });
 
 let accessTokenInMemory: string | null = null;
 
-export const setAccessToken = (token: string | null) => {
+export const setAccessToken = (token: string | null): void => {
   accessTokenInMemory = token;
 };
 
 let isRefreshing = false;
-let failedQueue: PromiseObject[] = [];
+let failedQueue: PromiseQueueItem[] = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: unknown, token: string | null = null): void => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
@@ -36,57 +38,50 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-// 🛰️ OUTBOUND REQUEST INTERCEPTOR
 api.interceptors.request.use(
   (config) => {
     if (accessTokenInMemory && config.headers) {
       config.headers.set("Authorization", `Bearer ${accessTokenInMemory}`);
     }
-
-    console.log("📤 [Request]:", config.method?.toUpperCase(), config.url,
-      "| Auth:", config.headers?.get("Authorization") ? "SET" : "MISSING"
-    );
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: unknown) => Promise.reject(error),
 );
 
-// 📡 INBOUND RESPONSE INTERCEPTOR
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
 
-    // 🛠️ 2. GLOBAL RATE LIMIT CATCHER (429)
     if (error.response?.status === 429) {
-      // Safely access the custom message sent by your backend createHandler wrapper
-      const responseData = error.response.data as { message?: string; error?: string };
-      const rateLimitMessage = responseData?.message || responseData?.error || "Too many requests. Please slow down.";
+      const responseData = error.response.data as {
+        message?: string;
+        error?: string;
+      };
+      const rateLimitMessage =
+        responseData?.message ||
+        responseData?.error ||
+        "Too many requests. Please slow down.";
 
-      // Fire the toast alert visually inside the browser UI view layer
       toast.error(rateLimitMessage, {
-        duration: 4000, // Stays visible for 4 seconds
-        id: "rate-limit-toast", // Fixed unique ID avoids stacking duplicate overlays if hammered quickly
+        duration: 4000,
+        id: "rate-limit-toast",
         style: {
-          background: '#1e293b', // Matches a dark slate color panel theme
-          color: '#fff',
-          fontWeight: '600',
-          borderRadius: '12px',
+          background: "#1e293b",
+          color: "#fff",
+          fontWeight: "600",
+          borderRadius: "12px",
         },
-       
       });
 
-       return Promise.reject(error);
+      return Promise.reject(error);
     }
 
     if (!originalRequest) {
       return Promise.reject(error);
     }
 
-    // 🛡️ CRITICAL FIX: Read retry lock directly from the config root, NOT headers
     if (error.response?.status === 401 && !originalRequest._retry) {
-      
-      // Queue up overlapping concurrent requests while processing the first refresh token transaction
       if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -97,26 +92,23 @@ api.interceptors.response.use(
             }
             return api(originalRequest);
           })
-          .catch((err) => Promise.reject(err));
+          .catch((err: unknown) => Promise.reject(err));
       }
 
-      // Lock this request instantly right on the root config object
       originalRequest._retry = true;
       isRefreshing = true;
 
       try {
-        console.log("🔄 [Interceptor]: Access token expired. Refreshing...");
-        
-        const response = await axios.post(
-          "http://localhost:5000/api/auth/refresh",
+        const response = await axios.post<{ accessToken: string }>(
+          `${API_BASE_URL}/auth/refresh`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
-        
+
         const { accessToken } = response.data;
 
-        setAccessToken(accessToken); 
-        
+        setAccessToken(accessToken);
+
         if (originalRequest.headers) {
           originalRequest.headers.set("Authorization", `Bearer ${accessToken}`);
         }
@@ -124,22 +116,21 @@ api.interceptors.response.use(
         isRefreshing = false;
         processQueue(null, accessToken);
 
-        console.log("🚀 [Interceptor]: Retrying initial transaction chain.");
         return api(originalRequest);
-      } catch (refreshError) {
+      } catch (refreshError: unknown) {
         isRefreshing = false;
         processQueue(refreshError, null);
         setAccessToken(null);
-        
+
         if (typeof window !== "undefined") {
-          window.location.href = "/login"; 
+          window.location.href = "/login";
         }
         return Promise.reject(refreshError);
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

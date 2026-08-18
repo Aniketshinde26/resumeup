@@ -12,10 +12,10 @@ class User
   public password!: string;
   public refreshToken!: string | null;
   public googleId!: string | null;
-  public githubId!: string | null; 
+  public githubId!: string | null;
   public resetPasswordToken!: string | null;
   public resetPasswordExpires!: Date | null;
-  public resetPasswordRequestedAt!: Date | null; // 👈 1. Added class property
+  public resetPasswordRequestedAt!: Date | null;
   public passwordChangedAt!: Date | null;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -50,7 +50,7 @@ User.init(
       unique: true,
       allowNull: true,
     },
-    githubId: { 
+    githubId: {
       type: DataTypes.STRING,
       allowNull: true,
       unique: true,
@@ -63,7 +63,7 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true,
     },
-    resetPasswordRequestedAt: { // 👈 2. Added Sequelize column definition
+    resetPasswordRequestedAt: {
       type: DataTypes.DATE,
       allowNull: true,
     },
@@ -76,7 +76,7 @@ User.init(
     sequelize,
     modelName: "User",
     tableName: "users",
-  }
+  },
 );
 
 export default User;

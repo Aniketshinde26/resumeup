@@ -1,4 +1,4 @@
-import { TEMPLATE_LIST } from "../types/templateindex";
+import { TEMPLATE_LIST, type Resume } from "../types/templateindex";
 import DocumentCard from "../components/DocumentCard";
 import CreateItemModal from "../components/CreateItemModal";
 import { useDashboard } from "../hooks/useDashboard";
@@ -26,7 +26,6 @@ export default function Dashboard() {
     <div className="-m-8">
     <GridBackground>
     <div className="p-8 max-w-7xl mx-auto w-full">
-      {/* 1. START NEW Section */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-6 text-(--color-text)">
           {t('start_new')}
@@ -57,7 +56,6 @@ export default function Dashboard() {
 
       <hr className="my-10 border-slate-200" />
 
-      {/* 2. YOUR RESUMES Section */}
       <section>
         <h2 className="text-xl font-bold mb-6 text-(--color-text) uppercase tracking-wider">
          {t('your_resumes')}
@@ -68,7 +66,7 @@ export default function Dashboard() {
 <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">         
    <SkeletonWrapper isLoading={false} count={4}>
             {resumes.length > 0 ? (
-              resumes.map((resume: any) => (
+              resumes.map((resume: Resume) => (
                 <DocumentCard
                   key={resume.id}
                   title={resume.title}
@@ -82,7 +80,6 @@ export default function Dashboard() {
                 />
               ))
             ) : (
-              /* Same Empty State as Cover Letter Dashboard */
               !isLoading && (
                 <div className="col-span-full py-20 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl bg-slate-50/50">
                   <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4">

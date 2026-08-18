@@ -11,7 +11,8 @@ export default function MinimalistBorderTemplate({ data }: { data: CoverLetterDa
           <span>{data.personal?.email}</span>
           <span>•</span>
           <span>{data.personal?.phone}</span>
-          {/* Added personal location to header for completeness */}
+          <span>•</span>
+          <span>{data.personal?.jobTitle}</span>
           {data.personal?.location && (
             <>
               <span>•</span>
@@ -27,7 +28,6 @@ export default function MinimalistBorderTemplate({ data }: { data: CoverLetterDa
         <div className="mb-10 space-y-1">
           <p className="font-bold text-zinc-900">{data.recipient?.hiringManager}</p>
           <p className="text-zinc-500 font-medium">{data.recipient?.company}</p>
-          {/* Recipient Address added here */}
           {data.recipient?.address && (
             <p className="text-zinc-400 whitespace-pre-line leading-snug">
               {data.recipient.address}

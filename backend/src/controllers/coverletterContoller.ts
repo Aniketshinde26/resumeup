@@ -1,188 +1,176 @@
-import { Request, Response } from "express";
+import { Response, NextFunction } from "express";
 import CoverLetter from "../models/Coverletter";
 import { AuthRequest } from "../types/ResumeAuthTypes";
-import { 
-  CoverLetterResponse, 
-  GetAllCoverLettersResponse, 
-  DeleteResponse 
+import {
+  UnauthorizedError,
+  NotFoundError,
+  BadRequestError,
+} from "../utils/AppError";
+import {
+  CoverLetterResponse,
+  GetAllCoverLettersResponse,
+  DeleteResponse,
 } from "../types/ResponseTypes";
 
-/**
- * @desc Create a new cover letter for the authenticated user
- * @param req Authenticated request
- * @param res Express response
- * @returns Created cover letter (201)
- */
 export const createCoverLetter = async (
-  req: AuthRequest, 
-  res: Response<CoverLetterResponse>
-): Promise<Response> => {
+  req: AuthRequest,
+  res: Response<CoverLetterResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
+      throw new UnauthorizedError();
     }
 
     const { Title, Data, TemplateId } = req.body;
+
+    if (!Title || !TemplateId) {
+      throw new BadRequestError("Missing required fields: Title or TemplateId");
+    }
 
     const coverletter = await CoverLetter.create({
       userId: req.user.id,
       Title,
       TemplateId,
-      Data: Data || {}, 
+      Data: Data || {},
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "Cover Letter created successfully",
-      coverletter: coverletter,
+      coverletter,
     });
   } catch (error) {
-    console.error("CREATE ERROR:", error);
-    return res.status(500).json({ success: false, message: "Internal Server Error" });
+    next(error);
   }
 };
 
-/**
- * @desc Get all cover letters for the authenticated user (or guest mode if no user)
- * @param req 
- * @param res 
- * @returns All cover letters for the authenticated user or guest mode data (200)
- */
 export const getAllCoverLetters = async (
-  req: Request, 
-  res: Response<GetAllCoverLettersResponse>
-): Promise<Response> => {
+  req: AuthRequest,
+  res: Response<GetAllCoverLettersResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
     if (req.user) {
-        const coverletters = await CoverLetter.findAll({
-            where: { userId: req.user.id },
-            order: [["createdAt", "DESC"]],
-        });
+      const coverletters = await CoverLetter.findAll({
+        where: { userId: req.user.id },
+        order: [["createdAt", "DESC"]],
+      });
 
-        return res.status(200).json({
-            success: true,
-            message: "User cover letters fetched successfully",
-            count: coverletters.length,
-            coverletters: coverletters,
-            isGuest: false 
-        });
-    }
-    return res.status(200).json({
+      res.status(200).json({
         success: true,
-        message: "Guest mode activated",
-        count: 0,
-        coverletters: [],
-        isGuest: true 
+        message: "User cover letters fetched successfully",
+        count: coverletters.length,
+        coverletters,
+        isGuest: false,
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Guest mode activated",
+      count: 0,
+      coverletters: [],
+      isGuest: true,
     });
   } catch (error) {
-    console.error("GET COVER LETTERS ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to fetch cover letters" });
+    next(error);
   }
 };
 
-/**
- * @desc Get a single cover letter by ID for the authenticated user
- * @param req Authenticated request with cover letter ID in params
- * @param res Express response
- * @returns Cover letter data (200) or error if not found/unauthorized
- */
 export const getCoverLetterById = async (
   req: AuthRequest,
-  res: Response<CoverLetterResponse>
-): Promise<Response> => {
+  res: Response<CoverLetterResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
-
     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
+      throw new UnauthorizedError();
     }
-    
-    const coverLetter = await CoverLetter.findByPk(req.params.id);
-    if (!coverLetter) {
-      return res.status(404).json({ success: false, message: "Cover letter not found" });
+
+    const coverletter = await CoverLetter.findOne({
+      where: {
+        Id: req.params.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!coverletter) {
+      throw new NotFoundError("Cover letter not found");
     }
-    
-    if (coverLetter.userId !== req.user.id) {
-      return res.status(403).json({ success: false, message: "Forbidden" });
-    }
-    
-    return res.status(200).json({
+
+    res.status(200).json({
       success: true,
       message: "Cover letter fetched successfully",
-      coverletter: coverLetter,
+      coverletter,
     });
   } catch (error) {
-    console.error("GET COVER LETTER BY ID ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to fetch cover letter" });
+    next(error);
   }
 };
 
-/**
- * @desc Update a cover letter by ID for the authenticated user
- * @param req Authenticated request with cover letter ID in params and updated data in body     
- * @param res Express response
- * @returns Updated cover letter data (200) or error if not found/unauthorized
- */
 export const updateCoverLetter = async (
   req: AuthRequest,
-  res: Response<CoverLetterResponse>
-): Promise<Response> => {
+  res: Response<CoverLetterResponse>,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    if (!req.user) {        
-        return res.status(401).json({ success: false, message: "Unauthorized" });
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
-    
-    const coverLetter = await CoverLetter.findByPk(req.params.id);
-    if (!coverLetter) {
-      return res.status(404).json({ success: false, message: "Cover letter not found" });
+
+    const coverletter = await CoverLetter.findOne({
+      where: {
+        Id: req.params.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!coverletter) {
+      throw new NotFoundError("Cover letter not found");
     }
-    
-    if (coverLetter.userId !== req.user.id) {
-      return res.status(403).json({ success: false, message: "Forbidden" });
-    }
-    
-    const updatedCoverLetter = await coverLetter.update(req.body);
-    return res.status(200).json({
+
+    const updatedCoverLetter = await coverletter.update(req.body);
+
+    res.status(200).json({
       success: true,
       message: "Cover letter updated successfully",
       coverletter: updatedCoverLetter,
     });
   } catch (error) {
-    console.error("UPDATE COVER LETTER ERROR:", error);
-    return res.status(500).json({ success: false, message: "Failed to update cover letter" });
+    next(error);
   }
 };
 
-/**
- * @desc Delete a cover letter by ID for the authenticated user
- * @param req Authenticated request with cover letter ID in params
- * @param res Express response
- * @returns Success message (200) or error if not found/unauthorized    
- */
 export const deleteCoverLetter = async (
-    req: AuthRequest,
-    res: Response<DeleteResponse>
-): Promise<Response> => {
-    try {
-        if (!req.user) {
-            return res.status(401).json({ success: false, message: "Unauthorized" });
-        }
-        
-        const coverLetter = await CoverLetter.findByPk(req.params.id);
-        if (!coverLetter) {
-            return res.status(404).json({ success: false, message: "Cover letter not found" });
-        }
-        
-        if (coverLetter.userId !== req.user.id) {
-            return res.status(403).json({ success: false, message: "Forbidden" });
-        }
-        
-        await coverLetter.destroy();
-        return res.status(200).json({ 
-            success: true, 
-            message: "Cover letter deleted successfully" 
-        });
-    } catch (error) {
-        console.error("DELETE COVER LETTER ERROR:", error);
-        return res.status(500).json({ success: false, message: "Failed to delete cover letter" });
+  req: AuthRequest,
+  res: Response<DeleteResponse>,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    if (!req.user) {
+      throw new UnauthorizedError();
     }
+
+    const coverletter = await CoverLetter.findOne({
+      where: {
+        Id: req.params.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!coverletter) {
+      throw new NotFoundError("Cover letter not found");
+    }
+
+    await coverletter.destroy();
+
+    res.status(200).json({
+      success: true,
+      message: "Cover letter deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
 };

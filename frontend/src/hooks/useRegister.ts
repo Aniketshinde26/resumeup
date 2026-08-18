@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-
+import type { RegisterResponse } from "../types/user";
+import axios from "axios";
 export const useRegister = () => {
   const navigate = useNavigate();
   const [fullname, setFullname] = useState("");
@@ -16,10 +17,18 @@ export const useRegister = () => {
     setError("");
 
     try {
-      await api.post("/auth/register", { fullname, email, password });
+      await api.post<RegisterResponse>("/auth/register", {
+        fullname,
+        email,
+        password,
+      });
       navigate("/login", { replace: true });
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed");
+    } catch (err: unknown) {
+      if (axios.isAxiosError<{ message?: string }>(err)) {
+        setError(err.response?.data?.message || "Registration failed");
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -35,6 +44,5 @@ export const useRegister = () => {
     isLoading,
     error,
     handleRegister,
-    
   };
 };

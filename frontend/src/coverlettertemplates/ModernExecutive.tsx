@@ -3,7 +3,6 @@ import type { CoverLetterData } from "../types/templateindex";
 export default function ModernExecutiveTemplate({ data }: { data: CoverLetterData }) {
   return (
     <div id="cover-letter-template" className="w-full h-full bg-white flex font-sans text-slate-900">
-      {/* Sidebar */}
       <div className="w-1/3 bg-slate-50 p-12 flex flex-col justify-between border-r border-slate-100">
         <div>
           <h1 className="text-4xl font-bold leading-tight mb-4">{data.personal?.fullName}</h1>
@@ -23,7 +22,6 @@ export default function ModernExecutiveTemplate({ data }: { data: CoverLetterDat
        
       </div>
 
-      {/* Main Content */}
       <div className="w-2/3 p-16">
         <div className="mb-12">
           <p className="text-slate-400 mb-8">{data.letter?.date}</p>

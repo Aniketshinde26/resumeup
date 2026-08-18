@@ -3,6 +3,7 @@ import { sequelize } from "../config/db";
 import {
   ResumeAttributes,
   ResumeCreationAttributes,
+  ResumeData,
 } from "../types/ResumeTypes";
 
 class Resume
@@ -13,7 +14,7 @@ class Resume
   public userId!: number;
   public title!: string;
   public templateId!: string;
-  public data!: object;
+  public data!: ResumeData;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -51,7 +52,7 @@ Resume.init(
     sequelize,
     modelName: "Resume",
     tableName: "resumes",
-  }
+  },
 );
 
 export default Resume;

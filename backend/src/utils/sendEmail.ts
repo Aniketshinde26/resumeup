@@ -1,5 +1,7 @@
 import { BrevoClient } from "@getbrevo/brevo";
 import dotenv from "dotenv";
+import { AppError } from "./AppError";
+import { SendEmailOptions, BrevoApiError } from "../types/SendEmail";
 
 dotenv.config();
 
@@ -7,14 +9,13 @@ if (!process.env.BREVO_API_KEY) {
   console.error("⚠️ CRITICAL: BREVO_API_KEY is missing from process.env!");
 }
 
-// Initialize Brevo Client
 const brevo = new BrevoClient({
   apiKey: process.env.BREVO_API_KEY || "",
 });
 
-export const sendEmail = async (options: { email: string; subject: string; message: string }) => {
-  console.log("✉️ Sending email via Brevo API to:", options.email);
-
+export const sendEmail = async (
+  options: SendEmailOptions,
+): Promise<unknown> => {
   try {
     const result = await brevo.transactionalEmails.sendTransacEmail({
       subject: options.subject,
@@ -46,10 +47,15 @@ export const sendEmail = async (options: { email: string; subject: string; messa
       `,
     });
 
-    console.log("✅ BREVO SUCCESS! Message ID:", result.messageId);
     return result;
-  } catch (err: any) {
-    console.error("❌ BREVO SDK EXCEPTION:", err.body || err.message || err);
-    throw new Error(err.body?.message || err.message || "Failed to send email via Brevo");
+  } catch (err: unknown) {
+    const brevoErr = err as BrevoApiError;
+    const errorMessage =
+      brevoErr.body?.message ||
+      brevoErr.message ||
+      "Failed to send email via Brevo";
+
+    console.error("❌ BREVO SDK EXCEPTION:", brevoErr.body || errorMessage);
+    throw new AppError(errorMessage, 500);
   }
 };

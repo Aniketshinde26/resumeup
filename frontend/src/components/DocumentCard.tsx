@@ -1,15 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import type { DocumentCardProps } from "../types/layoutprops";
 
-interface DocumentCardProps {
-  title: string;
-  updatedAt?: string;
-  id: string | number;
-  type: "resume" | "coverletter";
-  preview?: string;
-  showContent?: boolean;
-  onClick?: () => void;
-  onDelete?: () => void;
-}
 
 export default function DocumentCard({
   title,
@@ -28,7 +19,6 @@ export default function DocumentCard({
     const updateScale = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
-        // Standard A4 ratio calculation based on your original 790px width
         const newScale = containerWidth / 790;
         setScale(newScale);
       }
@@ -39,7 +29,6 @@ export default function DocumentCard({
     return () => window.removeEventListener("resize", updateScale);
   }, [showContent]);
 
-  // Determine the preview URL based on type
   const previewUrl = type === "resume" ? `/resume/preview/${id}` : `/cover-letters/preview/${id}`;
 
   return (
@@ -47,7 +36,6 @@ export default function DocumentCard({
       onClick={onClick}
       className="bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-500/50 transition-all hover:shadow-md cursor-pointer group relative flex flex-col h-full"
     >
-      {/* PREVIEW CONTAINER */}
       <div
         ref={containerRef}
         className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center"
@@ -66,7 +54,6 @@ export default function DocumentCard({
                 top: 0,
               }}
             />
-            {/* Overlay to prevent iframe interaction while in card mode */}
             <div className="absolute inset-0 z-30 bg-transparent" />
           </div>
         ) : (
@@ -78,7 +65,6 @@ export default function DocumentCard({
         )}
       </div>
 
-      {/* INFO FOOTER */}
       <div className="flex justify-between items-end mt-auto">
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-slate-800 truncate group-hover:text-green-500 transition-colors text-sm">

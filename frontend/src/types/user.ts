@@ -1,4 +1,3 @@
-// Use "export" so other files can use this blueprint
 export interface User {
   id: number;
   email: string;
@@ -10,4 +9,11 @@ export interface AuthResponse {
   accessToken: string;
   user: User;
 }
-  
+
+export interface ResetPasswordResponse {
+  message: string;
+}
+
+export interface RegisterResponse {
+  message: string;
+}

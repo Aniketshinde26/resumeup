@@ -10,7 +10,6 @@ export default function ProfessionalSplitCoverLetter({
       id="cover-letter-template"
       className="w-full h-full bg-white p-[1.5in] font-sans text-slate-800 leading-relaxed"
     >
-      {/* HEADER: SIMPLE VERTICAL STACK */}
       <header className="mb-12 border-b-2 border-slate-100 pb-8 flex justify-between items-end">
         <div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">
@@ -24,7 +23,6 @@ export default function ProfessionalSplitCoverLetter({
           </p>
         </div>
 
-        {/* PROFILE PIC - Mapped to the right side if exists */}
         {data.personal?.image && (
           <img
             src={data.personal.image}
@@ -34,14 +32,12 @@ export default function ProfessionalSplitCoverLetter({
         )}
       </header>
 
-      {/* CONTACT ROW */}
       <div className="flex flex-wrap gap-x-6 gap-y-2 text-[11px] font-medium text-slate-500 mb-12 uppercase tracking-wide">
         <span>✉️ {data.personal?.email}</span>
         <span>📞 {data.personal?.phone}</span>
         <span>📍 {data.personal?.location}</span>
       </div>
 
-      {/* DATE & RECIPIENT */}
       <div className="mb-10 text-[12px]">
         <p className="font-bold text-slate-900 mb-6">{data.letter?.date}</p>
         
@@ -60,14 +56,12 @@ export default function ProfessionalSplitCoverLetter({
         </div>
       </div>
 
-      {/* SUBJECT LINE */}
       {data.letter?.subject && (
         <h2 className="text-[12px] font-black text-slate-900 uppercase tracking-wider mb-8 border-l-4 border-indigo-600 pl-3">
           RE: {data.letter.subject}
         </h2>
       )}
 
-      {/* LETTER BODY */}
       <div className="text-[13px] text-slate-600 space-y-5">
         <p className="font-bold text-slate-800">{data.letter?.salutation}</p>
         
@@ -76,7 +70,6 @@ export default function ProfessionalSplitCoverLetter({
         ))}
       </div>
 
-      {/* CLOSING */}
       <div className="mt-12 text-[13px]">
         <p className="text-slate-600 mb-6">{data.letter?.closing}</p>
         <p className="font-bold text-slate-900 text-[15px] uppercase tracking-tight">
