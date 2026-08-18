@@ -2,7 +2,7 @@ import DocumentCard from "../components/DocumentCard";
 import CreateItemModal from "../components/CreateItemModal";
 import { useCoverLetterDashboard } from "../hooks/useCoverLetterDashboard";
 import SkeletonWrapper from "../layouts/SkeletonWrapper";
-import { COVER_LETTER_TEMPLATES, type coverLetter } from "../types/templateindex";
+import { COVER_LETTER_TEMPLATES, type CoverLetter} from "../types/templateindex";
 import { useTranslation } from "react-i18next";
 import GridBackground from "../layouts/Gridbackground";
 export default function CoverLetterDashboard() {
@@ -63,7 +63,7 @@ export default function CoverLetterDashboard() {
 <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">       
    <SkeletonWrapper isLoading={isLoading} count={4}>
           {coverLetters.length > 0 ? (
-            coverLetters.map((coverLetter: coverLetter) => (
+            coverLetters.map((coverLetter: CoverLetter) => (
               <DocumentCard
                 key={coverLetter.Id}
                 title={coverLetter.Title}

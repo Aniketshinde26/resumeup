@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import api from "../api/axios";
-import type { forgotPasswordResponse } from "../types/api";
+import type { ForgotPasswordResponse } from "../types/api";
 
 export const useForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ export const useForgotPassword = () => {
     setError("");
 
     try {
-      const response = await api.post<forgotPasswordResponse>(
+      const response = await api.post<ForgotPasswordResponse>(
         "/auth/forgot-password",
         { email },
       );
