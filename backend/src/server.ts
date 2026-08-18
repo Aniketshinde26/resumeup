@@ -64,8 +64,6 @@ const corsOptions: CorsOptions = {
 app.use(helmet());
 app.use(cors(corsOptions));
 
-app.options("*", cors(corsOptions));
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -85,6 +83,7 @@ const startServer = async () => {
     await connectDB();
     app.listen(PORT, () => {});
   } catch (error) {
+    console.error("Failed to start server:", error);
     process.exit(1);
   }
 };
