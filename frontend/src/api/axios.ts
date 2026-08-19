@@ -24,6 +24,10 @@ export const setAccessToken = (token: string | null): void => {
   accessTokenInMemory = token;
 };
 
+export const getAccessToken = (): string | null => {
+  return accessTokenInMemory;
+};
+
 let isRefreshing = false;
 let failedQueue: PromiseQueueItem[] = [];
 
@@ -81,7 +85,17 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const requestUrl = originalRequest.url || "";
+    const isAuthEndpoint =
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/register") ||
+      requestUrl.includes("/auth/refresh");
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
       if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -106,23 +120,26 @@ api.interceptors.response.use(
         );
 
         const { accessToken } = response.data;
-
         setAccessToken(accessToken);
 
         if (originalRequest.headers) {
           originalRequest.headers.set("Authorization", `Bearer ${accessToken}`);
         }
 
-        isRefreshing = false;
         processQueue(null, accessToken);
+        isRefreshing = false;
 
         return api(originalRequest);
       } catch (refreshError: unknown) {
-        isRefreshing = false;
         processQueue(refreshError, null);
+        isRefreshing = false;
         setAccessToken(null);
 
-        if (typeof window !== "undefined") {
+        if (
+          typeof window !== "undefined" &&
+          !window.location.pathname.startsWith("/login") &&
+          !window.location.pathname.startsWith("/register")
+        ) {
           window.location.href = "/login";
         }
         return Promise.reject(refreshError);
