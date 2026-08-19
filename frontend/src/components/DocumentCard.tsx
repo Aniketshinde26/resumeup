@@ -5,9 +5,8 @@ import {
   createEmptyResumeData,
   type ResumeData,
   type CoverLetterData,
+  COVER_LETTER_TEMPLATES_MAP,
 } from "../types/templateindex";
-
-
 
 export default function DocumentCard({
   title,
@@ -37,25 +36,26 @@ export default function DocumentCard({
     return () => window.removeEventListener("resize", updateScale);
   }, [showContent]);
 
-  let parsedData: ResumeData | CoverLetterData | null = null;
-  if (typeof data === "string") {
+  let parsedData: unknown = data;
+  if (typeof parsedData === "string") {
     try {
-      parsedData = JSON.parse(data);
-    } catch (e) {
-      console.error("Parse error in DocumentCard", e);
+      parsedData = JSON.parse(parsedData);
+    } catch {
+      parsedData = null;
     }
-  } else if (data) {
-    parsedData = data;
   }
 
   const isResume = type === "resume";
-  const resumeData: ResumeData =
-    isResume && parsedData && "experience" in parsedData
-      ? (parsedData as ResumeData)
-      : createEmptyResumeData();
 
-  const ResumeTemplateComponent =
+  const ResumeTemplate =
     isResume && templateId ? TEMPLATES[templateId] : null;
+
+  const CoverLetterTemplate =
+    !isResume && templateId
+      ? (COVER_LETTER_TEMPLATES_MAP as Record<string, React.ComponentType<{ data: CoverLetterData }>>)[templateId]
+      : null;
+
+  const hasTemplate = Boolean(ResumeTemplate || CoverLetterTemplate);
 
   return (
     <div
@@ -66,7 +66,7 @@ export default function DocumentCard({
         ref={containerRef}
         className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center pointer-events-none"
       >
-        {showContent && ResumeTemplateComponent ? (
+        {showContent && hasTemplate ? (
           <div className="relative w-full h-full bg-white flex items-start justify-center overflow-hidden">
             <div
               style={{
@@ -76,9 +76,25 @@ export default function DocumentCard({
                 transformOrigin: "top center",
                 position: "absolute",
                 top: 0,
+                left: "50%",
+                marginLeft: "-395px",
               }}
             >
-              <ResumeTemplateComponent data={resumeData} />
+              {isResume && ResumeTemplate ? (
+                <ResumeTemplate
+                  data={(parsedData as ResumeData) || createEmptyResumeData()}
+                />
+              ) : CoverLetterTemplate ? (
+                <CoverLetterTemplate
+                  data={
+                    (parsedData as CoverLetterData) || {
+                      personal: { name: "", email: "", phone: "", address: "" },
+                      recipient: { name: "", company: "", address: "" },
+                      letter: { text: "" },
+                    }
+                  }
+                />
+              ) : null}
             </div>
           </div>
         ) : (
@@ -96,7 +112,7 @@ export default function DocumentCard({
       <div className="flex justify-between items-end mt-auto">
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-slate-800 truncate group-hover:text-green-500 transition-colors text-sm">
-            {title || `Untitled ${type === "resume" ? "Resume" : "Cover Letter"}`}
+            {title || `Untitled ${isResume ? "Resume" : "Cover Letter"}`}
           </h3>
           <p className="text-[10px] text-slate-500 mt-1 font-medium">
             Edited{" "}

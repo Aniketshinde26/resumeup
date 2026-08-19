@@ -41,7 +41,7 @@ export interface DocumentCardProps {
 
 export interface ExtendedDocumentCardProps extends DocumentCardProps {
   templateId?: string;
-  data?: ResumeData | CoverLetterData | string;
+  data?: ResumeData | CoverLetterData | string | null;
 }
 
 export interface CreateItemModalProps {

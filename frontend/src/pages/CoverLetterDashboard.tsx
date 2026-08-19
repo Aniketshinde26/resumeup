@@ -70,8 +70,10 @@ export default function CoverLetterDashboard() {
                 updatedAt={coverLetter.updatedAt}
                 id={coverLetter.Id}
                 type="coverletter"
-                preview={`/previews/${coverLetter.TemplateId}.png`}
                 showContent={true}
+                templateId={coverLetter.TemplateId}
+                data={coverLetter.Data}
+                preview={`/previews/${coverLetter.TemplateId}.png`}
                 onClick={() => handleEditCoverLetter(coverLetter.Id)}
                 onDelete={() => handleDeleteCoverLetter(coverLetter.Id)}
               />
