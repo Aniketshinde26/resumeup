@@ -1,17 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import type { DocumentCardProps } from "../types/layoutprops";
+import type { ExtendedDocumentCardProps } from "../types/layoutprops";
+import {
+  TEMPLATES,
+  createEmptyResumeData,
+  type ResumeData,
+  type CoverLetterData,
+} from "../types/templateindex";
+
 
 
 export default function DocumentCard({
   title,
   updatedAt,
-  id,
   type,
   preview,
   showContent = false,
+  templateId,
+  data,
   onClick,
   onDelete,
-}: DocumentCardProps) {
+}: ExtendedDocumentCardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.28);
 
@@ -29,7 +37,25 @@ export default function DocumentCard({
     return () => window.removeEventListener("resize", updateScale);
   }, [showContent]);
 
-  const previewUrl = type === "resume" ? `/resume/preview/${id}` : `/cover-letters/preview/${id}`;
+  let parsedData: ResumeData | CoverLetterData | null = null;
+  if (typeof data === "string") {
+    try {
+      parsedData = JSON.parse(data);
+    } catch (e) {
+      console.error("Parse error in DocumentCard", e);
+    }
+  } else if (data) {
+    parsedData = data;
+  }
+
+  const isResume = type === "resume";
+  const resumeData: ResumeData =
+    isResume && parsedData && "experience" in parsedData
+      ? (parsedData as ResumeData)
+      : createEmptyResumeData();
+
+  const ResumeTemplateComponent =
+    isResume && templateId ? TEMPLATES[templateId] : null;
 
   return (
     <div
@@ -38,27 +64,29 @@ export default function DocumentCard({
     >
       <div
         ref={containerRef}
-        className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center"
+        className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center pointer-events-none"
       >
-        {showContent && id ? (
-          <div className="relative w-full h-full bg-white flex items-center justify-center overflow-hidden">
-            <iframe
-              src={previewUrl}
-              title={title}
-              className="absolute border-none pointer-events-none text-slate-100"
+        {showContent && ResumeTemplateComponent ? (
+          <div className="relative w-full h-full bg-white flex items-start justify-center overflow-hidden">
+            <div
               style={{
                 width: "790px",
                 height: "1118px",
                 transform: `scale(${scale})`,
                 transformOrigin: "top center",
+                position: "absolute",
                 top: 0,
               }}
-            />
-            <div className="absolute inset-0 z-30 bg-transparent" />
+            >
+              <ResumeTemplateComponent data={resumeData} />
+            </div>
           </div>
         ) : (
           <img
-            src={preview || "https://via.placeholder.com/300x424/f1f5f9/64748b?text=No+Preview"}
+            src={
+              preview ||
+              "https://via.placeholder.com/300x424/f1f5f9/64748b?text=No+Preview"
+            }
             alt={title}
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
           />
@@ -71,7 +99,8 @@ export default function DocumentCard({
             {title || `Untitled ${type === "resume" ? "Resume" : "Cover Letter"}`}
           </h3>
           <p className="text-[10px] text-slate-500 mt-1 font-medium">
-            Edited {updatedAt ? new Date(updatedAt).toLocaleDateString() : "Recently"}
+            Edited{" "}
+            {updatedAt ? new Date(updatedAt).toLocaleDateString() : "Recently"}
           </p>
         </div>
 
@@ -82,7 +111,12 @@ export default function DocumentCard({
           }}
           className="ml-4 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all md:opacity-0 group-hover:opacity-100"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -1,5 +1,6 @@
 import type { ChangeEvent, ReactNode } from "react";
 import React from "react";
+import type { CoverLetterData, ResumeData } from "./templateindex";
 
 export interface AuthContainerProps {
   children: ReactNode;
@@ -36,6 +37,11 @@ export interface DocumentCardProps {
   showContent?: boolean;
   onClick?: () => void;
   onDelete?: () => void;
+}
+
+export interface ExtendedDocumentCardProps extends DocumentCardProps {
+  templateId?: string;
+  data?: ResumeData | CoverLetterData | string;
 }
 
 export interface CreateItemModalProps {
