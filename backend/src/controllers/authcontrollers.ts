@@ -33,7 +33,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const cookieOptions = {
   httpOnly: true,
   secure: isProduction,
-  sameSite: "lax" as const,
+  sameSite: (isProduction ? "none" : "lax") as "none" | "lax",
 };
 
 const generateAccessToken = (user: UserAttributes) => {
