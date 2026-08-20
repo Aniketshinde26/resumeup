@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
+import express, { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
@@ -47,7 +47,7 @@ const corsOptions: CorsOptions = {
       return callback(null, true);
     }
 
-    return callback(new Error(`CORS policy blocked origin: ${origin}`));
+    return callback(null, false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
@@ -59,10 +59,16 @@ const corsOptions: CorsOptions = {
     "Origin",
     "X-Retry-Attempted",
   ],
+  optionsSuccessStatus: 200,
   maxAge: 86400,
 };
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  }),
+);
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -73,7 +79,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/cover-letters", coverletterRoutes);
 
-app.get("/", (_req, res) => {
+app.get("/", (_req: Request, res: Response) => {
   res.json({ success: true, message: "ResumeUp backend is running!" });
 });
 
