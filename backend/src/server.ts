@@ -16,7 +16,7 @@ import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 app.set("trust proxy", 1);
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 const configuredFrontend = (process.env.FRONTEND_URL || "")
   .trim()
