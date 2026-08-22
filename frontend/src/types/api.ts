@@ -56,3 +56,27 @@ export interface GoogleCredentialResponse {
 }
 
 export interface ForgotPasswordResponse extends BaseApiResponse {}
+export interface GoogleTokenResponse {
+  access_token?: string;
+  error?: string;
+}
+
+export interface GoogleTokenClient {
+  requestAccessToken: () => void;
+}
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        oauth2: {
+          initTokenClient: (config: {
+            client_id: string;
+            scope: string;
+            callback: (response: GoogleTokenResponse) => void;
+          }) => GoogleTokenClient;
+        };
+      };
+    };
+  }
+}

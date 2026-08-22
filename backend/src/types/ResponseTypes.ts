@@ -1,4 +1,4 @@
-import { Resume, User } from "../models";
+import { Resume } from "../models";
 import Coverletter from "../models/Coverletter";
 
 interface BaseSuccessResponse {
@@ -62,3 +62,10 @@ export type RefreshTokenResponse = ApiResponse<{
 }>;
 
 export type AuthMessageResponse = ApiResponse;
+
+export interface GoogleUserInfoResponse {
+  sub: string;
+  name: string;
+  email: string;
+  picture?: string;
+}
