@@ -1,4 +1,5 @@
 import type { ResumeData } from "../types/templateindex";
+import { formatSocialUrl } from "../utils/formatUrl";
 
 export default function TechTemplate({ data }: { data: ResumeData }) {
   return (
@@ -27,6 +28,18 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
                 <span>{data.personal.phone}</span>
               </>
             )}
+            {data.personal?.linkedin && (
+              <>
+                <span>•</span>
+                <span className="normal-case">{formatSocialUrl(data.personal.linkedin)}</span>
+              </>
+            )}
+            {data.personal?.github && (
+              <>
+                <span>•</span>
+                <span className="normal-case">{formatSocialUrl(data.personal.github)}</span>
+              </>
+            )}
           </div>
         </div>
         {data.personal?.image && (
@@ -51,6 +64,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
 
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-8 space-y-6">
+          {data.experience && data.experience.length > 0 && (
           <section className="no-break">
             <h2 className="text-blue-600 font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
               <span className="w-8 h-[2px] bg-blue-600"></span> Experience
@@ -72,6 +86,7 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
               ))}
             </div>
           </section>
+          )}
 
           {data.projects && data.projects.length > 0 && (
             <section className="no-break">
@@ -142,6 +157,11 @@ export default function TechTemplate({ data }: { data: ResumeData }) {
                   <div key={i} className="border-l-2 border-blue-500 pl-3 py-1">
                     <p className="text-[10px] font-bold text-slate-800 uppercase leading-tight">{cert.name}</p>
                     <p className="text-[9px] text-slate-400 mt-0.5">{cert.date}</p>
+                    {cert.link && (
+                      <p className="text-[8px] text-blue-600 break-all leading-snug mt-0.5">
+                        {cert.link}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

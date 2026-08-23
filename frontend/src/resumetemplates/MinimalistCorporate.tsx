@@ -1,4 +1,5 @@
 import type { ResumeData } from "../types/templateindex";
+import { formatSocialUrl } from "../utils/formatUrl";
 
 export default function CorporateTemplate({ data }: { data: ResumeData }) {
   return (
@@ -36,6 +37,16 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
               {data.personal?.phone && (
                 <p className="flex items-center gap-2">
                   📞 {data.personal.phone}
+                </p>
+              )}
+              {data.personal?.linkedin && (
+                <p className="flex items-center gap-2 break-all">
+                  🔗 {formatSocialUrl(data.personal.linkedin)}
+                </p>
+              )}
+              {data.personal?.github && (
+                <p className="flex items-center gap-2 break-all">
+                  🔗 {formatSocialUrl(data.personal.github)}
                 </p>
               )}
             </div>
@@ -120,6 +131,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
           </section>
         )}
 
+        {data.experience && data.experience.length > 0 && (
         <section className="mb-8">
           <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-3">
             Experience <span className="h-[2px] bg-slate-100 flex-1"></span>
@@ -149,6 +161,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
             ))}
           </div>
         </section>
+        )}
 
         {data.projects && data.projects.length > 0 && (
           <section className="mt-auto">

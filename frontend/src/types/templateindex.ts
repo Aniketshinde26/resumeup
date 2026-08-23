@@ -67,6 +67,8 @@ export interface PersonalInfo {
   location: string;
   summary: string;
   image?: string;
+  linkedin?: string;
+  github?: string;
 }
 
 export interface Experience {
@@ -102,7 +104,7 @@ export interface ResumeData {
     type?: "project" | "procedure" | "case_study";
   }[];
   languages?: { name: string; proficiency: string }[];
-  certifications?: { name: string; issuer: string; date: string }[];
+  certifications?: { name: string; link: string; date: string }[];
 }
 export interface CoverLetter {
   Id: string;
@@ -153,6 +155,8 @@ export const createEmptyResumeData = (): ResumeData => ({
     phone: "",
     location: "",
     summary: "",
+    linkedin: "",
+    github: "",
   },
   experience: [],
   education: [],

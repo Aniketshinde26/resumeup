@@ -1,4 +1,5 @@
 import type { ResumeData } from "../types/templateindex";
+import { formatSocialUrl } from "../utils/formatUrl";
 
 export default function ProfessionalSplitTemplate({
   data,
@@ -33,6 +34,7 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
           </section>
         )}
 
+        {data.experience && data.experience.length > 0 && (
         <section className="mb-10">
           <h2 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
             <span className="w-6 h-[2px] bg-indigo-600"></span> Experience
@@ -56,8 +58,9 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
                 </p>
               </div>
             ))}
-          </div>
+            </div>
         </section>
+        )}
 
         {data.projects && data.projects.length > 0 && (
           <section>
@@ -123,6 +126,16 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
             <p className="flex items-center gap-2">
               📍 {data.personal?.location}
             </p>
+            {data.personal?.linkedin && (
+              <p className="flex items-start gap-2 break-all">
+                🔗 {formatSocialUrl(data.personal.linkedin)}
+              </p>
+            )}
+            {data.personal?.github && (
+              <p className="flex items-start gap-2 break-all">
+                🔗 {formatSocialUrl(data.personal.github)}
+              </p>
+            )}
           </div>
         </section>
 
@@ -193,9 +206,11 @@ className="w-full h-full bg-white flex font-sans text-slate-800"    >
                   <p className="font-bold text-slate-800 leading-tight">
                     {cert.name}
                   </p>
-                  <p className="text-[10px] text-slate-500 mt-1">
-                    {cert.issuer}
-                  </p>
+                  {cert.link && (
+                    <p className="text-[9px] text-blue-600 font-semibold mt-1 break-all">
+                      {cert.link}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

@@ -217,7 +217,7 @@ export default function CoverLetterBuilder() {
                   <div className="relative">
                     <Calendar className="absolute left-3 top-2.5 text-slate-400" size={14} />
                     <input
-                      type="text"
+                      type="date"
                       placeholder="e.g. October 24, 2024"
                       className="w-full pl-9 pr-4 py-2 bg-[var(--color-form-bg)] text-[var(--form-text)] border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all text-sm"
                       value={coverLetter.Data.letter?.date || ""}
@@ -282,7 +282,7 @@ export default function CoverLetterBuilder() {
 
         <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
           <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
-            <div className="bg-white shadow-2xl rounded-[24px] overflow-hidden ring-1 ring-black/10 shrink-0">
+            <div className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0">
               <div
                 id="cover-letter-preview"
                 style={{

@@ -1,4 +1,5 @@
 import type { ResumeData } from "../types/templateindex";
+import { formatSocialUrl } from "../utils/formatUrl";
 
 export default function NeoProfessionalTemplate({
   data,
@@ -36,6 +37,16 @@ export default function NeoProfessionalTemplate({
                 📞 {data.personal.phone}
               </div>
             )}
+            {data.personal?.linkedin && (
+              <div className="flex items-center gap-1 normal-case break-all">
+                🔗 {formatSocialUrl(data.personal.linkedin)}
+              </div>
+            )}
+            {data.personal?.github && (
+              <div className="flex items-center gap-1 normal-case break-all">
+                🔗 {formatSocialUrl(data.personal.github)}
+              </div>
+            )}
           </div>
         </div>
 
@@ -63,6 +74,7 @@ export default function NeoProfessionalTemplate({
             </section>
           )}
 
+          {data.experience && data.experience.length > 0 && (
           <section className="mb-10">
             <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-6">
               {data.sectionTitles?.experience || "Work Experience"}
@@ -88,6 +100,7 @@ export default function NeoProfessionalTemplate({
               ))}
             </div>
           </section>
+          )}
 
           {data.projects && data.projects.length > 0 && (
             <section className="no-break">
@@ -131,14 +144,14 @@ export default function NeoProfessionalTemplate({
             <h2 className="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-5">
               {data.sectionTitles?.skills || "Skills"}
             </h2>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-x-3 gap-y-1.5">
               {data.skills?.map((skill, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="h-1.5 w-1.5 rounded-full bg-indigo-600"></div>
-                  <span className="text-[11px] font-bold text-slate-700 uppercase tracking-tight">
+                <span key={i} className="flex items-center gap-1.5">
+                  <span className="h-1 w-1 rounded-full bg-indigo-600"></span>
+                  <span className="text-[10px] font-bold text-slate-700 uppercase tracking-tight">
                     {skill}
                   </span>
-                </div>
+                </span>
               ))}
             </div>
           </section>
@@ -201,6 +214,11 @@ export default function NeoProfessionalTemplate({
                     <p className="text-[9px] text-slate-400 font-bold mt-1">
                       {cert.date}
                     </p>
+                    {cert.link && (
+                      <p className="text-[8px] text-indigo-600 break-all leading-snug mt-1">
+                        {cert.link}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

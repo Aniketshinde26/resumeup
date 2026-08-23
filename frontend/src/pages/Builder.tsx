@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { 
   Award, 
   LanguagesIcon, 
@@ -38,6 +38,7 @@ export default function Builder() {
     setTempImage,
   } = useBuilder();
   type TemplateId = keyof typeof TEMPLATES;
+  const [skillInput, setSkillInput] = useState("");
 
   if (loading) return <div className="p-10 text-center">Loading Resume...</div>;
   if (!resume) return null;
@@ -47,6 +48,14 @@ export default function Builder() {
   const languageList = resume.data.languages ?? []; 
   const educationList = resume.data.education ?? [];
   const skillsList = resume.data.skills ?? [];
+  const addSkillsFromInput = () => {
+    const parts = skillInput
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s && !skillsList.includes(s));
+    if (parts.length) updateData({ skills: [...skillsList, ...parts] });
+    setSkillInput("");
+  };
   const certificationsList = resume.data.certifications ?? [];
   const templateKey = (resume.templateId || "minimal") as TemplateId;
   const SelectedTemplate = TEMPLATES[templateKey];
@@ -167,6 +176,28 @@ export default function Builder() {
                     placeholder="+1 (555) 000-0000"
                     value={resume.data.personal?.phone || ""}
                     onChange={(e) => updatePersonal("phone", e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">LinkedIn URL</label>
+                  <input
+                    type="url"
+                    className="w-full px-4 py-2.5 bg-(--color-form-bg) border text-(--form-text) border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+                    placeholder="https://linkedin.com/in/username"
+                    value={resume.data.personal?.linkedin || ""}
+                    onChange={(e) => updatePersonal("linkedin", e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">GitHub URL</label>
+                  <input
+                    type="url"
+                    className="w-full px-4 py-2.5 bg-(--color-form-bg) border text-(--form-text) border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400"
+                    placeholder="https://github.com/username"
+                    value={resume.data.personal?.github || ""}
+                    onChange={(e) => updatePersonal("github", e.target.value)}
                   />
                 </div>
 
@@ -416,10 +447,10 @@ export default function Builder() {
                         <div className="relative">
                           <Calendar className="absolute left-3 top-3 text-slate-400" size={14} />
                           <input
-                            type="text"
+                            type="date"
                             placeholder="e.g. 2024"
                             className="w-full pl-9 pr-4 py-2.5 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all text-sm"
-                            value={edu.year}
+                            value={edu.year || ""}
                             onChange={(e) => {
                               const newList = [...educationList];
                               newList[idx] = { ...newList[idx], year: e.target.value };
@@ -461,20 +492,30 @@ export default function Builder() {
             </div>
 
             <div className="p-6 space-y-5">
-              <input
-                type="text"
-                placeholder="Press Enter to add (e.g. React, Surgery, Financial Analysis...)"
-                className="w-full pl-4 pr-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 outline-none transition-all"
-                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") {
-                    const val = e.currentTarget.value.trim();
-                    if (val) {
-                      updateData({ skills: [...skillsList, val] });
-                      e.currentTarget.value = "";
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={skillInput}
+                  placeholder="Type a skill & press Enter or tap Add (e.g. React, Surgery, Financial Analysis...)"
+                  className="flex-1 min-w-0 pl-4 pr-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 outline-none transition-all"
+                  onChange={(e) => setSkillInput(e.target.value)}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addSkillsFromInput();
                     }
-                  }
-                }}
-              />
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={addSkillsFromInput}
+                  disabled={!skillInput.trim()}
+                  className="shrink-0 px-5 py-3 bg-amber-500 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl transition-all flex items-center gap-1.5"
+                >
+                  <Plus size={16} strokeWidth={3} />
+                  Add
+                </button>
+              </div>
 
               <div className="flex flex-wrap gap-2">
                 {skillsList.map((skill: string, idx: number) => (
@@ -704,7 +745,7 @@ export default function Builder() {
                   updateData({
                     certifications: [
                       ...certificationsList,
-                      { name: "", issuer: "", date: "" },
+                      { name: "", link: "", date: "" },
                     ],
                   })
                 }
@@ -753,16 +794,16 @@ export default function Builder() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
-                          Issuing Organization
+                          Certificate Link
                         </label>
                         <input
-                          type="text"
-                          placeholder="e.g. Amazon Web Services"
+                          type="url"
+                          placeholder="https://credential.example.com/..."
                           className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs"
-                          value={cert.issuer}
+                          value={cert.link}
                           onChange={(e) => {
                             const newList = [...certificationsList];
-                            newList[idx] = { ...newList[idx], issuer: e.target.value };
+                            newList[idx] = { ...newList[idx], link: e.target.value };
                             updateData({ certifications: newList });
                           }}
                         />
@@ -773,10 +814,10 @@ export default function Builder() {
                           Issue Date
                         </label>
                         <input
-                          type="text"
+                          type="date"
                           placeholder="e.g. March 2024"
                           className="w-full px-3 py-2 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-xs"
-                          value={cert.date}
+                          value={cert.date || ""}
                           onChange={(e) => {
                             const newList = [...certificationsList];
                             newList[idx] = { ...newList[idx], date: e.target.value };
@@ -805,7 +846,7 @@ export default function Builder() {
           <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
             <div
               id="resume-template"
-              className="bg-white shadow-2xl rounded-[24px] overflow-hidden ring-1 ring-black/10 shrink-0"
+              className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0"
               style={{
                 width: "210mm",
                 height: "297mm",

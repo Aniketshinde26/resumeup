@@ -1,4 +1,5 @@
 import type { ResumeData } from "../types/templateindex";
+import { formatSocialUrl } from "../utils/formatUrl";
 
 export default function Modern({ data }: { data: ResumeData }) {
   return (
@@ -33,6 +34,7 @@ export default function Modern({ data }: { data: ResumeData }) {
       <div className="flex flex-1">
         <main className="flex-[1.6] p-[12mm] pr-6 flex flex-col gap-10">
           
+          {data.experience && data.experience.length > 0 && (
           <section>
             <div className="flex items-center gap-4 mb-6">
               <div className="h-1.5 w-10 bg-slate-900 rounded-full" />
@@ -61,6 +63,7 @@ export default function Modern({ data }: { data: ResumeData }) {
               ))}
             </div>
           </section>
+          )}
 
           {data.projects && data.projects.length > 0 && (
             <section>
@@ -108,6 +111,8 @@ export default function Modern({ data }: { data: ResumeData }) {
               {data.personal?.email && <p className="flex items-center gap-2">✉ {data.personal.email}</p>}
               {data.personal?.phone && <p className="flex items-center gap-2">📞 {data.personal.phone}</p>}
               {data.personal?.location && <p className="flex items-center gap-2">📍 {data.personal.location}</p>}
+              {data.personal?.linkedin && <p className="break-all">🔗 {formatSocialUrl(data.personal.linkedin)}</p>}
+              {data.personal?.github && <p className="break-all">🔗 {formatSocialUrl(data.personal.github)}</p>}
             </div>
           </section>
 
@@ -143,14 +148,14 @@ export default function Modern({ data }: { data: ResumeData }) {
             <h2 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 border-b border-slate-100 pb-2">
               {data.sectionTitles?.skills || "Skills"}
             </h2>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {data.skills?.map((skill, i) => (
-                <div 
-                  key={i} 
-                  className="bg-[#2c3547] text-white text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-md text-center shadow-sm"
+                <span
+                  key={i}
+                  className="bg-[#2c3547] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-sm"
                 >
                   {skill}
-                </div>
+                </span>
               ))}
             </div>
           </section>
@@ -185,6 +190,11 @@ export default function Modern({ data }: { data: ResumeData }) {
                   <div key={i}>
                     <p className="text-[10px] font-bold text-slate-800 uppercase tracking-tight">{cert.name}</p>
                     <p className="text-[9px] text-slate-400">{cert.date}</p>
+                    {cert.link && (
+                      <p className="text-[8px] text-blue-600 break-all leading-snug mt-0.5">
+                        {cert.link}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
