@@ -12,6 +12,7 @@ import {
   LoginUserResponse,
   AuthMessageResponse,
   RefreshTokenResponse,
+  GoogleUserInfoResponse,
 } from "../types/ResponseTypes";
 import {
   BadRequestError,
@@ -20,6 +21,7 @@ import {
   AppError,
 } from "../utils/AppError";
 import { Op } from "sequelize";
+import { GoogleLoginRequest } from "../types/GoogleAuthTypes";
 
 interface GitHubEmail {
   email: string;
@@ -168,28 +170,49 @@ export const loginUser = async (
 };
 
 export const googleLogin = async (
-  req: Request,
+  req: GoogleLoginRequest,
   res: Response<LoginUserResponse>,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { id_token } = req.body || {};
+    const { id_token, google_access_token } = req.body || {};
 
-    if (!id_token) {
-      throw new BadRequestError("Missing Google ID Token");
+    let googleId: string | undefined;
+    let email: string | undefined;
+    let fullname: string | undefined;
+
+    if (id_token) {
+      const ticket = await client.verifyIdToken({
+        idToken: id_token,
+        audience: GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+      if (!payload || !payload.email || !payload.sub) {
+        throw new UnauthorizedError("Invalid Google Token Payload");
+      }
+
+      googleId = payload.sub;
+      email = payload.email;
+      fullname = payload.name;
+    } else if (google_access_token) {
+      const googleUserRes = await axios.get<GoogleUserInfoResponse>(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        {
+          headers: { Authorization: `Bearer ${google_access_token}` },
+        },
+      );
+
+      googleId = googleUserRes.data.sub;
+      email = googleUserRes.data.email;
+      fullname = googleUserRes.data.name;
+    } else {
+      throw new BadRequestError("Missing Google Token");
     }
 
-    const ticket = await client.verifyIdToken({
-      idToken: id_token,
-      audience: GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    if (!payload || !payload.email || !payload.sub) {
-      throw new UnauthorizedError("Invalid Google Token Payload");
+    if (!email) {
+      throw new UnauthorizedError("Unable to retrieve email from Google");
     }
-
-    const { sub: googleId, email, name: fullname } = payload;
 
     let user = await User.findOne({ where: { email } });
 
@@ -200,7 +223,7 @@ export const googleLogin = async (
         googleId,
         password: "",
       } as UserAttributes);
-    } else if (!user.googleId) {
+    } else if (!user.googleId && googleId) {
       await user.update({ googleId });
     }
 
