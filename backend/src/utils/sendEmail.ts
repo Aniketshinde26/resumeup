@@ -36,10 +36,6 @@ export const sendEmail = async (
               Reset Password
             </a>
           </div>
-          <p style="color: #64748b; font-size: 13px; line-height: 1.4; word-break: break-all;">
-            Button not working? Copy and paste this link into your browser:<br />
-            <a href="${options.message}" style="color: #2563eb; word-break: break-all;">${options.message}</a>
-          </p>
           <p style="color: #64748b; font-size: 13px; line-height: 1.4;">
             This link is valid for <strong>1 hour</strong>. If you did not request a password reset, please ignore this email.
           </p>
