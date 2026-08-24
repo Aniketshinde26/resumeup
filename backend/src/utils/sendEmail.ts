@@ -31,11 +31,15 @@ export const sendEmail = async (
             We received a request to reset your password for your <strong>ResumeUp</strong> account.
           </p>
           <div style="text-align: center; margin: 28px 0;">
-            <a href="${options.message}" 
+            <a href="${options.message}"
                style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;">
               Reset Password
             </a>
           </div>
+          <p style="color: #64748b; font-size: 13px; line-height: 1.4; word-break: break-all;">
+            Button not working? Copy and paste this link into your browser:<br />
+            <a href="${options.message}" style="color: #2563eb; word-break: break-all;">${options.message}</a>
+          </p>
           <p style="color: #64748b; font-size: 13px; line-height: 1.4;">
             This link is valid for <strong>1 hour</strong>. If you did not request a password reset, please ignore this email.
           </p>
