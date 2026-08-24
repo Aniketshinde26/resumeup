@@ -103,6 +103,24 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
               </div>
             </section>
           )}
+          {data.certifications && data.certifications.length > 0 && (
+            <section>
+              <h2 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 border-b border-slate-700 pb-1">
+                Certifications
+              </h2>
+              <div className="space-y-3">
+                {data.certifications.map((cert, i) => (
+                  <div key={i}>
+                    <p className="text-[11px] font-bold text-white leading-tight">{cert.name}</p>
+                    <p className="text-[9px] text-slate-500 mt-1 uppercase tracking-tighter">{cert.date}</p>
+                    {cert.link && (
+                      <p className="text-[9px] text-slate-400 break-all leading-snug mt-1">{cert.link}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </aside>
 
@@ -187,7 +205,7 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
                       )
                     )}
                   </div>
-                  <p className="text-[10px] text-slate-600 leading-snug whitespace-pre-line">
+                  <p className="text-[10px] text-slate-600 leading-snug whitespace-pre-line break-words line-clamp-5">
                     {proj.description}
                   </p>
                 </div>

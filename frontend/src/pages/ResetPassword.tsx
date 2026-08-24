@@ -19,11 +19,11 @@ export default function ResetPassword() {
 
           <div className="mb-8 text-center relative z-10">
             <div className="flex items-center justify-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-brand-primary rounded-xl flex items-center justify-center shadow-md">
+              <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-xl flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-sm">R</span>
               </div>
               <div className="flex items-center gap-0 tracking-tight text-xl">
-                <span className="font-bold" style={{ color: 'var(--color-brand-name)' }}>
+                <span className="font-bold" style={{ color: 'var(--color-text-main)' }}>
                   Resume
                 </span>
                 <span className="text-green-600 font-bold">Pro</span>

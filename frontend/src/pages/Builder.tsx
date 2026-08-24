@@ -21,6 +21,7 @@ import {
   type Education, 
 } from "../types/templateindex";
 import { handlePrint } from "../utils/printUtils";
+import { countWords, limitWords, MAX_PROJECT_WORDS } from "../utils/textUtils";
 import BuilderHeader from "../components/BuilderHeader";
 import "react-datepicker/dist/react-datepicker.css";
 import "../print.css";
@@ -637,10 +638,13 @@ export default function Builder() {
                         value={proj.description}
                         onChange={(e) => {
                           const newList = [...projectList];
-                          newList[idx] = { ...newList[idx], description: e.target.value };
+                          newList[idx] = { ...newList[idx], description: limitWords(e.target.value, MAX_PROJECT_WORDS) };
                           updateData({ projects: newList });
                         }}
                       />
+                      <p className={`text-right text-[10px] font-bold ${countWords(proj.description || "") >= MAX_PROJECT_WORDS ? "text-red-500" : "text-slate-400"}`}>
+                        {countWords(proj.description || "")} / {MAX_PROJECT_WORDS} words
+                      </p>
                     </div>
                   </div>
                 );
