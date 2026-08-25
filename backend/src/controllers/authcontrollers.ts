@@ -44,7 +44,7 @@ const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET as string,
-    { expiresIn: "15m" },
+    { expiresIn: "60m" },
   );
 };
 
