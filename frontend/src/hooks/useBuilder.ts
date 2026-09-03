@@ -47,10 +47,10 @@ export const useBuilder = () => {
             data: { ...createEmptyResumeData(), ...(parsed.data || {}) },
           });
         } catch {
-          setResume(createEmptyResume(id, defaultTitle, id));
+          setResume(createEmptyResume(0, defaultTitle, id));
         }
       } else {
-        setResume(createEmptyResume(id, defaultTitle, id));
+        setResume(createEmptyResume(0, defaultTitle, id));
       }
 
       setLoading(false);
@@ -67,7 +67,7 @@ export const useBuilder = () => {
 
     try {
       setLoading(true);
-      const data = await ResumeService.getResumeById(id);
+      const data = await ResumeService.getResumeById(Number(id));
       const fetchedResume = data.resume;
 
       const rawData =
@@ -109,7 +109,7 @@ export const useBuilder = () => {
     try {
       setSaving(true);
 
-      await ResumeService.updateResume(id, {
+      await ResumeService.updateResume(Number(id), {
         title: resume.title,
         data: resume.data,
       });

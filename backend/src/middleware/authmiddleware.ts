@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
-import { JwtPayload } from "../types/ResumeAuthTypes";
+import { JwtPayload } from "../types/auth";
 import { UnauthorizedError } from "../utils/AppError";
 
 export const verifyToken = (

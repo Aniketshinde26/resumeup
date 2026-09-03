@@ -44,12 +44,9 @@ export const useCoverLetterDashboard = () => {
         TemplateId: selectedTemplate,
         Data: {},
       });
-      const newId = res.data.coverletter?.Id || res.data.coverletter?.Id;
+      const newId = res.data.coverletter?.Id;
       if (!newId) {
-        console.error(
-          "CRITICAL: No ID returned from backend. Check the console log above.",
-          res.data,
-        );
+        console.error("No ID returned from backend.", res.data);
         return;
       }
 
@@ -62,7 +59,7 @@ export const useCoverLetterDashboard = () => {
     }
   };
 
-  const handleDeleteCoverLetter = async (id: string) => {
+  const handleDeleteCoverLetter = async (id: number) => {
     try {
       await api.delete<DeleteCoverLetterResponse>(`/cover-letters/${id}`);
       setCoverLetters((prev) => prev.filter((cl) => (cl.Id || cl.Id) !== id));
@@ -71,7 +68,7 @@ export const useCoverLetterDashboard = () => {
     }
   };
 
-  const handleEditCoverLetter = (id: string | number) => {
+  const handleEditCoverLetter = (id: number) => {
     if (!id) {
       console.error("No ID provided for editing");
       return;

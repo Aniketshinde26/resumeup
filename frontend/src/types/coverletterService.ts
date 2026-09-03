@@ -27,7 +27,7 @@ export const CoverLetterService = {
   },
 
   getCoverLetterById: async (
-    id: string | number,
+    id: number,
   ): Promise<CoverLetterByIdResponse> => {
     const response = await api.get<CoverLetterByIdResponse>(
       `/cover-letters/${id}`,
@@ -46,7 +46,7 @@ export const CoverLetterService = {
   },
 
   updateCoverLetter: async (
-    id: string | number,
+    id: number,
     payload: UpdateCoverLetterPayload,
   ): Promise<UpdateCoverLetterResponse> => {
     const response = await api.put<UpdateCoverLetterResponse>(
@@ -57,7 +57,7 @@ export const CoverLetterService = {
   },
 
   deleteCoverLetterById: async (
-    id: string | number,
+    id: number,
   ): Promise<DeleteCoverLetterResponse> => {
     const response = await api.delete<DeleteCoverLetterResponse>(
       `/cover-letters/${id}`,

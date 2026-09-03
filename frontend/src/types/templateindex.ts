@@ -107,7 +107,7 @@ export interface ResumeData {
   certifications?: { name: string; link: string; date: string }[];
 }
 export interface CoverLetter {
-  Id: string;
+  Id: number;
   userId?: number;
   Title: string;
   TemplateId: string;
@@ -116,7 +116,7 @@ export interface CoverLetter {
 }
 
 export interface Resume {
-  id: string;
+  id: number;
   userId?: number;
   title: string;
   templateId: string;
@@ -192,7 +192,7 @@ export function createEmptyCoverLetterData(): CoverLetterData {
 }
 
 export const createEmptyResume = (
-  id: string,
+  id: number,
   title: string,
   templateId: string,
 ): Resume => ({

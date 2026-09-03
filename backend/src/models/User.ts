@@ -9,7 +9,7 @@ class User
   public id!: number;
   public fullname!: string;
   public email!: string;
-  public password!: string;
+  public password!: string | null;
   public refreshToken!: string | null;
   public googleId!: string | null;
   public githubId!: string | null;

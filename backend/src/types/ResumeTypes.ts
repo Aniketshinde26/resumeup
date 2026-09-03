@@ -43,7 +43,7 @@ export interface ResumeData {
     type?: "project" | "procedure" | "case_study";
   }[];
   languages?: { name: string; proficiency: string }[];
-  certifications?: { name: string; issuer: string; date: string }[];
+  certifications?: { name: string; link: string; date: string }[];
 }
 
 export interface ResumeAttributes {

@@ -12,7 +12,7 @@ export const useDashboard = () => {
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
 
-  const handleEditResume = (id: string) => {
+  const handleEditResume = (id: number) => {
     navigate(`/builder/${id}`);
   };
 
@@ -37,7 +37,7 @@ export const useDashboard = () => {
     }
   };
 
-  const handleDeleteResume = async (id: string) => {
+  const handleDeleteResume = async (id: number) => {
     try {
       await ResumeService.deleteResumeById(id);
       setResumes((prev) => prev.filter((resume) => resume.id !== id));

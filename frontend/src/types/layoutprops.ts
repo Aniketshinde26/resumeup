@@ -31,7 +31,7 @@ export interface PasswordInputProps {
 export interface DocumentCardProps {
   title: string;
   updatedAt?: string;
-  id: string | number;
+  id: number;
   type: "resume" | "coverletter";
   preview?: string;
   showContent?: boolean;

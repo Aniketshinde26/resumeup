@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Resume from "../models/Resume";
-import { AuthRequest } from "../types/ResumeAuthTypes";
+import { AuthRequest } from "../types/auth";
 import {
   NotFoundError,
   BadRequestError,
@@ -62,6 +62,7 @@ export const getAllResumes = async (
         resumes,
         isGuest: false,
       });
+      return;
     }
 
     res.status(200).json({

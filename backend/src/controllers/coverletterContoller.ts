@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import CoverLetter from "../models/Coverletter";
-import { AuthRequest } from "../types/ResumeAuthTypes";
+import { AuthRequest } from "../types/auth";
 import {
   UnauthorizedError,
   NotFoundError,

@@ -26,7 +26,7 @@ export const ResumeService = {
     return response.data;
   },
 
-  getResumeById: async (id: string | number): Promise<ResumeByIdResponse> => {
+  getResumeById: async (id: number): Promise<ResumeByIdResponse> => {
     const response = await api.get<ResumeByIdResponse>(`/resumes/${id}`);
     return response.data;
   },
@@ -39,7 +39,7 @@ export const ResumeService = {
   },
 
   updateResume: async (
-    id: string | number,
+    id: number,
     payload: UpdateResumePayload,
   ): Promise<UpdateResumeResponse> => {
     const response = await api.put<UpdateResumeResponse>(
@@ -50,7 +50,7 @@ export const ResumeService = {
   },
 
   deleteResumeById: async (
-    id: string | number,
+    id: number,
   ): Promise<DeleteResumeResponse> => {
     const response = await api.delete<DeleteResumeResponse>(`/resumes/${id}`);
     return response.data;

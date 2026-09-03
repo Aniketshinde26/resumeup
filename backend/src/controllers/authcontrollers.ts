@@ -6,7 +6,15 @@ import { OAuth2Client } from "google-auth-library";
 import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
 import axios from "axios";
-import { UserAttributes } from "../types/UserTypes";
+import {
+  GithubLoginRequest,
+  UserAttributes,
+  UserCreateRequest,
+  UserLoginRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+  GitHubEmail,
+} from "../types/UserTypes";
 import {
   RegisterUserResponse,
   LoginUserResponse,
@@ -21,14 +29,7 @@ import {
   AppError,
 } from "../utils/AppError";
 import { Op } from "sequelize";
-import { GoogleLoginRequest } from "../types/GoogleAuthTypes";
-
-interface GitHubEmail {
-  email: string;
-  primary: boolean;
-  verified: boolean;
-  visibility: string | null;
-}
+import { GoogleLoginRequestBody } from "../types/auth";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -60,12 +61,12 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const registerUser = async (
-  req: Request,
+  req: Request<{}, {}, UserCreateRequest>,
   res: Response<RegisterUserResponse>,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { fullname, email, password } = req.body || {};
+    const { fullname, email, password } = req.body;
     if (!fullname || !email || !password) {
       throw new BadRequestError("Fullname, email, and password are required");
     }
@@ -116,12 +117,12 @@ export const registerUser = async (
 };
 
 export const loginUser = async (
-  req: Request,
+  req: Request<{}, {}, UserLoginRequest>,
   res: Response<LoginUserResponse>,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { email, password } = req.body || {};
+    const { email, password } = req.body;
 
     if (!email || !password) {
       throw new BadRequestError("Email & password required");
@@ -170,14 +171,14 @@ export const loginUser = async (
 };
 
 export const googleLogin = async (
-  req: GoogleLoginRequest,
+  req: Request<{}, {}, GoogleLoginRequestBody>,
   res: Response<LoginUserResponse>,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { id_token, google_access_token } = req.body || {};
+    const { id_token, google_access_token } = req.body;
 
-    let googleId: string | undefined;
+    let googleId: string | null = null;
     let email: string | undefined;
     let fullname: string | undefined;
 
@@ -222,7 +223,7 @@ export const googleLogin = async (
         email,
         googleId,
         password: "",
-      } as UserAttributes);
+      });
     } else if (!user.googleId && googleId) {
       await user.update({ googleId });
     }
@@ -258,7 +259,7 @@ export const refreshAccessToken = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+    const refreshToken = req.cookies?.refreshToken;
 
     if (!refreshToken) {
       throw new UnauthorizedError("No refresh token provided");
@@ -322,12 +323,12 @@ export const logoutUser = async (
 };
 
 export const githubLogin = async (
-  req: Request,
+  req: Request<{}, {}, GithubLoginRequest>,
   res: Response<LoginUserResponse>,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { code } = req.body || {};
+    const { code } = req.body;
 
     if (!code) {
       throw new BadRequestError("Missing GitHub Code");
@@ -382,7 +383,7 @@ export const githubLogin = async (
         fullname: name || "GitHub User",
         githubId: String(githubId),
         password: "",
-      } as UserAttributes);
+      });
     } else if (!user.githubId) {
       await user.update({ githubId: String(githubId) });
     }
@@ -414,12 +415,12 @@ export const githubLogin = async (
 };
 
 export const forgotPassword = async (
-  req: Request,
+  req: Request<{}, {}, ForgotPasswordRequest>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { email } = req.body || {};
+    const { email } = req.body;
     if (!email) {
       throw new BadRequestError("Email is required");
     }
@@ -486,13 +487,13 @@ export const forgotPassword = async (
 };
 
 export const resetPassword = async (
-  req: Request,
+  req: Request<{ token: string }, {}, ResetPasswordRequest>,
   res: Response<AuthMessageResponse>,
   next: NextFunction,
 ): Promise<void> => {
   try {
     const { token } = req.params;
-    const { password } = req.body || {};
+    const { password } = req.body;
 
     if (!password || typeof password !== "string" || password.trim() === "") {
       throw new BadRequestError("New password is required");
