@@ -125,7 +125,7 @@ export default function DocumentCard({
             e.stopPropagation();
             onDelete?.();
           }}
-          className="ml-4 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all md:opacity-0 group-hover:opacity-100"
+          className="ml-4 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
         >
           <svg
             className="h-4 w-4"
