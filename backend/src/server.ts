@@ -23,10 +23,18 @@ const configuredFrontend = (process.env.FRONTEND_URL || "")
   .replace(/['"\r\n]/g, "")
   .replace(/\/$/, "");
 
+const additionalOrigins = (process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((origin) =>
+    origin.trim().replace(/['"\r\n]/g, "").replace(/\/$/, ""),
+  )
+  .filter(Boolean);
+
 const allowedOrigins = [
   configuredFrontend,
   "http://localhost:5173",
   "http://localhost:3000",
+  ...additionalOrigins,
 ].filter(Boolean);
 
 const corsOptions: CorsOptions = {
@@ -37,12 +45,9 @@ const corsOptions: CorsOptions = {
 
     const normalizedOrigin = origin.trim().replace(/\/$/, "").toLowerCase();
 
-    const isAllowed =
-      allowedOrigins.some(
-        (allowed) => allowed.toLowerCase() === normalizedOrigin,
-      ) ||
-      normalizedOrigin.endsWith(".vercel.app") ||
-      normalizedOrigin.includes("vercel.app");
+    const isAllowed = allowedOrigins.some(
+      (allowed) => allowed.toLowerCase() === normalizedOrigin,
+    );
 
     if (isAllowed) {
       return callback(null, true);

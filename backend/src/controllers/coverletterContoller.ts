@@ -28,11 +28,15 @@ export const createCoverLetter = async (
       throw new BadRequestError("Missing required fields: Title or TemplateId");
     }
 
+    if (typeof Title !== "string" || typeof TemplateId !== "string") {
+      throw new BadRequestError("Title and TemplateId must be strings");
+    }
+
     const coverletter = await CoverLetter.create({
       userId: req.user.id,
       Title,
       TemplateId,
-      Data: Data || {},
+      Data: Data && typeof Data === "object" ? Data : {},
     });
 
     res.status(201).json({
@@ -131,7 +135,26 @@ export const updateCoverLetter = async (
       throw new NotFoundError("Cover letter not found");
     }
 
-    const updatedCoverLetter = await coverletter.update(req.body);
+    const { Title, Data } = req.body;
+
+    const updateFields: Partial<Pick<typeof coverletter, "Title" | "Data">> =
+      {};
+
+    if (Title !== undefined) {
+      if (typeof Title !== "string") {
+        throw new BadRequestError("Title must be a string");
+      }
+      updateFields.Title = Title;
+    }
+
+    if (Data !== undefined) {
+      if (typeof Data !== "object" || Data === null || Array.isArray(Data)) {
+        throw new BadRequestError("Data must be an object");
+      }
+      updateFields.Data = Data;
+    }
+
+    const updatedCoverLetter = await coverletter.update(updateFields);
 
     res.status(200).json({
       success: true,
