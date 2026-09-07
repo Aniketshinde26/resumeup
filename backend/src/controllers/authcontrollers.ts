@@ -440,7 +440,7 @@ export const forgotPassword = async (
       return;
     }
 
-    const coolDownPeriodInMs = isDev ? 0 : 2 * 60 * 1000;
+    const coolDownPeriodInMs = isDev ? 0 : 24 * 60 * 60 * 1000;
 
     if (coolDownPeriodInMs > 0 && user.resetPasswordRequestedAt) {
       const lastRequestTime = new Date(user.resetPasswordRequestedAt).getTime();
@@ -448,7 +448,7 @@ export const forgotPassword = async (
 
       if (timeSinceLastRequest < coolDownPeriodInMs) {
         throw new AppError(
-          "Please wait 2 minutes before requesting another reset email.",
+          "Please wait 24 hours before requesting another reset email.",
           429,
         );
       }

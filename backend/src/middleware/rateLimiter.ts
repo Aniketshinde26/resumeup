@@ -19,13 +19,13 @@ const config = {
   },
   forgotpassword: {
     windowMs: 24 * 60 * 60 * 1000,
-    max: 2,
+    max: 5,
     message: "Too many forgot password requests. Please try again in 24 hours.",
   },
   resetPassword: {
-    windowMs: 24 * 60 * 60 * 1000,
-    max: 2,
-    message: "Too many password reset attempts. Please try again in 24 hours.",
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: "Too many password reset attempts. Please try again in 15 minutes.",
   },
   refresh: {
     windowMs: 15 * 60 * 1000,
