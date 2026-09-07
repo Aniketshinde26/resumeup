@@ -447,10 +447,12 @@ export const forgotPassword = async (
       const timeSinceLastRequest = currentTime - lastRequestTime;
 
       if (timeSinceLastRequest < coolDownPeriodInMs) {
-        throw new AppError(
-          "Please wait 24 hours before requesting another reset email.",
-          429,
-        );
+        res.status(200).json({
+          success: true,
+          message:
+            "If an account with that email exists, a password reset link has been sent.",
+        });
+        return;
       }
     }
 
