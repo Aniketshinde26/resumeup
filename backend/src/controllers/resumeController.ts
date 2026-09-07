@@ -27,6 +27,12 @@ export const createResume = async (
         "Missing required fields: title, templateId, or data",
       );
     }
+    if (typeof title !== "string" || typeof templateId !== "string") {
+      throw new BadRequestError("title and templateId must be strings");
+    }
+    if (typeof data !== "object" || data === null || Array.isArray(data)) {
+      throw new BadRequestError("data must be an object");
+    }
     const resume = await Resume.create({
       userId: req.user.id,
       title,
@@ -122,10 +128,6 @@ export const updateResume = async (
     const { id } = req.params;
     const { title, data } = req.body;
 
-    if (!data) {
-      throw new BadRequestError("Resume data is required");
-    }
-
     const resume = await Resume.findOne({
       where: {
         id,
@@ -137,10 +139,23 @@ export const updateResume = async (
       throw new NotFoundError("Resume not found");
     }
 
-    await resume.update({
-      title: title ?? resume.title,
-      data,
-    });
+    const updateFields: Partial<Pick<typeof resume, "title" | "data">> = {};
+
+    if (title !== undefined) {
+      if (typeof title !== "string") {
+        throw new BadRequestError("Title must be a string");
+      }
+      updateFields.title = title;
+    }
+
+    if (data !== undefined) {
+      if (typeof data !== "object" || data === null || Array.isArray(data)) {
+        throw new BadRequestError("Data must be an object");
+      }
+      updateFields.data = data;
+    }
+
+    await resume.update(updateFields);
 
     res.status(200).json({
       success: true,
