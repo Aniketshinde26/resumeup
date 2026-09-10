@@ -73,7 +73,7 @@ export default function CoverLetterBuilder() {
                 </div>
                 Your Details
               </h2>
-              {openSections.details ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+              {openSections.details ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700" />}
             </summary>
             <div className="p-6 space-y-6">
               <div className="flex items-center gap-6 p-4 bg-[var(--color-form-in)] rounded-xl border border-dashed border-slate-200">
@@ -188,7 +188,7 @@ export default function CoverLetterBuilder() {
                 </div>
                 Recipient Details
               </h2>
-              {openSections.recipient ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+              {openSections.recipient ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700" />}
             </summary>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <div className="space-y-1.5">
@@ -234,7 +234,7 @@ export default function CoverLetterBuilder() {
                 </div>
                 Letter Content
               </h2>
-              {openSections.content ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+              {openSections.content ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700" />}
             </summary>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">

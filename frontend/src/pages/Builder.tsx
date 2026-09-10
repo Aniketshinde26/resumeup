@@ -102,7 +102,7 @@ export default function Builder() {
                 </div>
                 Personal Information
               </h2>
-              {openSections.personal ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+              {openSections.personal ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700" />}
             </summary>
 
             <div className="p-6 space-y-6">
@@ -271,7 +271,7 @@ export default function Builder() {
                   <Plus size={14} strokeWidth={3} />
                   ADD EXPERIENCE
                 </button>
-                {openSections.experience ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+                {openSections.experience ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" />}
               </div>
             </summary>
 
@@ -416,7 +416,7 @@ export default function Builder() {
                   <Plus size={14} strokeWidth={3} />
                   ADD EDUCATION
                 </button>
-                {openSections.education ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+                {openSections.education ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" />}
               </div>
             </summary>
 
@@ -602,7 +602,7 @@ export default function Builder() {
                     <option value="Publications">Research Publications</option>
                   </select>
                   
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-cyan-500 transition-colors">
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-600 group-hover:text-cyan-500 transition-colors">
                     <ChevronDown size={14} strokeWidth={3} />
                   </div>
                 </div>
@@ -616,7 +616,7 @@ export default function Builder() {
               >
                 <Plus size={14} strokeWidth={3} /> ADD ITEM
               </button>
-              {openSections.projects ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+              {openSections.projects ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" />}
             </summary>
 
             <div className="p-6 space-y-6">
@@ -720,7 +720,7 @@ export default function Builder() {
                   <Plus size={14} strokeWidth={3} />
                   ADD LANGUAGE
                 </button>
-                {openSections.languages ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+                {openSections.languages ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" />}
               </div>
             </summary>
 
@@ -811,7 +811,7 @@ export default function Builder() {
                   <Plus size={14} strokeWidth={3} />
                   ADD CERTIFICATE
                 </button>
-                {openSections.certifications ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+                {openSections.certifications ? <ChevronUp size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" /> : <ChevronDown size={20} strokeWidth={2.5} className="text-slate-700 hidden md:block" />}
               </div>
             </summary>
 
