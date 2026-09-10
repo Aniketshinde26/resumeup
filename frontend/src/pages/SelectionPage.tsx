@@ -37,7 +37,7 @@ export default function SelectionPage() {
     <>
       <div className="-m-8">
         <GridBackground>
-          <div className="p-8 max-w-7xl mx-auto w-full ">
+          <div className="p-8 pl-14 lg:pl-8 max-w-7xl mx-auto w-full ">
             <header className="mb-12 relative">
               <div className="absolute -top-10 -left-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl" />
               <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--color-text-main)' }}>
