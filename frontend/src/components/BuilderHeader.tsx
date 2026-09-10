@@ -47,13 +47,13 @@ export default function BuilderHeader({
           {isSaving ? t("saving") : t("save")}
         </button>
 
-        <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-white border rounded-full shadow-sm">
+        <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 bg-white border rounded-full shadow-sm">
           <div
             className={`h-2 w-2 rounded-full transition-colors duration-500 ${
               isSaving ? "bg-blue-500 animate-pulse" : isDirty ? "bg-amber-500" : "bg-emerald-500"
             }`}
           />
-          <span className="text-[10px] font-bold uppercase text-slate-500">
+          <span className="text-[9px] md:text-[10px] font-bold uppercase text-slate-500">
             {isSaving ? t("saving") : isDirty ? t("changes_unsaved") : t("saved")}
           </span>
         </div>
