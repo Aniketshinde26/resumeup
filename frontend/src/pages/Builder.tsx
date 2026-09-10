@@ -12,7 +12,9 @@ import {
   Calendar, 
   Camera, 
   Plus, 
-  Trash2 
+  Trash2,
+  Eye,
+  ChevronUp 
 } from "lucide-react";
 import { useBuilder } from "../hooks/useBuilder";
 import { 
@@ -40,6 +42,18 @@ export default function Builder() {
   } = useBuilder();
   type TemplateId = keyof typeof TEMPLATES;
   const [skillInput, setSkillInput] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    personal: true,
+    experience: true,
+    education: true,
+    skills: true,
+    projects: true,
+    languages: true,
+    certifications: true,
+  });
+  const toggleSection = (key: string) =>
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
   if (loading) return <div className="p-10 text-center">Loading Resume...</div>;
   if (!resume) return null;
@@ -74,18 +88,22 @@ export default function Builder() {
         onDownload={() => handlePrint("resume-template", "Resume")}
       />
 
-      <main className="flex-1 flex overflow-hidden">
-        <section className="w-1/2 overflow-y-auto p-8 border-r border-slate-200 space-y-10 custom-scrollbar no-print">
+      <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        <section className="w-full md:w-1/2 overflow-y-auto p-4 sm:p-8 border-b md:border-b-0 md:border-r border-slate-200 space-y-6 md:space-y-10 custom-scrollbar no-print">
           
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.personal} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('personal'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-indigo-100 text-indigo-600 rounded-lg">
                   <User size={18} />
                 </div>
                 Personal Information
               </h2>
-            </div>
+              {openSections.personal ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+            </summary>
 
             <div className="p-6 space-y-6">
               <div className="flex items-center gap-6 p-4 bg-(--color-form-in) rounded-xl border border-dashed border-slate-200">
@@ -216,7 +234,7 @@ export default function Builder() {
                 <div className="space-y-1.5 md:col-span-2">
                   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Professional Summary</label>
                   <textarea
-                    className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 min-h-[120px] resize-none"
+                    className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400 min-h-[80px] md:min-h-[120px] resize-none"
                     placeholder="Briefly describe your career background and key achievements..."
                     value={resume.data.personal?.summary || ""}
                     onChange={(e) => updatePersonal("summary", e.target.value)}
@@ -224,31 +242,38 @@ export default function Builder() {
                 </div>
               </div>
             </div>
-          </div>
+          </details>
 
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-100/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.experience} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('experience'); }}
+              className="bg-slate-100/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-emerald-100 text-emerald-600 rounded-lg">
                   <Briefcase size={18} />
                 </div>
                 Work Experience
               </h2>
-              <button
-                onClick={() =>
-                  updateData({
-                    experience: [
-                      ...experienceList,
-                      { company: "", position: "", startDate: "", endDate: "", description: "" },
-                    ],
-                  })
-                }
-                className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-all border border-emerald-100"
-              >
-                <Plus size={14} strokeWidth={3} />
-                ADD EXPERIENCE
-              </button>
-            </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateData({
+                      experience: [
+                        ...experienceList,
+                        { company: "", position: "", startDate: "", endDate: "", description: "" },
+                      ],
+                    });
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-all border border-emerald-100"
+                >
+                  <Plus size={14} strokeWidth={3} />
+                  ADD EXPERIENCE
+                </button>
+                {openSections.experience ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+              </div>
+            </summary>
 
             <div className="p-6 space-y-8">
               {experienceList.map((exp: Experience, idx: number) => (
@@ -343,7 +368,7 @@ export default function Builder() {
                       <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Responsibilities</label>
                       <textarea
                         placeholder="Describe your achievements..."
-                        className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm min-h-[100px] resize-none"
+                        className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm min-h-[80px] md:min-h-[100px] resize-none"
                         value={exp.description}
                         onChange={(e) => {
                           const newList = [...experienceList];
@@ -362,31 +387,38 @@ export default function Builder() {
                 </div>
               )}
             </div>
-          </div>
+          </details>
 
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.education} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('education'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-violet-100 text-violet-600 rounded-lg">
                   <GraduationCap size={18} />
                 </div>
                 Education
               </h2>
-              <button
-                onClick={() =>
-                  updateData({
-                    education: [
-                      ...educationList,
-                      { school: "", degree: "", year: "" },
-                    ],
-                  })
-                }
-                className="flex items-center gap-1.5 text-xs font-bold text-violet-600 hover:bg-violet-100 px-3 py-1.5 rounded-lg transition-all border border-violet-100"
-              >
-                <Plus size={14} strokeWidth={3} />
-                ADD EDUCATION
-              </button>
-            </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateData({
+                      education: [
+                        ...educationList,
+                        { school: "", degree: "", year: "" },
+                      ],
+                    });
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-violet-600 hover:bg-violet-100 px-3 py-1.5 rounded-lg transition-all border border-violet-100"
+                >
+                  <Plus size={14} strokeWidth={3} />
+                  ADD EDUCATION
+                </button>
+                {openSections.education ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+              </div>
+            </summary>
 
             <div className="p-6 space-y-6">
               {educationList.map((edu: Education, idx: number) => (
@@ -472,10 +504,13 @@ export default function Builder() {
                 </div>
               )}
             </div>
-          </div>
+          </details>
 
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
+          <details open={openSections.skills} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('skills'); }}
+              className="bg-slate-50/50 px-6 py-4 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-8 w-full">
                 <div className="p-2 bg-amber-50 text-amber-600 rounded-lg shrink-0 border border-amber-100">
                   <Wrench size={18} />
@@ -485,12 +520,13 @@ export default function Builder() {
                   className="w-full bg-transparent px-2 py-1.5 rounded-md text-slate-800 font-bold outline-none border border-slate-100 hover:bg-slate-50 focus:bg-amber-50/50 focus:ring-2 focus:ring-amber-500/50 transition-all duration-200"
                   value={resume.data.sectionTitles?.skills ?? ""} 
                   placeholder="Edit skill header"
-                  onChange={(e) => updateData({ 
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => { e.stopPropagation(); updateData({ 
                     sectionTitles: { ...resume.data.sectionTitles, skills: e.target.value } 
-                  })}
+                  }); }}
                 />
               </h2>
-            </div>
+            </summary>
 
             <div className="p-6 space-y-5">
               <div className="flex gap-2">
@@ -535,10 +571,13 @@ export default function Builder() {
                 ))}
               </div>
             </div>
-          </div>
+          </details>
 
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.projects} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-6">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('projects'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <div className="flex items-center gap-3">
                 <div className={`p-2 rounded-xl transition-colors ${
                   resume.data.sectionTitles?.projects === "Procedures" ? "bg-rose-100 text-rose-600" : 
@@ -552,9 +591,10 @@ export default function Builder() {
                   <select 
                     className="appearance-none bg-white border border-slate-200 hover:border-cyan-500 pl-3 pr-8 py-1.5 rounded-lg text-sm font-bold text-slate-700 outline-none cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-cyan-500/10"
                     value={resume.data.sectionTitles?.projects || "Projects"}
-                    onChange={(e) => updateData({ 
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => { e.stopPropagation(); updateData({ 
                       sectionTitles: { ...resume.data.sectionTitles, projects: e.target.value } 
-                    })}
+                    }); }}
                   >
                     <option value="Projects">Personal Projects</option>
                     <option value="Procedures">Medical Procedures</option>
@@ -569,14 +609,15 @@ export default function Builder() {
               </div>
               
               <button
-                onClick={() => updateData({
+                onClick={(e) => { e.stopPropagation(); updateData({
                   projects: [...projectList, { name: "", link: "", description: "" }],
-                })}
+                }); }}
                 className="flex items-center gap-1.5 text-xs font-bold bg-white text-cyan-600 hover:bg-cyan-50 border border-cyan-200 px-3 py-1.5 rounded-lg transition-all shadow-sm"
               >
                 <Plus size={14} strokeWidth={3} /> ADD ITEM
               </button>
-            </div>
+              {openSections.projects ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+            </summary>
 
             <div className="p-6 space-y-6">
               {projectList.map((proj, idx: number) => {
@@ -634,7 +675,7 @@ export default function Builder() {
                       </label>
                       <textarea 
                         placeholder={isMedical ? "Describe your role in the procedure and the results..." : "Describe the project..."}
-                        className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl min-h-[100px] outline-none focus:ring-2 focus:ring-cyan-500/20"
+                        className="w-full px-4 py-3 bg-(--color-form-bg) text-(--form-text) border border-slate-200 rounded-xl min-h-[80px] md:min-h-[100px] outline-none focus:ring-2 focus:ring-cyan-500/20"
                         value={proj.description}
                         onChange={(e) => {
                           const newList = [...projectList];
@@ -650,31 +691,38 @@ export default function Builder() {
                 );
               })}
             </div>
-          </div>
+          </details>
 
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.languages} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('languages'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-rose-100 text-rose-600 rounded-lg">
                   <LanguagesIcon size={18} />
                 </div>
                 Languages
               </h2>
-              <button
-                onClick={() =>
-                  updateData({
-                    languages: [
-                      ...languageList,
-                      { name: "", proficiency: "Fluent" },
-                    ],
-                  })
-                }
-                className="flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition-all border border-rose-100"
-              >
-                <Plus size={14} strokeWidth={3} />
-                ADD LANGUAGE
-              </button>
-            </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateData({
+                      languages: [
+                        ...languageList,
+                        { name: "", proficiency: "Fluent" },
+                      ],
+                    });
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 px-3 py-1.5 rounded-lg transition-all border border-rose-100"
+                >
+                  <Plus size={14} strokeWidth={3} />
+                  ADD LANGUAGE
+                </button>
+                {openSections.languages ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+              </div>
+            </summary>
 
             <div className="p-6">
               <div className="grid grid-cols-1 gap-4">
@@ -734,31 +782,38 @@ export default function Builder() {
                 )}
               </div>
             </div>
-          </div>
+          </details>
 
-          <div className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.certifications} className="bg-(--color-form-bg) rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('certifications'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-blue-100 text-blue-600 rounded-lg">
                   <Award size={18} />
                 </div>
                 Certifications
               </h2>
-              <button
-                onClick={() =>
-                  updateData({
-                    certifications: [
-                      ...certificationsList,
-                      { name: "", link: "", date: "" },
-                    ],
-                  })
-                }
-                className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-all border border-blue-100"
-              >
-                <Plus size={14} strokeWidth={3} />
-                ADD CERTIFICATE
-              </button>
-            </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateData({
+                      certifications: [
+                        ...certificationsList,
+                        { name: "", link: "", date: "" },
+                      ],
+                    });
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-all border border-blue-100"
+                >
+                  <Plus size={14} strokeWidth={3} />
+                  ADD CERTIFICATE
+                </button>
+                {openSections.certifications ? <ChevronUp size={18} className="text-slate-400 hidden md:block" /> : <ChevronDown size={18} className="text-slate-400 hidden md:block" />}
+              </div>
+            </summary>
 
             <div className="p-6 space-y-4">
               {certificationsList.map((cert, idx: number) => (
@@ -795,7 +850,7 @@ export default function Builder() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">
                           Certificate Link
@@ -841,13 +896,12 @@ export default function Builder() {
                 </div>
               )}
             </div>
-          </div>
+          </details>
         </section>
 
-        <div className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-slate-300/60 to-transparent" />
-
-        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
+        <section className="hidden md:block md:w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
           <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
+            <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-slate-300/60 to-transparent" />
             <div
               id="resume-template"
               className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0"
@@ -878,6 +932,55 @@ export default function Builder() {
           </div>
         </section>
       </main>
+
+      <button
+        onClick={() => setShowPreview(true)}
+        className="md:hidden fixed bottom-6 right-6 z-40 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition-all flex items-center gap-2"
+      >
+        <Eye size={22} />
+      </button>
+
+      {showPreview && (
+        <div className="md:hidden fixed inset-0 z-50 bg-slate-900/80 flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200">
+            <h3 className="font-bold text-slate-800">Resume Preview</h3>
+            <button
+              onClick={() => setShowPreview(false)}
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-auto bg-slate-300 flex justify-center p-4">
+            <div
+              className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0 origin-top"
+              style={{
+                width: "210mm",
+                height: "297mm",
+                minWidth: "210mm",
+                minHeight: "297mm",
+                transform: `scale(${(window.innerWidth - 32) / 794})`,
+              }}
+            >
+              {SelectedTemplate ? (
+                <SelectedTemplate
+                  data={{
+                    ...resume.data,
+                    personal: {
+                      ...resume.data.personal,
+                      image: tempImage || undefined,
+                    },
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                  Template Not Found
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .input-style {
