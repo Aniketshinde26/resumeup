@@ -946,9 +946,9 @@ export default function Builder() {
             <h3 className="font-bold text-slate-800">Resume Preview</h3>
             <button
               onClick={() => setShowPreview(false)}
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all shadow-[0_0_12px_rgba(220,38,38,0.7)]"
             >
-              <X size={20} />
+              <X size={22} strokeWidth={2.5} />
             </button>
           </div>
           <div className="flex-1 overflow-auto bg-slate-300 flex justify-center p-4">
