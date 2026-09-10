@@ -49,7 +49,7 @@ export default function Login() {
                     <span className="text-white font-bold text-sm">R</span>
                   </div>
                   <div className="flex items-center gap-0 tracking-tight">
-                    <span className="font-bold text-xl" style={{ color: 'var(--color-brand-name)' }}>
+                    <span className="font-bold text-xl" style={{ color: 'var(--color-title-intro)' }}>
                       Resume
                     </span>
                     <span className="text-green-600 font-bold text-xl">Pro</span>
@@ -70,7 +70,7 @@ export default function Login() {
                   >
                     <div className="relative aspect-[3/4.2] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-500 ease-out shadow-sm group-hover:shadow-2xl group-hover:shadow-brand-primary/20 group-hover:-translate-y-2 group-hover:border-brand-primary/50">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex flex-col justify-end p-4">
-                        <span className="text-[10px] font-bold uppercase tracking-tighter mb-1 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <span className="text-[10px] font-bold dark:text-slate-900 uppercase tracking-tighter mb-1 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                           Click to Customize
                         </span>
                       </div>
@@ -83,7 +83,7 @@ export default function Login() {
 
                     <div className="mt-4 flex items-center justify-between px-1">
                       <div>
-                        <p className="text-[11px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider group-hover:text-brand-primary transition-colors">
+                        <p className="text-[11px] font-black text-slate-100 dark:text-slate-700 uppercase tracking-wider group-hover:text-brand-primary transition-colors">
                           {tpl.name}
                         </p>
                         <div className="h-0.5 w-0 group-hover:w-full bg-brand-primary transition-all duration-300 rounded-full" />
