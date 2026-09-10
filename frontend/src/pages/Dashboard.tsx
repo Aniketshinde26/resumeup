@@ -23,7 +23,7 @@ export default function Dashboard() {
     <>
       <div className="-m-8">
         <GridBackground>
-          <div className="p-8 max-w-7xl mx-auto w-full">
+          <div className="p-8 pl-14 lg:pl-8 max-w-7xl mx-auto w-full">
             {/* Template Selection Section */}
             <section className="mb-12">
               <h2 className="text-2xl font-bold mb-6 text-(--color-text)">
