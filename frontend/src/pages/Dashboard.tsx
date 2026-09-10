@@ -23,13 +23,13 @@ export default function Dashboard() {
     <>
       <div className="-m-8">
         <GridBackground>
-          <div className="p-8 max-w-7xl mx-auto w-full">
+          <div className="p-4 sm:p-8 max-w-7xl mx-auto w-full">
             {/* Template Selection Section */}
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-(--color-text)">
+            <section className="mb-8 sm:mb-12">
+              <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-(--color-text)">
                 {t('start_new')}
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 <SkeletonWrapper isLoading={false} count={2}>
                   {TEMPLATE_LIST.map((tpl) => (
                     <div 
@@ -63,7 +63,7 @@ export default function Dashboard() {
                 {t('your_resumes')}
               </h2>
 
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">         
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 md:gap-6">         
                 <SkeletonWrapper isLoading={isLoading} count={4}>
                   {resumes.length > 0 ? (
                     resumes.map((resume: Resume) => (
