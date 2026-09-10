@@ -27,7 +27,7 @@ export default function CoverLetterDashboard() {
     <div className="p-8 pl-14 lg:pl-8 max-w-7xl mx-auto w-full">
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6 text-(--color-text)"> {t('start_new')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <SkeletonWrapper isLoading={false} count={2}>
               {COVER_LETTER_TEMPLATES.map((tpl) => (
             <div 
