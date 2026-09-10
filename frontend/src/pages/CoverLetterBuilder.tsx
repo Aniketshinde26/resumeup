@@ -1,10 +1,15 @@
+import { useState } from "react";
 import { 
   Building2, 
   AlignLeft, 
   User, 
   Camera, 
   Trash2,  
-  Calendar 
+  Calendar,
+  Eye,
+  X,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { useCoverLetterBuilder } from "../hooks/useCoverLetterBuilder";
 import { COVER_LETTER_TEMPLATES_MAP } from "../types/templateindex"; 
@@ -24,6 +29,15 @@ export default function CoverLetterBuilder() {
     tempImage,
     setTempImage,
   } = useCoverLetterBuilder();
+
+  const [showPreview, setShowPreview] = useState(false);
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    details: true,
+    recipient: true,
+    content: true,
+  });
+  const toggleSection = (key: string) =>
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
   if (loading) return <div className="p-10 text-center">Loading Cover Letter...</div>;
   if (!coverLetter) return null;
@@ -45,18 +59,22 @@ export default function CoverLetterBuilder() {
         onDownload={() => handlePrint("cover-letter-preview", "Cover Letter")}
       />
 
-      <main className="flex-1 flex overflow-hidden">
-        <section className="w-1/2 overflow-y-auto p-8 border-r border-slate-200 space-y-10 custom-scrollbar no-print">
+      <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+        <section className="w-full md:w-1/2 overflow-y-auto p-4 sm:p-8 border-b md:border-b-0 md:border-r border-slate-200 space-y-6 md:space-y-10 custom-scrollbar no-print">
           
-          <div className="bg-[var(--color-form-bg)] rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.details} className="bg-[var(--color-form-bg)] rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('details'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-indigo-100 text-indigo-600 rounded-lg">
                   <User size={18} />
                 </div>
                 Your Details
               </h2>
-            </div>
+              {openSections.details ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+            </summary>
             <div className="p-6 space-y-6">
               <div className="flex items-center gap-6 p-4 bg-[var(--color-form-in)] rounded-xl border border-dashed border-slate-200">
                 <label className="relative cursor-pointer group shrink-0">
@@ -157,17 +175,21 @@ export default function CoverLetterBuilder() {
                 </div>
               </div>
             </div>
-          </div>
+          </details>
 
-          <div className="bg-[var(--color-form-bg)] rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.recipient} className="bg-[var(--color-form-bg)] rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('recipient'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-emerald-100 text-emerald-600 rounded-lg">
                   <Building2 size={18} />
                 </div>
                 Recipient Details
               </h2>
-            </div>
+              {openSections.recipient ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+            </summary>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <div className="space-y-1.5">
                 <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Company Name</label>
@@ -199,17 +221,21 @@ export default function CoverLetterBuilder() {
                 />
               </div>
             </div>
-          </div>
+          </details>
 
-          <div className="bg-[var(--color-form-bg)] rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <details open={openSections.content} className="bg-[var(--color-form-bg)] rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <summary
+              onClick={(e) => { e.preventDefault(); toggleSection('content'); }}
+              className="bg-slate-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between cursor-pointer list-none [&::-webkit-details-marker]:hidden"
+            >
               <h2 className="text-slate-800 font-bold flex items-center gap-2">
                 <div className="p-1.5 bg-violet-100 text-violet-600 rounded-lg">
                   <AlignLeft size={18} />
                 </div>
                 Letter Content
               </h2>
-            </div>
+              {openSections.content ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
+            </summary>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                 <div className="space-y-1.5">
@@ -254,7 +280,7 @@ export default function CoverLetterBuilder() {
                   <span className="text-slate-400 normal-case font-normal text-[10px]">Separate paragraphs with a blank line (Enter twice)</span>
                 </label>
                 <textarea
-                  className="w-full px-4 py-3 bg-[var(--color-form-bg)] text-[var(--form-text)] border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all min-h-[300px] resize-y leading-relaxed"
+                  className="w-full px-4 py-3 bg-[var(--color-form-bg)] text-[var(--form-text)] border border-slate-200 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all min-h-[150px] md:min-h-[300px] resize-y leading-relaxed"
                   placeholder="I am writing to express my interest in..."
                   value={(coverLetter.Data.letter?.bodyParagraphs || []).join("\n\n")}
                   onChange={(e) => {
@@ -275,13 +301,12 @@ export default function CoverLetterBuilder() {
                 />
               </div>
             </div>
-          </div>
+          </details>
         </section>
 
-        <div className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-slate-300/60 to-transparent" />
-
-        <section className="w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
+        <section className="hidden md:block md:w-1/2 bg-slate-300 overflow-y-auto custom-scrollbar h-full">
           <div className="flex justify-center items-start min-h-full w-full py-12 bg-slate-300">
+            <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 h-full w-[1px] bg-gradient-to-b from-transparent via-slate-300/60 to-transparent" />
             <div className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0">
               <div
                 id="cover-letter-preview"
@@ -313,6 +338,54 @@ export default function CoverLetterBuilder() {
         </section>
       </main>
 
+      <button
+        onClick={() => setShowPreview(true)}
+        className="md:hidden fixed bottom-6 right-6 z-40 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition-all flex items-center gap-2"
+      >
+        <Eye size={22} />
+      </button>
+
+      {showPreview && (
+        <div className="md:hidden fixed inset-0 z-50 bg-slate-900/80 flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200">
+            <h3 className="font-bold text-slate-800">Cover Letter Preview</h3>
+            <button
+              onClick={() => setShowPreview(false)}
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-auto bg-slate-300 flex justify-center p-4">
+            <div
+              className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0 origin-top"
+              style={{
+                width: "210mm",
+                height: "297mm",
+                minWidth: "210mm",
+                minHeight: "297mm",
+                transform: `scale(${(window.innerWidth - 32) / 794})`,
+              }}
+            >
+              {SelectedTemplate ? (
+                <SelectedTemplate
+                  data={{
+                    ...coverLetter.Data,
+                    personal: {
+                      ...coverLetter.Data.personal,
+                      image: tempImage || undefined,
+                    },
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                  Template Not Found
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       <style>{`
         .input-style {
           @apply border border-slate-200 p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white;
