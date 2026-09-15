@@ -9,7 +9,7 @@ const config = {
   },
   login: {
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 10,
     message: "Too many login attempts. Please try again in 15 minutes.",
   },
   oauth: {
@@ -119,14 +119,20 @@ const getUserOrIpKey = (req: any) => {
 
 export const authLimiter = rateLimit({
   ...config.auth,
+  standardHeaders: true,
+  legacyHeaders: false,
   handler: createHandler(config.auth.message),
 });
 export const loginLimiter = rateLimit({
   ...config.login,
+  standardHeaders: true,
+  legacyHeaders: false,
   handler: createHandler(config.login.message),
 });
 export const oauthLimiter = rateLimit({
   ...config.oauth,
+  standardHeaders: true,
+  legacyHeaders: false,
   handler: createHandler(config.oauth.message),
 });
 export const forgotPasswordLimiter = rateLimit({
@@ -138,6 +144,8 @@ export const forgotPasswordLimiter = rateLimit({
 });
 export const resetPasswordLimiter = rateLimit({
   ...config.resetPassword,
+  standardHeaders: true,
+  legacyHeaders: false,
   handler: createHandler(config.resetPassword.message),
 });
 

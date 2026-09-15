@@ -34,7 +34,7 @@ import { GoogleLoginRequestBody } from "../types/auth";
 const isProduction = process.env.NODE_ENV === "production";
 
 const MAX_LOGIN_ATTEMPTS = 5;
-const LOGIN_LOCKOUT_MS = 15 * 60 * 1000;
+const LOGIN_LOCKOUT_MS = 12 * 60 * 60 * 1000;
 
 const cookieOptions = {
   httpOnly: true,
