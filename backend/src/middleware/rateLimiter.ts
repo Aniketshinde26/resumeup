@@ -9,7 +9,7 @@ const config = {
   },
   login: {
     windowMs: 15 * 60 * 1000,
-    max: 10,
+    max: 100,
     message: "Too many login attempts. Please try again in 15 minutes.",
   },
   oauth: {
