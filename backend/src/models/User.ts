@@ -16,6 +16,8 @@ class User
   public resetPasswordToken!: string | null;
   public resetPasswordExpires!: Date | null;
   public resetPasswordRequestedAt!: Date | null;
+  public failedLoginAttempts!: number;
+  public lockedUntil!: Date | null;
   public passwordChangedAt!: Date | null;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -64,6 +66,15 @@ User.init(
       allowNull: true,
     },
     resetPasswordRequestedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    failedLoginAttempts: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    lockedUntil: {
       type: DataTypes.DATE,
       allowNull: true,
     },

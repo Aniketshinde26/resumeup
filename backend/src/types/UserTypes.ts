@@ -14,6 +14,8 @@ export interface UserAttributes {
   resetPasswordExpires: Date | null;
   passwordChangedAt: Date | null;
   resetPasswordRequestedAt: Date | null;
+  failedLoginAttempts: number;
+  lockedUntil: Date | null;
 }
 
 export interface UserCreationAttributes extends Optional<
@@ -28,6 +30,8 @@ export interface UserCreationAttributes extends Optional<
   | "resetPasswordExpires"
   | "passwordChangedAt"
   | "resetPasswordRequestedAt"
+  | "failedLoginAttempts"
+  | "lockedUntil"
 > {}
 
 export interface UserCreateRequest {

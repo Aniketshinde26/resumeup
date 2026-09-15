@@ -25,7 +25,8 @@ const config = {
   resetPassword: {
     windowMs: 15 * 60 * 1000,
     max: 10,
-    message: "Too many password reset attempts. Please try again in 15 minutes.",
+    message:
+      "Too many password reset attempts. Please try again in 15 minutes.",
   },
   refresh: {
     windowMs: 15 * 60 * 1000,
@@ -204,4 +205,30 @@ export const coverLetterBuilderLimiter = rateLimit({
   ...config.builder,
   keyGenerator: getUserOrIpKey,
   handler: createHandler(config.builder.message),
+});
+
+const emailKeyGenerator = (req: any) => {
+  const email = String(req.body?.email || "")
+    .toLowerCase()
+    .trim();
+  if (email) return `email:${email}`;
+  return ipKeyGenerator(req.ip || "");
+};
+
+export const loginEmailLimiter = rateLimit({
+  windowMs: config.login.windowMs,
+  max: config.login.max,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: emailKeyGenerator,
+  handler: createHandler(config.login.message),
+});
+
+export const forgotPasswordEmailLimiter = rateLimit({
+  windowMs: config.forgotpassword.windowMs,
+  max: config.forgotpassword.max,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: emailKeyGenerator,
+  handler: createHandler(config.forgotpassword.message),
 });

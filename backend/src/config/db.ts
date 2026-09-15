@@ -28,6 +28,13 @@ export const connectDB = async () => {
     await sequelize.authenticate();
 
     await sequelize.sync();
+
+    await sequelize.query(`
+      ALTER TABLE users ADD COLUMN failedLoginAttempts INT NOT NULL DEFAULT 0;
+    `).catch(() => {});
+    await sequelize.query(`
+      ALTER TABLE users ADD COLUMN lockedUntil DATETIME NULL;
+    `).catch(() => {});
   } catch (err) {
     console.error("DB connection error:", err);
     process.exit(1);

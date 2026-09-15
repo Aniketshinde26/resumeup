@@ -33,6 +33,9 @@ import { GoogleLoginRequestBody } from "../types/auth";
 
 const isProduction = process.env.NODE_ENV === "production";
 
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOGIN_LOCKOUT_MS = 15 * 60 * 1000;
+
 const cookieOptions = {
   httpOnly: true,
   secure: isProduction,
@@ -134,6 +137,10 @@ export const loginUser = async (
       throw new BadRequestError("Invalid email or password");
     }
 
+    if (user.lockedUntil && user.lockedUntil.getTime() > Date.now()) {
+      throw new BadRequestError("Invalid email or password");
+    }
+
     if (!user.password || user.password === "") {
       throw new BadRequestError(
         "This account was created via Google Login. Please use the 'Sign in with Google' button.",
@@ -142,13 +149,22 @@ export const loginUser = async (
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
+      const attempts = (user.failedLoginAttempts || 0) + 1;
+      if (attempts >= MAX_LOGIN_ATTEMPTS) {
+        await user.update({
+          failedLoginAttempts: 0,
+          lockedUntil: new Date(Date.now() + LOGIN_LOCKOUT_MS),
+        });
+      } else {
+        await user.update({ failedLoginAttempts: attempts });
+      }
       throw new BadRequestError("Invalid email or password");
     }
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    await user.update({ refreshToken });
+    await user.update({ refreshToken, failedLoginAttempts: 0, lockedUntil: null });
 
     res.cookie("refreshToken", refreshToken, {
       ...cookieOptions,
