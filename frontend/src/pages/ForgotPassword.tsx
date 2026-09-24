@@ -2,9 +2,10 @@ import { useForgotPassword } from "../hooks/useForgotPassword";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import GridBackground from "../layouts/Gridbackground";
+import FieldError from "../components/ui/FieldError";
 
 export default function ForgotPassword() {
-  const { email, setEmail, message, error, loading, handleForgotPassword } = useForgotPassword();
+  const { email, setEmail, message, error, loading, fieldErrors, handleForgotPassword } = useForgotPassword();
   const { t } = useTranslation('translation', { keyPrefix: 'forgotpassword' });
 
   return (
@@ -52,7 +53,7 @@ export default function ForgotPassword() {
             </div>
           </div>
 
-          <form onSubmit={handleForgotPassword} className="space-y-5 relative z-10">
+          <form onSubmit={handleForgotPassword} className="space-y-5 relative z-10" noValidate>
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">
                 {t('email')}
@@ -65,6 +66,7 @@ export default function ForgotPassword() {
                 className="w-full rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-3.5 text-base text-slate-900 dark:text-white placeholder:text-slate-300 focus:bg-white dark:focus:bg-slate-700 focus:border-brand-primary/50 outline-none transition-all"
                 required
               />
+              {fieldErrors.email && <FieldError message={fieldErrors.email} />}
             </div>
 
             <button

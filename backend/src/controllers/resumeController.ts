@@ -3,7 +3,6 @@ import Resume from "../models/Resume";
 import { AuthRequest } from "../types/auth";
 import {
   NotFoundError,
-  BadRequestError,
   UnauthorizedError,
 } from "../utils/AppError";
 import {
@@ -22,17 +21,6 @@ export const createResume = async (
       throw new UnauthorizedError();
     }
     const { title, templateId, data } = req.body;
-    if (!title || !templateId || !data) {
-      throw new BadRequestError(
-        "Missing required fields: title, templateId, or data",
-      );
-    }
-    if (typeof title !== "string" || typeof templateId !== "string") {
-      throw new BadRequestError("title and templateId must be strings");
-    }
-    if (typeof data !== "object" || data === null || Array.isArray(data)) {
-      throw new BadRequestError("data must be an object");
-    }
     const resume = await Resume.create({
       userId: req.user.id,
       title,
@@ -142,16 +130,10 @@ export const updateResume = async (
     const updateFields: Partial<Pick<typeof resume, "title" | "data">> = {};
 
     if (title !== undefined) {
-      if (typeof title !== "string") {
-        throw new BadRequestError("Title must be a string");
-      }
       updateFields.title = title;
     }
 
     if (data !== undefined) {
-      if (typeof data !== "object" || data === null || Array.isArray(data)) {
-        throw new BadRequestError("Data must be an object");
-      }
       updateFields.data = data;
     }
 

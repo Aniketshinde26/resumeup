@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { PasswordInputProps } from "../types/layoutprops";
+import FieldError from "./ui/FieldError";
 
 
 export default function PasswordInput({
@@ -8,6 +9,7 @@ export default function PasswordInput({
   placeholder = "Password",
   disabled = false,
   inputClassName = "",
+  error,
 }: PasswordInputProps) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -23,6 +25,7 @@ export default function PasswordInput({
         disabled={disabled}
         className={`
           w-full rounded-xl border border-slate-200 dark:border-slate-700
+          ${error ? "border-red-500 dark:border-red-500" : ""}
           bg-slate-50 dark:bg-slate-800 px-4 py-3 pr-11 text-sm
           text-slate-900 dark:text-white
           placeholder:text-slate-300 dark:placeholder:text-slate-500
@@ -50,6 +53,7 @@ export default function PasswordInput({
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         )}
       </button>
+      {error && <FieldError message={error} />}
     </div>
   );
 }

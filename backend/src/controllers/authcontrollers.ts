@@ -70,9 +70,6 @@ export const registerUser = async (
 ): Promise<void> => {
   try {
     const { fullname, email, password } = req.body;
-    if (!fullname || !email || !password) {
-      throw new BadRequestError("Fullname, email, and password are required");
-    }
 
     const existingUser = await User.findOne({ where: { email } });
 
@@ -126,10 +123,6 @@ export const loginUser = async (
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      throw new BadRequestError("Email & password required");
-    }
 
     const user = await User.findOne({ where: { email } });
 
@@ -223,8 +216,6 @@ export const googleLogin = async (
       googleId = googleUserRes.data.sub;
       email = googleUserRes.data.email;
       fullname = googleUserRes.data.name;
-    } else {
-      throw new BadRequestError("Missing Google Token");
     }
 
     if (!email) {
@@ -346,10 +337,6 @@ export const githubLogin = async (
   try {
     const { code } = req.body;
 
-    if (!code) {
-      throw new BadRequestError("Missing GitHub Code");
-    }
-
     const tokenResponse = await axios.post(
       "https://github.com/login/oauth/access_token",
       {
@@ -437,9 +424,6 @@ export const forgotPassword = async (
 ): Promise<void> => {
   try {
     const { email } = req.body;
-    if (!email) {
-      throw new BadRequestError("Email is required");
-    }
 
     const sanitizedEmail = email.toLowerCase().trim();
     const currentTime = Date.now();
@@ -512,10 +496,6 @@ export const resetPassword = async (
   try {
     const { token } = req.params;
     const { password } = req.body;
-
-    if (!password || typeof password !== "string" || password.trim() === "") {
-      throw new BadRequestError("New password is required");
-    }
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 

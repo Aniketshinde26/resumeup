@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import GridBackground from "../layouts/Gridbackground";
 
 export default function ResetPassword() {
-  const { password, setPassword, confirmPassword, setConfirmPassword, message, error, loading, handleResetPassword } = useResetPassword();
+  const { password, setPassword, confirmPassword, setConfirmPassword, message, error, loading, fieldErrors, handleResetPassword } = useResetPassword();
   const { t } = useTranslation('translation', { keyPrefix: 'resetpassword' });
 
   return (
@@ -46,6 +46,7 @@ export default function ResetPassword() {
               <PasswordInput 
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
+                error={fieldErrors.password}
               />
             </div>
 
@@ -56,6 +57,7 @@ export default function ResetPassword() {
               <PasswordInput 
                 value={confirmPassword} 
                 onChange={(e) => setConfirmPassword(e.target.value)} 
+                error={fieldErrors.password}
               />
             </div>
 

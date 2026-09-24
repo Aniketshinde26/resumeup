@@ -26,6 +26,7 @@ export interface PasswordInputProps {
   placeholder?: string;
   disabled?: boolean;
   inputClassName?: string;
+  error?: string;
 }
 
 export interface DocumentCardProps {

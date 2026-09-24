@@ -5,6 +5,7 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import type { AuthResponse } from "../types/user";
 import { initiateGithubLogin } from "../services/githubAuth";
+import { loginSchema } from "../validations/authSchemas";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -13,11 +14,25 @@ export const useLogin = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<string, string>>>({});
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError("");
+    setFieldErrors({});
+
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      const errors: Partial<Record<string, string>> = {};
+      for (const issue of result.error.issues) {
+        const key = String(issue.path[0]);
+        if (!errors[key]) errors[key] = issue.message;
+      }
+      setFieldErrors(errors);
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       const res = await api.post<AuthResponse>("/auth/login", {
@@ -47,6 +62,7 @@ export const useLogin = () => {
     setPassword,
     isLoading,
     error,
+    fieldErrors,
     handleLogin,
     initiateGithubLogin,
   };

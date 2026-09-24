@@ -1,6 +1,6 @@
 import { useRegister } from "../hooks/useRegister";
 import PasswordInput from "../components/PasswordInput";
-import { ErrorMessage } from "../components/ui";
+import { ErrorMessage, FieldError } from "../components/ui";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 import { Link } from "react-router-dom";
 import { useGithubAuth } from "../hooks/useGithubAuth";
@@ -19,6 +19,7 @@ export default function Register() {
     setPassword,
     isLoading,
     error,
+    fieldErrors,
     handleRegister,
   } = useRegister();
   const { handleSocialClick } = useGithubAuth();
@@ -145,7 +146,7 @@ export default function Register() {
                   <div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div>
                 </div>
 
-                <form onSubmit={handleRegister} className="space-y-4">
+                <form onSubmit={handleRegister} className="space-y-4" noValidate>
                   {error && <ErrorMessage message={error} />}
 
                   <div className="space-y-1.5">
@@ -160,6 +161,7 @@ export default function Register() {
                       onChange={(e) => setFullname(e.target.value)}
                       className="w-full rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-300 focus:bg-white dark:focus:bg-slate-700 focus:border-brand-primary/50 outline-none transition-all"
                     />
+                    {fieldErrors.fullname && <FieldError message={fieldErrors.fullname} />}
                   </div>
 
                   <div className="space-y-1.5">
@@ -174,6 +176,7 @@ export default function Register() {
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-300 focus:bg-white dark:focus:bg-slate-700 focus:border-brand-primary/50 outline-none transition-all"
                     />
+                    {fieldErrors.email && <FieldError message={fieldErrors.email} />}
                   </div>
 
                   <div className="space-y-1.5">
@@ -183,6 +186,7 @@ export default function Register() {
                     <PasswordInput
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      error={fieldErrors.password}
                     />
                   </div>
 

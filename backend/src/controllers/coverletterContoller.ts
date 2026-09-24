@@ -4,7 +4,6 @@ import { AuthRequest } from "../types/auth";
 import {
   UnauthorizedError,
   NotFoundError,
-  BadRequestError,
 } from "../utils/AppError";
 import {
   CoverLetterResponse,
@@ -23,14 +22,6 @@ export const createCoverLetter = async (
     }
 
     const { Title, Data, TemplateId } = req.body;
-
-    if (!Title || !TemplateId) {
-      throw new BadRequestError("Missing required fields: Title or TemplateId");
-    }
-
-    if (typeof Title !== "string" || typeof TemplateId !== "string") {
-      throw new BadRequestError("Title and TemplateId must be strings");
-    }
 
     const coverletter = await CoverLetter.create({
       userId: req.user.id,
@@ -141,16 +132,10 @@ export const updateCoverLetter = async (
       {};
 
     if (Title !== undefined) {
-      if (typeof Title !== "string") {
-        throw new BadRequestError("Title must be a string");
-      }
       updateFields.Title = Title;
     }
 
     if (Data !== undefined) {
-      if (typeof Data !== "object" || Data === null || Array.isArray(Data)) {
-        throw new BadRequestError("Data must be an object");
-      }
       updateFields.Data = Data;
     }
 

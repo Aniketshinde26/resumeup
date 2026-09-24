@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import type { RegisterResponse } from "../types/user";
+import { registerSchema } from "../validations/authSchemas";
 import axios from "axios";
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -10,11 +11,25 @@ export const useRegister = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<string, string>>>({});
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError("");
+    setFieldErrors({});
+
+    const result = registerSchema.safeParse({ fullname, email, password });
+    if (!result.success) {
+      const errors: Partial<Record<string, string>> = {};
+      for (const issue of result.error.issues) {
+        const key = String(issue.path[0]);
+        if (!errors[key]) errors[key] = issue.message;
+      }
+      setFieldErrors(errors);
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       await api.post<RegisterResponse>("/auth/register", {
@@ -43,6 +58,7 @@ export const useRegister = () => {
     setPassword,
     isLoading,
     error,
+    fieldErrors,
     handleRegister,
   };
 };

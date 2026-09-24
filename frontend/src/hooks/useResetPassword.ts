@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import axios from "axios";
 import type { ResetPasswordResponse } from "../types/user";
+import { resetPasswordSchema } from "../validations/authSchemas";
 
 export const useResetPassword = () => {
   const { token } = useParams<{ token: string }>();
@@ -13,14 +14,31 @@ export const useResetPassword = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<string, string>>>({});
 
   const handleResetPassword = async (e: FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword)
-      return setError("Passwords do not match.");
+    setError("");
+    setMessage("");
+    setFieldErrors({});
+
+    const result = resetPasswordSchema.safeParse({ password });
+    if (!result.success) {
+      const errors: Partial<Record<string, string>> = {};
+      for (const issue of result.error.issues) {
+        const key = String(issue.path[0]);
+        if (!errors[key]) errors[key] = issue.message;
+      }
+      setFieldErrors(errors);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     setLoading(true);
-    setError("");
 
     try {
       const res = await api.post<ResetPasswordResponse>(
@@ -48,6 +66,7 @@ export const useResetPassword = () => {
     message,
     error,
     loading,
+    fieldErrors,
     handleResetPassword,
   };
 };
