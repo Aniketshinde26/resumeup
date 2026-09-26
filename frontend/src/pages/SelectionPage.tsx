@@ -35,29 +35,28 @@ export default function SelectionPage() {
 
   return (
     <>
-      <div className="-m-8">
         <GridBackground>
-          <div className="p-8 pl-14 lg:pl-8 max-w-7xl mx-auto w-full ">
-            <header className="mb-12 relative">
+          <div className="max-w-7xl mx-auto w-full">
+            <header className="mb-8 sm:mb-12 relative">
               <div className="absolute -top-10 -left-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl" />
-              <h1 className="text-4xl font-black tracking-tight" style={{ color: 'var(--color-text-main)' }}>
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight" style={{ color: 'var(--color-text-main)' }}>
                 Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-700 to-green-600">ResumePro</span>
               </h1>
-              <p className="mt-3 text-lg max-w-2xl" style={{ color: 'var(--color-text-main)' }}>
+              <p className="mt-2 sm:mt-3 text-sm sm:text-base max-w-2xl" style={{ color: 'var(--color-text-main)' }}>
                 {t('everything_you_need_to_land_your_dream_job_powered_by_smart_design_select_a_tool_below_to_begin')}
               </p>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               {tools.map((tool) => (
                 <Link to={tool.path} key={tool.id} className="group">
                  
-                  <div className="h-full bg-(--color-form-in) border border-slate-200/80 dark:border-slate-200/80 p-8 rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-black/30 transition-all duration-300 flex flex-col items-start">
-                    <div className={`p-4 rounded-2xl ${tool.color} text-white mb-6 shadow-lg shadow-current/20`}>
+                  <div className="h-full bg-(--color-form-in) border border-slate-200/80 dark:border-slate-200/80 p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-black/30 transition-all duration-300 flex flex-col items-start">
+                    <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${tool.color} text-white mb-4 sm:mb-6 shadow-lg shadow-current/20`}>
                       {tool.icon}
                     </div>
                     
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                       {tool.title}
                     </h3>
                     <p className="text-slate-500 text-sm leading-relaxed mb-6">
@@ -72,7 +71,6 @@ export default function SelectionPage() {
             </div>
           </div>
         </GridBackground>
-      </div>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check} from "lucide-react";
+import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check, Menu, X} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "../components/ThemeToggle";
 import { useAuth } from "../context/AuthContext";
@@ -10,6 +10,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'sidebar' });
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   const { logout } = useAuth();
   const languages = [
@@ -27,6 +28,10 @@ export default function DashboardLayout() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   const menuItems = [
     { name: t('home'), icon: <LayoutDashboard size={22} />, path: '/home' },
@@ -52,8 +57,24 @@ return (
     <div className="flex h-screen w-full bg-slate-50 dark:bg-slate-950 overflow-hidden transition-colors duration-300 font-sans">
       
 
-<aside className="h-full bg-[var(--color-card-bg)] border-r border-[var(--color-border-subtle)] flex flex-col transition-all duration-300 ease-in-out group 
-                  w-[80px] hover:w-[280px] shrink-0 z-[50] shadow-xl shadow-slate-200/50 dark:shadow-none">
+      {isSidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      <button
+        onClick={() => setIsSidebarOpen((v) => !v)}
+        aria-label="Toggle navigation"
+        className="md:hidden fixed top-3 left-3 z-[60] p-2 rounded-xl bg-(--color-card-bg) border border-(--color-border-subtle) shadow-lg active:scale-95 transition-transform"
+      >
+        {isSidebarOpen ? <X size={22} className="text-slate-600 dark:text-slate-200" /> : <Menu size={22} className="text-slate-600 dark:text-slate-200" />}
+      </button>
+
+<aside className={`h-full bg-[var(--color-card-bg)] border-r border-[var(--color-border-subtle)] flex flex-col transition-all duration-300 ease-in-out group
+                  fixed inset-y-0 left-0 z-50 md:static md:z-auto w-[280px] md:w-[80px] md:hover:w-[280px] shrink-0 shadow-xl shadow-slate-200/50 dark:shadow-none
+                  ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         
         <div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
           <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
@@ -150,7 +171,7 @@ return (
       </aside>
 
     <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--color-card-bg)] text-[var(--color-text-main)] transition-colors duration-300">
-  <div className="p-10 max-w-7xl mx-auto min-h-full">
+  <div className="p-4 pt-16 sm:p-10 sm:pt-10 max-w-7xl mx-auto min-h-full">
     <Outlet />
   </div>
 </main>
