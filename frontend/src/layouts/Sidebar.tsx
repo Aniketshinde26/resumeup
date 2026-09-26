@@ -80,7 +80,7 @@ return (
           <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
             <span className="text-white font-bold text-xs uppercase">R</span>
           </div>
-          <div className="ml-4 flex items-center gap-0 tracking-tight whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="ml-4 flex items-center gap-0 tracking-tight whitespace-nowrap md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
             <span className="text-slate-900  font-bold text-xl" style={{ color: 'var(--color-text-main)' }}>
               Resume
             </span>
@@ -104,7 +104,7 @@ return (
                 <div className="w-6 h-6 flex items-center justify-center shrink-0">
                   {item.icon}
                 </div>
-                <span className="ml-5 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="ml-5 text-sm font-bold md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                   {item.name}
                 </span>
               </Link>
@@ -147,7 +147,7 @@ return (
               <div className="w-6 h-6 flex items-center justify-center shrink-0">
                 <Languages size={20} />
               </div>
-              <div className="ml-5 flex items-center justify-between flex-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="ml-5 flex items-center justify-between flex-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                 <span className="text-xs font-black uppercase tracking-widest">
                   {languages.find(l => i18n.language.startsWith(l.code))?.label || 'Language'}
                 </span>
@@ -163,7 +163,7 @@ return (
             <div className="w-6 h-6 flex items-center justify-center shrink-0">
               <LogOut size={20} />
             </div>
-            <span className="ml-5 text-xs font-black tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="ml-5 text-xs font-black tracking-widest md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
               {t('logout')}
             </span>
           </button>
