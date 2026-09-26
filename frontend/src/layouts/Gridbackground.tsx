@@ -8,7 +8,7 @@ const GridBackground = ({
 }: GridBackgroundProps) => {
   return (
   
-    <div className="relative min-h-screen w-[100vw] left-50/97 -translate-x-1/2 bg-[var(--color-brand-surface)] transition-colors duration-300 isolate overflow-x-hidden">
+    <div className="relative min-h-screen w-full bg-[var(--color-brand-surface)] transition-colors duration-300 isolate overflow-x-hidden">
       
    
       <div 

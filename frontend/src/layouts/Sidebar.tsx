@@ -75,7 +75,7 @@ return (
       </button>
 
 <aside className={`h-full bg-[var(--color-card-bg)] border-r border-[var(--color-border-subtle)] flex flex-col transition-all duration-300 ease-in-out group
-                  fixed inset-y-0 left-0 z-50 md:static md:z-auto w-[280px] md:w-[80px] md:hover:w-[280px] shrink-0 shadow-xl shadow-slate-200/50 dark:shadow-none
+                  fixed inset-y-0 left-0 z-50 w-[280px] md:w-[80px] md:hover:w-[280px] shrink-0 shadow-xl shadow-slate-200/50 dark:shadow-none md:hover:shadow-2xl md:hover:shadow-slate-300/60 dark:md:hover:shadow-black/40
                   ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         
         <div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
@@ -173,7 +173,7 @@ return (
         </div>
       </aside>
 
-    <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--color-card-bg)] text-[var(--color-text-main)] transition-colors duration-300">
+    <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden bg-[var(--color-card-bg)] text-[var(--color-text-main)] transition-colors duration-300 md:pl-20">
   <div className="p-4 pt-16 sm:p-10 sm:pt-10 max-w-7xl mx-auto min-h-full">
     <Outlet />
   </div>
