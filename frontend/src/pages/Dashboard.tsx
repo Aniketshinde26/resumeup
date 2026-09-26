@@ -26,27 +26,27 @@ export default function Dashboard() {
           <div className="max-w-7xl mx-auto w-full">
             {/* Template Selection Section */}
             <section className="mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-(--color-text)">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-(--color-text)">
                 {t('start_new')}
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                 <SkeletonWrapper isLoading={false} count={2}>
                   {TEMPLATE_LIST.map((tpl) => (
                     <div 
                       key={tpl.id} 
                       onClick={() => handleTemplateSelect(tpl.id)} 
-                      className="group cursor-pointer"
+                      className="group cursor-pointer min-w-0"
                     >
-                      <div className="relative aspect-[1/1.41] rounded-xl border-2 border-slate-100 group-hover:border-blue-500 transition-all overflow-hidden bg-white shadow-sm">
+                      <div className="relative aspect-[1/1.41] rounded-xl border-2 border-slate-100 group-hover:border-blue-500 transition-all overflow-hidden bg-slate-100 shadow-sm">
                         <img
                           src={`/previews/${tpl.id}.png`}
                           alt={tpl.name}
-                          className="w-full h-full object-cover opacity-0 transition-opacity duration-500"
+                          className="w-full h-full object-contain object-top opacity-0 transition-opacity duration-500"
                           onLoad={(e) => e.currentTarget.classList.remove('opacity-0')}
                         />
                         <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors" />
                       </div>
-                      <p className="mt-2 text-sm font-medium text-center text-slate-700 group-hover:text-blue-600 transition-colors">
+                      <p className="mt-2 text-xs sm:text-sm font-medium text-center text-slate-700 group-hover:text-blue-600 transition-colors truncate">
                         {tpl.name}
                       </p>
                     </div>
@@ -59,11 +59,11 @@ export default function Dashboard() {
 
             {/* Saved Resumes Section */}
             <section>
-              <h2 className="text-xl font-bold mb-6 text-(--color-text) uppercase tracking-wider">
+              <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-(--color-text) uppercase tracking-wider">
                 {t('your_resumes')}
               </h2>
 
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">         
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,260px),1fr))] gap-4 sm:gap-6">         
                 <SkeletonWrapper isLoading={isLoading} count={4}>
                   {resumes.length > 0 ? (
                     resumes.map((resume: Resume) => (
@@ -83,14 +83,14 @@ export default function Dashboard() {
                     ))
                   ) : (
                     !isLoading && (
-                      <div className="col-span-full py-20 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl bg-slate-50/50">
-                        <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4">
-                          <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="col-span-full py-12 sm:py-20 px-4 flex flex-col items-center justify-center text-center border-2 border-dashed border-slate-200 rounded-3xl bg-slate-50/50">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4">
+                          <svg className="w-7 h-7 sm:w-8 sm:h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                           </svg>
                         </div>
-                        <h3 className="text-lg font-medium text-slate-900">{t('no_resumes_yet')}</h3>
-                        <p className="text-slate-500 mt-1">{t('select_a_template_above_to_create_your_first_resume')}</p>
+                        <h3 className="text-base sm:text-lg font-medium text-slate-900">{t('no_resumes_yet')}</h3>
+                        <p className="text-slate-500 mt-1 text-sm sm:text-base">{t('select_a_template_above_to_create_your_first_resume')}</p>
                       </div>
                     )
                   )}

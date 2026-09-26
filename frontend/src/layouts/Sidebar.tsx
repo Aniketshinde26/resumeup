@@ -29,9 +29,11 @@ export default function DashboardLayout() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    setIsSidebarOpen(false);
-  }, [pathname]);
+  const closeOnMobile = () => {
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      setIsSidebarOpen(false);
+    }
+  };
 
   const menuItems = [
     { name: t('home'), icon: <LayoutDashboard size={22} />, path: '/home' },
@@ -95,6 +97,7 @@ return (
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={closeOnMobile}
                 className={`flex items-center h-12 px-3 rounded-xl transition-all relative whitespace-nowrap overflow-hidden
                   ${isActive 
                     ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-lg shadow-slate-900/20' 
@@ -122,12 +125,12 @@ return (
             {isLangOpen && (
               <div className="absolute bottom-full left-0 mb-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-2 z-[60] animate-in fade-in slide-in-from-bottom-2">
                 {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      i18n.changeLanguage(lang.code);
-                      setIsLangOpen(false);
-                    }}
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    i18n.changeLanguage(lang.code);
+                    setIsLangOpen(false);
+                  }}
                     className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     <span className={i18n.language.startsWith(lang.code) ? "font-bold text-slate-900 dark:text-slate-100" : ""}>

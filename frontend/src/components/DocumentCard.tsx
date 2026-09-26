@@ -60,11 +60,11 @@ export default function DocumentCard({
   return (
     <div
       onClick={onClick}
-      className="bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-500/50 transition-all hover:shadow-md cursor-pointer group relative flex flex-col h-full"
+      className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 hover:border-blue-500/50 transition-all hover:shadow-md cursor-pointer group relative flex flex-col h-full min-w-0"
     >
       <div
         ref={containerRef}
-        className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center pointer-events-none"
+        className="bg-slate-50 rounded-lg aspect-[1/1.41] mb-4 sm:mb-5 border border-slate-200 overflow-hidden relative shadow-sm flex items-center justify-center pointer-events-none"
       >
         {showContent && hasTemplate ? (
           <div className="relative w-full h-full bg-white flex items-start justify-center overflow-hidden">
@@ -125,7 +125,7 @@ export default function DocumentCard({
             e.stopPropagation();
             onDelete?.();
           }}
-          className="ml-4 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+          className="ml-3 sm:ml-4 p-2 sm:p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
         >
           <svg
             className="h-4 w-4"

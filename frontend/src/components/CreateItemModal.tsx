@@ -25,16 +25,16 @@ export default function CreateItemModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-[var(--color-brand-card)] rounded-2xl w-full max-w-md p-8 shadow-2xl zoom-in duration-200">
+      <div className="bg-[var(--color-brand-card)] rounded-2xl w-full max-w-md p-5 sm:p-8 shadow-2xl zoom-in duration-200 max-h-[90vh] overflow-y-auto">
         
-        <h2 className="text-2xl font-bold text-[var(--color-text-main)]">
+        <h2 className="text-xl sm:text-2xl font-bold text-[var(--color-text-main)]">
           {t('create_new')} {type === "Resume" ? t('resume', 'Resume') : t('cover_letter', 'Cover Letter')}
         </h2>
-        <p className="text-slate-600 mt-1 mb-6">
+        <p className="text-slate-600 mt-1 mb-5 sm:mb-6 text-sm sm:text-base">
           {t('give_your')} {(type === "Resume" ? t('resume', 'Resume') : t('cover_letter', 'Cover Letter')).toLowerCase()} {t('a_name_to_get_started')}
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
           <div>
             <label className="block text-sm font-medium text-[var(--color-text-main)] mb-2">
               {type === "Resume" ? t('resume', 'Resume') : t('cover_letter', 'Cover Letter')} {t('title')}
@@ -59,14 +59,14 @@ export default function CreateItemModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition"
+              className="px-4 sm:px-5 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition"
             >
               {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={isLoading || !title.trim()}
-              className="bg-blue-600 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+              className="bg-blue-600 text-white px-5 sm:px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
             >
               {isLoading ? t('creating') : t('start_building')}
             </button>

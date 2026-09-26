@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Building2, 
   AlignLeft, 
@@ -31,6 +31,7 @@ export default function CoverLetterBuilder() {
   } = useCoverLetterBuilder();
 
   const [showPreview, setShowPreview] = useState(false);
+  const [previewScale, setPreviewScale] = useState(0.4);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     details: true,
     recipient: true,
@@ -38,6 +39,15 @@ export default function CoverLetterBuilder() {
   });
   const toggleSection = (key: string) =>
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  useEffect(() => {
+    if (!showPreview) return;
+    const updateScale = () =>
+      setPreviewScale(Math.min((window.innerWidth - 32) / 794, 1));
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [showPreview]);
 
   if (loading) return <div className="p-10 text-center">Loading Cover Letter...</div>;
   if (!coverLetter) return null;
@@ -356,7 +366,7 @@ export default function CoverLetterBuilder() {
               <X size={22} strokeWidth={2.5} />
             </button>
           </div>
-          <div className="flex-1 overflow-auto bg-slate-300 flex justify-center p-4">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-300 flex justify-center p-4">
             <div
               className="bg-white shadow-2xl overflow-hidden ring-1 ring-black/10 shrink-0 origin-top"
               style={{
@@ -364,7 +374,8 @@ export default function CoverLetterBuilder() {
                 height: "297mm",
                 minWidth: "210mm",
                 minHeight: "297mm",
-                transform: `scale(${(window.innerWidth - 32) / 794})`,
+                transform: `scale(${previewScale})`,
+                transformOrigin: "top center",
               }}
             >
               {SelectedTemplate ? (
