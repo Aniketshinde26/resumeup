@@ -22,9 +22,9 @@ export default function CoverLetterDashboard() {
 
   return (
     <>
-    <div className="w-full">
+    <div className="-m-4 -mt-16 sm:-m-10 sm:-mt-10 md:-m-8">
  <GridBackground>
-    <div className="max-w-7xl mx-auto w-full">
+    <div className="p-4 pt-16 sm:pt-16 md:p-8 md:pl-14 lg:pl-8 max-w-7xl mx-auto w-full">
         <section className="mb-12">
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-(--color-text)"> {t('start_new')}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
