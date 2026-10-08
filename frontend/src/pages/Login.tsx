@@ -46,9 +46,11 @@ export default function Login() {
 
               <div className="relative z-10">
                 <div className="flex items-center gap-2.5 mb-8">
-                  <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md">
-                    <span className="text-white font-bold text-sm">R</span>
-                  </div>
+                  <img
+                    src="/logo.png"
+                    alt="ResumePro"
+                    className="w-8 h-8 object-contain shrink-0 drop-shadow-md"
+                  />
                   <div className="flex items-center gap-0 tracking-tight">
                     <span className="font-bold text-xl" style={{ color: 'var(--color-title-intro)' }}>
                       Resume
@@ -175,7 +177,7 @@ export default function Login() {
     <p className="mt-10 text-center text-sm" style={{ color: 'var(--color-sign-in)' }}>
       {t('dont_have_an_account')}{' '}
       <Link to="/register" className="text-inherit font-bold underline">
-        {t('sign_up_free')}
+        {t('sign_up')}
       </Link>
     </p>
   </div>

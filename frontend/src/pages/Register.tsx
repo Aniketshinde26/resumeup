@@ -41,9 +41,11 @@ export default function Register() {
 
               <div className="relative z-10">
                 <div className="flex items-center gap-2.5 mb-8">
-                  <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md">
-                    <span className="text-white font-bold text-sm">R</span>
-                  </div>
+                  <img
+                    src="/logo.png"
+                    alt="ResumePro"
+                    className="w-8 h-8 object-contain shrink-0 drop-shadow-md"
+                  />
                   <div className="flex items-center gap-0 tracking-tight">
                     <span className="font-bold text-xl" style={{ color: 'var(--color-title-intro)' }}>
                       Resume

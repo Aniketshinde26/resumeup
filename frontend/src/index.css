@@ -26,6 +26,8 @@
 --color-form-in:#f8fafc;
 --form-text:#0f172a;
 --color-dots:#cbd5e1;
+--color-brand-landing:#f8fafc;
+--color-landing-title:#0f172a;
 
 }
 
@@ -50,6 +52,9 @@
 --color-form-in:#000000!important;
 --form-text:#f8fafc!important;
 --color-dots:#f8fafc!important;
+--color-brand-landing:#343a40!important;
+--color-landing-title:#f8fafc!important;
+
   
 }
 

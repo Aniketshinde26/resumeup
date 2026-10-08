@@ -4,6 +4,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n"; 
 
 import Login from "./pages/Login";
+import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard"; 
 import SelectionPage from "./pages/SelectionPage"; 
@@ -30,7 +31,7 @@ export default function App() {
           <Suspense fallback={<div className="flex h-screen items-center justify-center font-bold">Loading...</div>}>
             <Routes>
               {/* Public Routes */}
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/auth/github/callback" element={<GithubCallback />} />

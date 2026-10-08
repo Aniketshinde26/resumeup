@@ -19,9 +19,11 @@ export default function ResetPassword() {
 
           <div className="mb-8 text-center relative z-10">
             <div className="flex items-center justify-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-xl flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-sm">R</span>
-              </div>
+              <img
+                src="/logo.png"
+                alt="ResumePro"
+                className="w-8 h-8 object-contain shrink-0 drop-shadow-md"
+              />
               <div className="flex items-center gap-0 tracking-tight text-xl">
                 <span className="font-bold" style={{ color: 'var(--color-text-main)' }}>
                   Resume

@@ -36,7 +36,7 @@
     "password":"Password",
     "forgot":"Forgot?",
     "dont_have_an_account":"Don't have an account",
-    "sign_up_free":"Sign up free",
+    "sign_up":"Sign up ",
     "sign_in":"Sign In",
     "or":"OR",
     "email":"EMAIL",
@@ -97,5 +97,11 @@
     "redirecting": "Redirecting...",
     "back_to": "Back to",
     "sign_in": "Sign In"
+  },
+  "landing": {
+    "hero_title_1": "Build a resume that",
+    "hero_title_2": "gets you the interview",
+    "nav_sign_in": "Sign in",
+    "nav_get_started": "Get started"
   }
 }

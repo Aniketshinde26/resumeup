@@ -79,9 +79,11 @@ return (
                   ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         
         <div className="h-24 flex items-center px-[26px] overflow-hidden shrink-0">
-          <div className="w-8 h-8 bg-slate-900 dark:bg-green-600 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-slate-900/20">
-            <span className="text-white font-bold text-xs uppercase">R</span>
-          </div>
+          <img
+            src="/logo.png"
+            alt="ResumePro"
+            className="w-8 h-8 object-contain shrink-0 drop-shadow-md"
+          />
           <div className="ml-4 flex items-center gap-0 tracking-tight whitespace-nowrap md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
             <span className="text-slate-900  font-bold text-xl" style={{ color: 'var(--color-text-main)' }}>
               Resume
