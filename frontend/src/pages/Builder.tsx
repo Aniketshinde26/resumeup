@@ -21,7 +21,9 @@ import {
   TEMPLATES, 
   type Experience, 
   type Education, 
+  type ProjectSectionKind, 
 } from "../types/templateindex";
+import { FieldError } from "../components/ui";
 import { handlePrint } from "../utils/printUtils";
 import { countWords, limitWords, MAX_PROJECT_WORDS } from "../utils/textUtils";
 import BuilderHeader from "../components/BuilderHeader";
@@ -39,6 +41,8 @@ export default function Builder() {
     isDirty,
     tempImage,
     setTempImage,
+    saveError,
+    fieldErrors,
   } = useBuilder();
   type TemplateId = keyof typeof TEMPLATES;
 const [skillInput, setSkillInput] = useState("");
@@ -82,6 +86,10 @@ const [previewScale, setPreviewScale] = useState(0.4);
     setSkillInput("");
   };
   const certificationsList = resume.data.certifications ?? [];
+
+  const err = (key: string) => fieldErrors[key];
+  const rowErr = (list: string, idx: number, field: string) =>
+    fieldErrors[`${list}[${idx}].${field}`];
   const templateKey = (resume.templateId || "minimal") as TemplateId;
   const SelectedTemplate = TEMPLATES[templateKey];
 
@@ -97,6 +105,15 @@ const [previewScale, setPreviewScale] = useState(0.4);
         onSave={handleSave}
         onDownload={() => handlePrint("resume-template", "Resume")}
       />
+
+      {saveError && (
+        <div className="no-print mx-4 sm:mx-8 mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <div className="mt-0.5 shrink-0 text-red-500">
+            <X size={16} strokeWidth={3} />
+          </div>
+          <p className="text-sm font-semibold text-red-600">{saveError}</p>
+        </div>
+      )}
 
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
         <section className="w-full md:w-1/2 overflow-y-auto p-4 sm:p-8 border-b md:border-b-0 md:border-r border-slate-200 space-y-6 md:space-y-10 custom-scrollbar no-print">
@@ -173,6 +190,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.fullName || ""}
                     onChange={(e) => updatePersonal("fullName", e.target.value)}
                   />
+                  {err("personal.fullName") && (
+                    <FieldError message={err("personal.fullName")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -184,6 +204,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.jobTitle || ""}
                     onChange={(e) => updatePersonal("jobTitle", e.target.value)}
                   />
+                  {err("personal.jobTitle") && (
+                    <FieldError message={err("personal.jobTitle")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -195,6 +218,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.email || ""}
                     onChange={(e) => updatePersonal("email", e.target.value)}
                   />
+                  {err("personal.email") && (
+                    <FieldError message={err("personal.email")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -206,6 +232,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.phone || ""}
                     onChange={(e) => updatePersonal("phone", e.target.value)}
                   />
+                  {err("personal.phone") && (
+                    <FieldError message={err("personal.phone")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -217,6 +246,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.linkedin || ""}
                     onChange={(e) => updatePersonal("linkedin", e.target.value)}
                   />
+                  {err("personal.linkedin") && (
+                    <FieldError message={err("personal.linkedin")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -228,6 +260,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.github || ""}
                     onChange={(e) => updatePersonal("github", e.target.value)}
                   />
+                  {err("personal.github") && (
+                    <FieldError message={err("personal.github")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5 md:col-span-2">
@@ -239,6 +274,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.location || ""}
                     onChange={(e) => updatePersonal("location", e.target.value)}
                   />
+                  {err("personal.location") && (
+                    <FieldError message={err("personal.location")} />
+                  )}
                 </div>
 
                 <div className="space-y-1.5 md:col-span-2">
@@ -249,6 +287,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.personal?.summary || ""}
                     onChange={(e) => updatePersonal("summary", e.target.value)}
                   />
+                  {err("personal.summary") && (
+                    <FieldError message={err("personal.summary")} />
+                  )}
                 </div>
               </div>
             </div>
@@ -320,6 +361,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ experience: newList });
                           }}
                         />
+                        {rowErr("experience", idx, "company") && (
+                          <FieldError message={rowErr("experience", idx, "company")} />
+                        )}
                       </div>
 
                       <div className="space-y-1">
@@ -335,6 +379,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ experience: newList });
                           }}
                         />
+                        {rowErr("experience", idx, "position") && (
+                          <FieldError message={rowErr("experience", idx, "position")} />
+                        )}
                       </div>
                     </div>
 
@@ -371,6 +418,16 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             />
                           </div>
                         </div>
+                        {(rowErr("experience", idx, "startDate") ||
+                          rowErr("experience", idx, "endDate")) && (
+                          <FieldError
+                            message={
+                              rowErr("experience", idx, "startDate") ||
+                              rowErr("experience", idx, "endDate") ||
+                              ""
+                            }
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -386,6 +443,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                           updateData({ experience: newList });
                         }}
                       />
+                      {rowErr("experience", idx, "description") && (
+                        <FieldError message={rowErr("experience", idx, "description")} />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -463,6 +523,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                           updateData({ education: newList });
                         }}
                       />
+                      {rowErr("education", idx, "school") && (
+                        <FieldError message={rowErr("education", idx, "school")} />
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -481,6 +544,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ education: newList });
                           }}
                         />
+                        {rowErr("education", idx, "degree") && (
+                          <FieldError message={rowErr("education", idx, "degree")} />
+                        )}
                       </div>
 
                       <div className="space-y-1">
@@ -501,6 +567,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             }}
                           />
                         </div>
+                        {rowErr("education", idx, "year") && (
+                          <FieldError message={rowErr("education", idx, "year")} />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -563,6 +632,7 @@ const [previewScale, setPreviewScale] = useState(0.4);
                   Add
                 </button>
               </div>
+              {err("skills") && <FieldError message={err("skills")} />}
 
               <div className="flex flex-wrap gap-2">
                 {skillsList.map((skill: string, idx: number) => (
@@ -603,7 +673,7 @@ const [previewScale, setPreviewScale] = useState(0.4);
                     value={resume.data.sectionTitles?.projects || "Projects"}
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => { e.stopPropagation(); updateData({ 
-                      sectionTitles: { ...resume.data.sectionTitles, projects: e.target.value } 
+                      sectionTitles: { ...resume.data.sectionTitles, projects: e.target.value as ProjectSectionKind } 
                     }); }}
                   >
                     <option value="Projects">Personal Projects</option>
@@ -661,6 +731,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ projects: newList });
                           }}
                         />
+                        {rowErr("projects", idx, "name") && (
+                          <FieldError message={rowErr("projects", idx, "name")} />
+                        )}
                       </div>
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-slate-400 uppercase">
@@ -676,6 +749,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ projects: newList });
                           }}
                         />
+                        {rowErr("projects", idx, "link") && (
+                          <FieldError message={rowErr("projects", idx, "link")} />
+                        )}
                       </div>
                     </div>
 
@@ -693,6 +769,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                           updateData({ projects: newList });
                         }}
                       />
+                      {rowErr("projects", idx, "description") && (
+                        <FieldError message={rowErr("projects", idx, "description")} />
+                      )}
                       <p className={`text-right text-[10px] font-bold ${countWords(proj.description || "") >= MAX_PROJECT_WORDS ? "text-red-500" : "text-slate-400"}`}>
                         {countWords(proj.description || "")} / {MAX_PROJECT_WORDS} words
                       </p>
@@ -753,6 +832,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                           updateData({ languages: newList });
                         }}
                       />
+                      {rowErr("languages", idx, "name") && (
+                        <FieldError message={rowErr("languages", idx, "name")} />
+                      )}
                     </div>
 
                     <div className="w-full sm:w-30">
@@ -858,6 +940,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                           updateData({ certifications: newList });
                         }}
                       />
+                      {rowErr("certifications", idx, "name") && (
+                        <FieldError message={rowErr("certifications", idx, "name")} />
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -876,6 +961,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ certifications: newList });
                           }}
                         />
+                        {rowErr("certifications", idx, "link") && (
+                          <FieldError message={rowErr("certifications", idx, "link")} />
+                        )}
                       </div>
 
                       <div className="space-y-1">
@@ -893,6 +981,9 @@ const [previewScale, setPreviewScale] = useState(0.4);
                             updateData({ certifications: newList });
                           }}
                         />
+                        {rowErr("certifications", idx, "date") && (
+                          <FieldError message={rowErr("certifications", idx, "date")} />
+                        )}
                       </div>
                     </div>
                   </div>

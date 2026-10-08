@@ -7,6 +7,8 @@ import {
   createEmptyResume,
 } from "../types/templateindex";
 import { ResumeService } from "../services/resumeService";
+import { collectIssues, type FieldErrorMap } from "../validations/common";
+import { resumeSchema } from "../validations/resumeSchemas";
 
 const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
 
@@ -18,10 +20,20 @@ export const useBuilder = () => {
   const [isDirty, setIsDirty] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrorMap>({});
+
+  const clearFieldErrors = (key: string) =>
+    setFieldErrors((prev) => {
+      if (!(key in prev)) return prev;
+      const newErrors = { ...prev };
+      delete newErrors[key];
+      return newErrors;
+    });
 
   const updateData = (newData: Partial<ResumeData>) => {
     setIsDirty(true);
     setSaveError(null);
+    setFieldErrors({});
     setResume((prev: Resume | null) => {
       if (!prev) return null;
       return {
@@ -99,6 +111,14 @@ export const useBuilder = () => {
     if (!isDirty || saving) return;
 
     setSaveError(null);
+    setFieldErrors({});
+
+    const parsed = resumeSchema.safeParse(resume.data);
+    if (!parsed.success) {
+      setFieldErrors(collectIssues(parsed.error.issues));
+      setSaveError("Please fix the highlighted errors before saving.");
+      return;
+    }
 
     if (PUBLIC_TEMPLATES.includes(id)) {
       localStorage.setItem(`guest_resume_${id}`, JSON.stringify(resume));
@@ -166,6 +186,7 @@ export const useBuilder = () => {
   ) => {
     setIsDirty(true);
     setSaveError(null);
+    clearFieldErrors(`personal.${field}`);
     setResume((prev: Resume | null) => {
       if (!prev) return null;
       return {
@@ -202,5 +223,7 @@ export const useBuilder = () => {
     tempImage,
     setTempImage,
     saveError,
+    fieldErrors,
+    clearFieldErrors,
   };
 };

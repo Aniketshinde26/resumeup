@@ -59,6 +59,12 @@ export const COVER_LETTER_TEMPLATES = [
   { id: "elegantserifcover", name: "Elegant Serif" },
 ];
 
+export type ProjectSectionKind =
+  | "Projects"
+  | "Procedures"
+  | "Case Studies"
+  | "Publications";
+
 export interface PersonalInfo {
   fullName: string;
   jobTitle: string;
@@ -91,7 +97,7 @@ export interface ResumeData {
   education: Education[];
   sectionTitles?: {
     skills?: string;
-    projects?: string;
+    projects?: ProjectSectionKind;
     experience?: string;
     additionalSkills?: string;
   };
@@ -101,14 +107,13 @@ export interface ResumeData {
     name: string;
     description: string;
     link?: string;
-    type?: "project" | "procedure" | "case_study";
   }[];
   languages?: { name: string; proficiency: string }[];
   certifications?: { name: string; link: string; date: string }[];
 }
 export interface CoverLetter {
   Id: number;
-  userId?: number;
+  userId?: string;
   Title: string;
   TemplateId: string;
   updatedAt?: string;
