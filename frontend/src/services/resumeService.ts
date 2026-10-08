@@ -5,8 +5,8 @@ import type {
   DeleteResumeResponse,
   CreateResumeResponse,
   UpdateResumeResponse,
-} from "./api";
-import type { ResumeData } from "./templateindex";
+} from "../types/api";
+import type { ResumeData } from "../types/templateindex";
 
 export interface CreateResumePayload {
   title: string;
@@ -49,9 +49,7 @@ export const ResumeService = {
     return response.data;
   },
 
-  deleteResumeById: async (
-    id: number,
-  ): Promise<DeleteResumeResponse> => {
+  deleteResumeById: async (id: number): Promise<DeleteResumeResponse> => {
     const response = await api.delete<DeleteResumeResponse>(`/resumes/${id}`);
     return response.data;
   },

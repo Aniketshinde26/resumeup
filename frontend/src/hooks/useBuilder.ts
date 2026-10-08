@@ -6,7 +6,7 @@ import {
   createEmptyResumeData,
   createEmptyResume,
 } from "../types/templateindex";
-import { ResumeService } from "../types/resumeService";
+import { ResumeService } from "../services/resumeService";
 
 const PUBLIC_TEMPLATES = ["moderntech", "neoprofessional"];
 

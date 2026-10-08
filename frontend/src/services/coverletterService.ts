@@ -1,23 +1,23 @@
 import api from "../api/axios";
 import type {
+  FetchCoverLettersResponse,
+  CoverLetterByIdResponse,
   CreateCoverLetterResponse,
   UpdateCoverLetterResponse,
   DeleteCoverLetterResponse,
-  FetchCoverLettersResponse,
-  CoverLetterByIdResponse,
-} from "./api";
-import type { CoverLetterData } from "./templateindex";
+} from "../types/api";
+import type { CoverLetterData } from "../types/templateindex";
 
 export interface CreateCoverLetterPayload {
-  title: string;
-  templateId: string;
-  data: CoverLetterData | Record<string, never>;
+  Title: string;
+  TemplateId: string;
+  Data: CoverLetterData | Record<string, never>;
 }
 
 export interface UpdateCoverLetterPayload {
-  title?: string;
-  templateId?: string;
-  data?: CoverLetterData;
+  Title?: string;
+  TemplateId?: string;
+  Data?: CoverLetterData;
 }
 
 export const CoverLetterService = {

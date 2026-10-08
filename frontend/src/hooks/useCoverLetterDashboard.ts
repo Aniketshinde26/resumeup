@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import { CoverLetterService } from "../services/coverletterService";
 import type { CoverLetter } from "../types/templateindex";
-import type {
-  CreateCoverLetterResponse,
-  DeleteCoverLetterResponse,
-  FetchCoverLettersResponse,
-} from "../types/api";
 
 export const useCoverLetterDashboard = () => {
   const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
@@ -18,8 +13,8 @@ export const useCoverLetterDashboard = () => {
   const fetchCoverLetters = async () => {
     setIsLoading(true);
     try {
-      const res = await api.get<FetchCoverLettersResponse>("/cover-letters");
-      setCoverLetters(res.data.coverletters || []);
+      const data = await CoverLetterService.getAllCoverLetters();
+      setCoverLetters(data.coverletters || []);
     } catch (err: unknown) {
       console.error("Failed to fetch", err);
     } finally {
@@ -39,14 +34,14 @@ export const useCoverLetterDashboard = () => {
   const handleCreateCoverLetter = async (title: string) => {
     setIsLoading(true);
     try {
-      const res = await api.post<CreateCoverLetterResponse>("/cover-letters", {
+      const data = await CoverLetterService.createCoverLetter({
         Title: title,
         TemplateId: selectedTemplate,
         Data: {},
       });
-      const newId = res.data.coverletter?.Id;
+      const newId = data.coverletter?.Id;
       if (!newId) {
-        console.error("No ID returned from backend.", res.data);
+        console.error("No ID returned from backend.", data);
         return;
       }
 
@@ -61,8 +56,8 @@ export const useCoverLetterDashboard = () => {
 
   const handleDeleteCoverLetter = async (id: number) => {
     try {
-      await api.delete<DeleteCoverLetterResponse>(`/cover-letters/${id}`);
-      setCoverLetters((prev) => prev.filter((cl) => (cl.Id || cl.Id) !== id));
+      await CoverLetterService.deleteCoverLetterById(id);
+      setCoverLetters((prev) => prev.filter((cl) => cl.Id !== id));
     } catch (err: unknown) {
       console.error("Deletion failed", err);
     }

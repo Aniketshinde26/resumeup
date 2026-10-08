@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import type { Resume } from "../types/templateindex";
-import { ResumeService } from "../types/resumeService";
+import { ResumeService } from "../services/resumeService";
 
 export const useDashboard = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);

@@ -1,9 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import api from "../api/axios";
-import type { CoverLetterByIdResponse } from "../types/api";
-import type { CoverLetterData, CoverLetter } from "../types/templateindex";
+import { CoverLetterService } from "../services/coverletterService";
+import {
+  createEmptyCoverLetterData,
+  type CoverLetterData,
+  type CoverLetter,
+} from "../types/templateindex";
 
 export const useCoverLetterBuilder = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,11 +51,9 @@ export const useCoverLetterBuilder = () => {
     // 2. Fetch from backend API
     try {
       setLoading(true);
-      const res = await api.get<CoverLetterByIdResponse>(
-        `/cover-letters/${id}`,
-      );
+      const data = await CoverLetterService.getCoverLetterById(Number(id));
 
-      const fetchedLetter = res.data.coverletter;
+      const fetchedLetter = data.coverletter;
 
       const rawData =
         typeof fetchedLetter.Data === "string"
@@ -61,7 +62,7 @@ export const useCoverLetterBuilder = () => {
 
       setCoverLetter({
         ...fetchedLetter,
-        Data: { ...fetchedLetter.Data, ...rawData },
+        Data: { ...createEmptyCoverLetterData(), ...rawData },
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -85,7 +86,7 @@ export const useCoverLetterBuilder = () => {
 
     try {
       setSaving(true);
-      await api.put<CoverLetterByIdResponse>(`/cover-letters/${id}`, {
+      await CoverLetterService.updateCoverLetter(Number(id), {
         Title: coverLetter.Title,
         Data: coverLetter.Data,
       });

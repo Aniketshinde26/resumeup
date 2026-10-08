@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../api/axios";
+import { CoverLetterService } from "../services/coverletterService";
 import { 
   COVER_LETTER_TEMPLATES_MAP, 
   createEmptyCoverLetterData, 
@@ -16,8 +16,8 @@ export default function CoverLetterPreview() {
   useEffect(() => {
     const fetchCoverLetter = async () => {
       try {
-        const res = await api.get(`/cover-letters/${id}`);
-        setCoverLetter(res.data.coverletter || res.data);
+        const data = await CoverLetterService.getCoverLetterById(Number(id));
+        setCoverLetter(data.coverletter);
       } catch (err: unknown) {
         console.error("Failed to fetch cover letter for preview", err);
       } finally {
@@ -31,19 +31,19 @@ export default function CoverLetterPreview() {
   if (!coverLetter) return <div>Cover Letter not found</div>;  
   
   type CoverTemplateKey = keyof typeof COVER_LETTER_TEMPLATES_MAP;
-  const templateId = (coverLetter.TemplateId || coverLetter.TemplateId || "moderncover") as CoverTemplateKey;
-  const rawData = coverLetter.Data || coverLetter.Data;
+  const templateId = (coverLetter.TemplateId || "moderncover") as CoverTemplateKey;
+  const rawData: unknown = coverLetter.Data;
 
   let parsedData: CoverLetterData = createEmptyCoverLetterData();
 
   if (typeof rawData === "string") {
     try {
-      parsedData = JSON.parse(rawData);
+      parsedData = JSON.parse(rawData) as CoverLetterData;
     } catch (e: unknown) {
       console.error("Parse error", e);
     }
   } else if (rawData) {
-    parsedData = rawData;
+    parsedData = rawData as CoverLetterData;
   }
 
   const TemplateComponent = COVER_LETTER_TEMPLATES_MAP[templateId];
