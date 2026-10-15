@@ -26,7 +26,9 @@ export const resumeDataSchema = z
           position: z.string(),
           startDate: z.string(),
           endDate: z.string(),
-          description: z.string(),
+          description: z
+            .string()
+            .max(250, "Description cannot exceed 250 characters"),
         }).partial(),
       )
       .optional(),

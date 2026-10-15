@@ -25,7 +25,7 @@ import {
 } from "../types/templateindex";
 import { FieldError } from "../components/ui";
 import { handlePrint } from "../utils/printUtils";
-import { countWords, limitWords, MAX_PROJECT_WORDS } from "../utils/textUtils";
+import { countWords, limitWords, limitChars, MAX_PROJECT_WORDS, MAX_EXPERIENCE_DESCRIPTION_CHARS } from "../utils/textUtils";
 import BuilderHeader from "../components/BuilderHeader";
 import "react-datepicker/dist/react-datepicker.css";
 import "../print.css";
@@ -439,13 +439,16 @@ const [previewScale, setPreviewScale] = useState(0.4);
                         value={exp.description}
                         onChange={(e) => {
                           const newList = [...experienceList];
-                          newList[idx] = { ...newList[idx], description: e.target.value };
+                          newList[idx] = { ...newList[idx], description: limitChars(e.target.value, MAX_EXPERIENCE_DESCRIPTION_CHARS) };
                           updateData({ experience: newList });
                         }}
                       />
                       {rowErr("experience", idx, "description") && (
                         <FieldError message={rowErr("experience", idx, "description")} />
                       )}
+                      <p className={`text-right text-[10px] font-bold ${(exp.description || "").length >= MAX_EXPERIENCE_DESCRIPTION_CHARS ? "text-red-500" : "text-slate-400"}`}>
+                        {(exp.description || "").length} / {MAX_EXPERIENCE_DESCRIPTION_CHARS} characters
+                      </p>
                     </div>
                   </div>
                 </div>

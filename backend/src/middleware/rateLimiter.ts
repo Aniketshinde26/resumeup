@@ -12,6 +12,11 @@ const config = {
     max: 5,
     message: "Too many login attempts. Please try again in 15 minutes.",
   },
+  loginIp: {
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Too many login attempts. Please try again in 15 minutes.",
+  },
   oauth: {
     windowMs: 15 * 60 * 1000,
     max: 15,
@@ -123,15 +128,13 @@ export const authLimiter = rateLimit({
   legacyHeaders: false,
   handler: createHandler(config.auth.message),
 });
-const requestWasSuccessful = (_req: any, res: any) => res.statusCode < 400;
 
 export const loginLimiter = rateLimit({
-  ...config.login,
+  ...config.loginIp,
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: true,
-  requestWasSuccessful,
-  handler: createHandler(config.login.message),
+  handler: createHandler(config.loginIp.message),
 });
 export const oauthLimiter = rateLimit({
   ...config.oauth,
@@ -234,7 +237,6 @@ export const loginEmailLimiter = rateLimit({
   legacyHeaders: false,
   keyGenerator: emailKeyGenerator,
   skipSuccessfulRequests: true,
-  requestWasSuccessful,
   handler: createHandler(config.login.message),
 });
 

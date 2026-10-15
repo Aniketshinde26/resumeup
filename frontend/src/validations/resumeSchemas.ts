@@ -26,7 +26,7 @@ const experienceRow = lenientRow(
     position: requiredText("Position", 100),
     startDate: requiredText("Start Date", 40),
     endDate: requiredText("End Date", 40),
-    description: requiredText("Description", 2000),
+    description: requiredText("Description", 250),
   }),
 );
 
