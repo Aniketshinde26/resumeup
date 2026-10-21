@@ -47,7 +47,7 @@ export default function Register() {
                     className="w-8 h-8 object-contain shrink-0 drop-shadow-md"
                   />
                   <div className="flex items-center gap-0 tracking-tight">
-                    <span className="font-bold text-xl" style={{ color: 'var(--color-title-intro)' }}>
+                    <span className="font-bold text-xl" style={{ color: 'var(--color-form-login)' }}>
                       Resume
                     </span>
                     <span className="text-green-600 font-bold text-xl">Pro</span>

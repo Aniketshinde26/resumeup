@@ -54,6 +54,8 @@
 --color-dots:#f8fafc!important;
 --color-brand-landing:#343a40!important;
 --color-landing-title:#f8fafc!important;
+--color-title-intro:#f8fafc!important;
+--color-form-login:#000000!important;
 
   
 }
@@ -61,6 +63,8 @@
 /* 3. TELL TAILWIND ABOUT THE VARIABLES */
 @theme {
   --variant-dark: .dark &; 
+   --font-sans: "Inter", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+
   --color-brand-primary: var(--color-brand-primary);
   --color-brand-surface: var(--color-brand-surface);
   --color-card-bg: var(--color-card-bg);
@@ -75,5 +79,28 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+/* 5. MOBILE MENU DROPDOWN ANIMATION */
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-menu-in {
+  animation: menu-in 200ms ease-out;
+  transform-origin: top right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-menu-in {
+    animation: none;
+  }
 }
 

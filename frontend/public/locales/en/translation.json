@@ -101,7 +101,29 @@
   "landing": {
     "hero_title_1": "Build a resume that",
     "hero_title_2": "gets you the interview",
+    "hero_subtitle": "Create a clean, professional resume with pre made, ATS friendly designs free and easy to use.",
+    "hero_trust": "Free to start · No credit card required",
     "nav_sign_in": "Sign in",
-    "nav_get_started": "Get started"
+    "nav_get_started": "Get started",
+    "nav_menu": "Menu",
+    "features_title": "Everything you need",
+    "features_subtitle": "Pick a design, add your details, and download that's it.",
+    "feature_free_title": "Free to use",
+    "feature_free_desc": "Create and download your resume at no cost, with no card required.",
+    "feature_ats_title": "ATS Friendly",
+    "feature_ats_desc": "Optimized formatting that passes applicant tracking systems and reaches the recruiter.",
+    "feature_templates_title": "Pre made designs",
+    "feature_templates_desc": "Clean, professional layouts that are ready to fill in.",
+    "feature_export_title": "One Click Export",
+    "feature_export_desc": "Download a polished, print-ready PDF of your resume whenever you need it.",
+    "cta_title": "Ready to land your next role?",
+    "cta_subtitle": "Build your resume today and start applying with confidence.",
+    "footer_rights": "© 2026 ResumePro. All rights reserved.",
+    "footer_tagline": "A simple, free resume maker with pre made, ATS-friendly designs.",
+    "footer_contact_title": "Contact",
+    "footer_support_title": "Support",
+    "footer_link_reset": "Reset password",
+    "data_notice_title": "Data usage notice",
+    "data_notice_body": "Your resume content is stored so you can come back and edit it later. Avoid entering passwords, national ID numbers, or other highly sensitive information. We never sell your data."
   }
 }
