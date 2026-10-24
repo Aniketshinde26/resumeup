@@ -19,6 +19,13 @@ export const validate = (
         ),
       );
     }
+
+    if (source === "params") {
+      req.params = result.data as typeof req.params;
+    } else {
+      req.body = result.data;
+    }
+
     next();
   };
 };

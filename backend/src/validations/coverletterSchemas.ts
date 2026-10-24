@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { idParamSchema } from "./resumeSchemas";
+import { dateField, emailField, phoneField } from "./fields";
 
 export const coverLetterDataSchema = z
   .object({
@@ -7,8 +8,8 @@ export const coverLetterDataSchema = z
       .object({
         fullName: z.string(),
         jobTitle: z.string(),
-        email: z.string(),
-        phone: z.string(),
+        email: emailField,
+        phone: phoneField,
         location: z.string(),
         image: z.string(),
         summary: z.string(),
@@ -23,7 +24,7 @@ export const coverLetterDataSchema = z
       .partial(),
     letter: z
       .object({
-        date: z.string(),
+        date: dateField,
         subject: z.string(),
         salutation: z.string(),
         bodyParagraphs: z.array(z.string()),

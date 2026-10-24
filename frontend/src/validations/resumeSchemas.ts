@@ -5,6 +5,7 @@ import {
   emailField,
   urlOrEmpty,
   phoneField,
+  dateField,
   lenientRow,
 } from "./common";
 
@@ -24,8 +25,8 @@ const experienceRow = lenientRow(
   z.object({
     company: requiredText("Company", 100),
     position: requiredText("Position", 100),
-    startDate: requiredText("Start Date", 40),
-    endDate: requiredText("End Date", 40),
+    startDate: dateField("Start Date"),
+    endDate: dateField("End Date"),
     description: requiredText("Description", 250),
   }),
 );
@@ -34,7 +35,7 @@ const educationRow = lenientRow(
   z.object({
     school: requiredText("School", 100),
     degree: requiredText("Degree", 100),
-    year: requiredText("Graduation Year", 40),
+    year: dateField("Graduation Year"),
   }),
 );
 
@@ -57,7 +58,7 @@ const certificationRow = lenientRow(
   z.object({
     name: requiredText("Certification Name", 150),
     link: urlOrEmpty,
-    date: requiredText("Date", 40),
+    date: dateField("Date"),
   }),
 );
 

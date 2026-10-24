@@ -15,6 +15,7 @@ import { useCoverLetterBuilder } from "../hooks/useCoverLetterBuilder";
 import { COVER_LETTER_TEMPLATES_MAP } from "../types/templateindex"; 
 import { handlePrint } from "../utils/printUtils";
 import BuilderHeader from "../components/BuilderHeader";
+import { FieldError } from "../components/ui";
 import "../print.css";
 
 export default function CoverLetterBuilder() {
@@ -28,6 +29,8 @@ export default function CoverLetterBuilder() {
     isDirty,
     tempImage,
     setTempImage,
+    saveError,
+    fieldErrors,
   } = useCoverLetterBuilder();
 
   const [showPreview, setShowPreview] = useState(false);
@@ -55,11 +58,12 @@ export default function CoverLetterBuilder() {
   type CoverTemplateKey = keyof typeof COVER_LETTER_TEMPLATES_MAP;
   const templateKey = (coverLetter.TemplateId || "moderncover") as CoverTemplateKey;
   const SelectedTemplate = COVER_LETTER_TEMPLATES_MAP[templateKey] || COVER_LETTER_TEMPLATES_MAP["moderncover"];
+  const err = (key: string) => fieldErrors[key];
 
   return (
     <div className="flex flex-col h-screen bg-[var(--color-form-in)] text-slate-900">
       <BuilderHeader
-        productName="Cover"
+        productName="Cover Letter"
         accentColor="text-indigo-600"
         buttonColor="bg-indigo-600"
         docTitle={coverLetter.Title}
@@ -68,6 +72,15 @@ export default function CoverLetterBuilder() {
         onSave={handleSave}
         onDownload={() => handlePrint("cover-letter-preview", "Cover Letter")}
       />
+
+      {saveError && (
+        <div className="no-print mx-4 sm:mx-8 mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <div className="mt-0.5 shrink-0 text-red-500">
+            <X size={16} strokeWidth={3} />
+          </div>
+          <p className="text-sm font-semibold text-red-600">{saveError}</p>
+        </div>
+      )}
 
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
         <section className="w-full md:w-1/2 overflow-y-auto p-4 sm:p-8 border-b md:border-b-0 md:border-r border-slate-200 space-y-6 md:space-y-10 custom-scrollbar no-print">
@@ -142,6 +155,9 @@ export default function CoverLetterBuilder() {
                     value={coverLetter.Data.personal?.fullName || ""}
                     onChange={(e) => updatePersonal("fullName", e.target.value)}
                   />
+                  {err("personal.fullName") && (
+                    <FieldError message={err("personal.fullName")} />
+                  )}
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Job Title</label>
@@ -152,6 +168,9 @@ export default function CoverLetterBuilder() {
                     value={coverLetter.Data.personal?.jobTitle || ""}
                     onChange={(e) => updatePersonal("jobTitle", e.target.value)}
                   />
+                  {err("personal.jobTitle") && (
+                    <FieldError message={err("personal.jobTitle")} />
+                  )}
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Email</label>
@@ -162,6 +181,9 @@ export default function CoverLetterBuilder() {
                     value={coverLetter.Data.personal?.email || ""}
                     onChange={(e) => updatePersonal("email", e.target.value)}
                   />
+                  {err("personal.email") && (
+                    <FieldError message={err("personal.email")} />
+                  )}
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Phone</label>
@@ -172,6 +194,9 @@ export default function CoverLetterBuilder() {
                     value={coverLetter.Data.personal?.phone || ""}
                     onChange={(e) => updatePersonal("phone", e.target.value)}
                   />
+                  {err("personal.phone") && (
+                    <FieldError message={err("personal.phone")} />
+                  )}
                 </div>
                 <div className="space-y-1.5 md:col-span-2">
                   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Location</label>
@@ -182,6 +207,9 @@ export default function CoverLetterBuilder() {
                     value={coverLetter.Data.personal?.location || ""}
                     onChange={(e) => updatePersonal("location", e.target.value)}
                   />
+                  {err("personal.location") && (
+                    <FieldError message={err("personal.location")} />
+                  )}
                 </div>
               </div>
             </div>
@@ -210,6 +238,9 @@ export default function CoverLetterBuilder() {
                   value={coverLetter.Data.recipient?.company || ""}
                   onChange={(e) => updateData({ recipient: { ...coverLetter.Data.recipient, company: e.target.value } })}
                 />
+                {err("recipient.company") && (
+                  <FieldError message={err("recipient.company")} />
+                )}
               </div>
               <div className="space-y-1.5">
                 <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Hiring Manager (Optional)</label>
@@ -220,6 +251,9 @@ export default function CoverLetterBuilder() {
                   value={coverLetter.Data.recipient?.hiringManager || ""}
                   onChange={(e) => updateData({ recipient: { ...coverLetter.Data.recipient, hiringManager: e.target.value } })}
                 />
+                {err("recipient.hiringManager") && (
+                  <FieldError message={err("recipient.hiringManager")} />
+                )}
               </div>
               <div className="space-y-1.5 md:col-span-2">
                 <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Company Address (Optional)</label>
@@ -229,6 +263,9 @@ export default function CoverLetterBuilder() {
                   value={coverLetter.Data.recipient?.address || ""}
                   onChange={(e) => updateData({ recipient: { ...coverLetter.Data.recipient, address: e.target.value } })}
                 />
+                {err("recipient.address") && (
+                  <FieldError message={err("recipient.address")} />
+                )}
               </div>
             </div>
           </details>
@@ -260,6 +297,9 @@ export default function CoverLetterBuilder() {
                       onChange={(e) => updateData({ letter: { ...coverLetter.Data.letter, date: e.target.value } })}
                     />
                   </div>
+                  {err("letter.date") && (
+                    <FieldError message={err("letter.date")} />
+                  )}
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase ml-1">Subject Line (Optional)</label>
@@ -270,6 +310,9 @@ export default function CoverLetterBuilder() {
                     value={coverLetter.Data.letter?.subject || ""}
                     onChange={(e) => updateData({ letter: { ...coverLetter.Data.letter, subject: e.target.value } })}
                   />
+                  {err("letter.subject") && (
+                    <FieldError message={err("letter.subject")} />
+                  )}
                 </div>
               </div>
 
@@ -282,6 +325,9 @@ export default function CoverLetterBuilder() {
                   value={coverLetter.Data.letter?.salutation || ""}
                   onChange={(e) => updateData({ letter: { ...coverLetter.Data.letter, salutation: e.target.value } })}
                 />
+                {err("letter.salutation") && (
+                  <FieldError message={err("letter.salutation")} />
+                )}
               </div>
 
               <div className="space-y-1.5">
@@ -298,6 +344,9 @@ export default function CoverLetterBuilder() {
                     updateData({ letter: { ...coverLetter.Data.letter, bodyParagraphs: paragraphs } });
                   }}
                 />
+                {err("letter.bodyParagraphs") && (
+                  <FieldError message={err("letter.bodyParagraphs")} />
+                )}
               </div>
 
               <div className="space-y-1.5">
@@ -309,6 +358,9 @@ export default function CoverLetterBuilder() {
                   value={coverLetter.Data.letter?.closing || ""}
                   onChange={(e) => updateData({ letter: { ...coverLetter.Data.letter, closing: e.target.value } })}
                 />
+                {err("letter.closing") && (
+                  <FieldError message={err("letter.closing")} />
+                )}
               </div>
             </div>
           </details>

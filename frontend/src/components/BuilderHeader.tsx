@@ -4,7 +4,7 @@ import type { BuilderHeaderProps } from "../types/layoutprops";
 
 export default function BuilderHeader({
   productName,
-  productSuffix = "Pro",
+  productSuffix = "",
   accentColor,
   buttonColor,
   docTitle,

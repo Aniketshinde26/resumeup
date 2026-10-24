@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { dateField, emailField, phoneField, urlField } from "./fields";
 
 export const idParamSchema = z.object({
   id: z.coerce.number().int().positive("Invalid id"),
@@ -10,13 +11,13 @@ export const resumeDataSchema = z
       .object({
         fullName: z.string(),
         jobTitle: z.string(),
-        email: z.string(),
-        phone: z.string(),
+        email: emailField,
+        phone: phoneField,
         location: z.string(),
         summary: z.string(),
         image: z.string(),
-        linkedin: z.string(),
-        github: z.string(),
+        linkedin: urlField,
+        github: urlField,
       })
       .partial(),
     experience: z
@@ -24,8 +25,8 @@ export const resumeDataSchema = z
         z.object({
           company: z.string(),
           position: z.string(),
-          startDate: z.string(),
-          endDate: z.string(),
+          startDate: dateField,
+          endDate: dateField,
           description: z
             .string()
             .max(250, "Description cannot exceed 250 characters"),
@@ -37,7 +38,7 @@ export const resumeDataSchema = z
         z.object({
           school: z.string(),
           degree: z.string(),
-          year: z.string(),
+          year: dateField,
         }).partial(),
       )
       .optional(),
@@ -56,7 +57,7 @@ export const resumeDataSchema = z
         z.object({
           name: z.string(),
           description: z.string(),
-          link: z.string(),
+          link: urlField,
           type: z.string(),
         }).partial(),
       )
@@ -73,8 +74,8 @@ export const resumeDataSchema = z
       .array(
         z.object({
           name: z.string(),
-          link: z.string(),
-          date: z.string(),
+          link: urlField,
+          date: dateField,
         }).partial(),
       )
       .optional(),

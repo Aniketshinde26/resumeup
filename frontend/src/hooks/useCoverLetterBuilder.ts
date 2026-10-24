@@ -7,6 +7,8 @@ import {
   type CoverLetterData,
   type CoverLetter,
 } from "../types/templateindex";
+import { collectIssues, type FieldErrorMap } from "../validations/common";
+import { coverLetterSchema } from "../validations/coverletterSchemas";
 
 export const useCoverLetterBuilder = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,10 +19,20 @@ export const useCoverLetterBuilder = () => {
   const [isDirty, setIsDirty] = useState(false);
   const [tempImage, setTempImage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrorMap>({});
+
+  const clearFieldErrors = (key: string) =>
+    setFieldErrors((prev) => {
+      if (!(key in prev)) return prev;
+      const newErrors = { ...prev };
+      delete newErrors[key];
+      return newErrors;
+    });
 
   const updateData = (newData: Partial<CoverLetterData>) => {
     setIsDirty(true);
     setSaveError(null);
+    setFieldErrors({});
     setCoverLetter((prev: CoverLetter | null) => {
       if (!prev) return null;
       return {
@@ -83,6 +95,14 @@ export const useCoverLetterBuilder = () => {
     if (!isDirty || saving) return;
 
     setSaveError(null);
+    setFieldErrors({});
+
+    const parsed = coverLetterSchema.safeParse(coverLetter.Data);
+    if (!parsed.success) {
+      setFieldErrors(collectIssues(parsed.error.issues));
+      setSaveError("Please fix the highlighted errors before saving.");
+      return;
+    }
 
     try {
       setSaving(true);
@@ -148,6 +168,7 @@ export const useCoverLetterBuilder = () => {
   ) => {
     setIsDirty(true);
     setSaveError(null);
+    clearFieldErrors(`personal.${field}`);
     setCoverLetter((prev: CoverLetter | null) => {
       if (!prev) return null;
       return {
@@ -179,6 +200,8 @@ export const useCoverLetterBuilder = () => {
     tempImage,
     setTempImage,
     saveError,
+    fieldErrors,
+    clearFieldErrors,
     updateData,
     loadCoverLetter,
     handleSave,

@@ -28,11 +28,33 @@ export const urlField = z
 
 export const urlOrEmpty = z.union([z.literal(""), urlField]);
 
+const DATE_OR_YEAR_PATTERN =
+  /^\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\d|3[01]))?)?$/;
+const PHONE_PATTERN = /^\+?[0-9\s().-]+$/;
+
+const isDateLike = (value: string): boolean =>
+  /^(present|current)$/i.test(value) || DATE_OR_YEAR_PATTERN.test(value);
+
+const isPhoneLike = (value: string): boolean =>
+  PHONE_PATTERN.test(value) && value.replace(/\D/g, "").length >= 7;
+
 export const phoneField = z
   .string()
   .trim()
   .min(7, "Enter a valid phone number")
-  .max(20, "Phone number cannot exceed 20 characters");
+  .max(20, "Phone number cannot exceed 20 characters")
+  .refine(isPhoneLike, "Enter a valid phone number");
+
+export const dateField = (label: string) =>
+  z
+    .string()
+    .trim()
+    .min(1, `${label} is required`)
+    .max(40, `${label} cannot exceed 40 characters`)
+    .refine(
+      isDateLike,
+      `${label} must be a valid date (YYYY-MM-DD) or year (YYYY)`,
+    );
 
 export const isBlankRecord = (value: unknown): boolean => {
   if (typeof value !== "object" || value === null) return false;

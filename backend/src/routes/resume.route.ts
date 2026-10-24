@@ -31,7 +31,13 @@ router.post(
   createResume,
 );
 router.get("/", verifyToken, getResumesLimiter, getAllResumes);
-router.get("/:id", verifyToken, getSingleResumeLimiter, getResumeById);
+router.get(
+  "/:id",
+  verifyToken,
+  getSingleResumeLimiter,
+  validate(idParamSchema, "params"),
+  getResumeById,
+);
 router.put(
   "/:id",
   verifyToken,
@@ -40,5 +46,11 @@ router.put(
   validate(updateResumeSchema),
   updateResume,
 );
-router.delete("/:id", verifyToken, deleteResumeLimiter, deleteResume);
+router.delete(
+  "/:id",
+  verifyToken,
+  deleteResumeLimiter,
+  validate(idParamSchema, "params"),
+  deleteResume,
+);
 export default router;

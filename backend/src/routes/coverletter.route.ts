@@ -34,6 +34,7 @@ router.get(
   "/:id",
   verifyToken,
   getSingleCoverLetterLimiter,
+  validate(idParamSchema, "params"),
   getCoverLetterById,
 );
 router.put(
@@ -44,5 +45,11 @@ router.put(
   validate(updateCoverLetterSchema),
   updateCoverLetter,
 );
-router.delete("/:id", verifyToken, deleteCoverLetterLimiter, deleteCoverLetter);
+router.delete(
+  "/:id",
+  verifyToken,
+  deleteCoverLetterLimiter,
+  validate(idParamSchema, "params"),
+  deleteCoverLetter,
+);
 export default router;
