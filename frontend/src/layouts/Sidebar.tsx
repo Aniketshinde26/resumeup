@@ -3,7 +3,7 @@ import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { LayoutDashboard, FileText, Search, PenTool, LogOut, Languages, ChevronRight, Check, Menu, X} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import ThemeToggle from "../components/ThemeToggle";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/auth-context";
 
 export default function DashboardLayout() {
   const { pathname } = useLocation();
@@ -47,7 +47,7 @@ const handleLogout = async () => {
     try {
       await logout();
       navigate("/login");
-    } catch (err) {
+    } catch {
       console.warn("Logout request was rate limited by backend.");
       setTimeout(() => {
         navigate("/login");

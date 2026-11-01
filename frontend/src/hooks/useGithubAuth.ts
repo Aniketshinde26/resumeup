@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import { initiateGithubLogin } from "../services/githubAuth";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/auth-context";
 import type { AuthResponse } from "../types/user";
 
 export const useGithubAuth = () => {

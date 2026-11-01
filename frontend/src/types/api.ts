@@ -55,7 +55,7 @@ export interface GoogleCredentialResponse {
   credential: string;
 }
 
-export interface ForgotPasswordResponse extends BaseApiResponse {}
+export type ForgotPasswordResponse = BaseApiResponse;
 export interface GoogleTokenResponse {
   access_token?: string;
   error?: string;

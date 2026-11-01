@@ -1,9 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api, { setAccessToken as setAxiosToken } from '../api/axios'; 
-import type { AuthContextType } from '../types/auth';
 import type { User } from '../types/user';
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from './auth-context';
 
 let memoryToken: string | null = null;
 
@@ -41,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         setAccessToken(response.data.accessToken);
         setUser(response.data.user);
-      } catch (error) {
+      } catch {
         setAccessToken(null);
         setUser(null);
       } finally {
@@ -68,12 +66,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };
