@@ -60,6 +60,24 @@ const generateRefreshToken = (user: UserAttributes) => {
   );
 };
 
+const getUserIdFromToken = (
+  token: string | undefined,
+  secret: string,
+): number | null => {
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const decoded = jwt.verify(token, secret, {
+      ignoreExpiration: true,
+    }) as { id?: unknown };
+    return typeof decoded.id === "number" ? decoded.id : null;
+  } catch {
+    return null;
+  }
+};
+
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
@@ -312,13 +330,19 @@ export const logoutUser = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
+    const authHeader = req.headers.authorization;
+    const accessToken = authHeader?.startsWith("Bearer ")
+      ? authHeader.slice(7)
+      : undefined;
     const refreshToken = req.cookies?.refreshToken;
 
-    if (refreshToken) {
-      const user = await User.findOne({ where: { refreshToken } });
-      if (user) {
-        await user.update({ refreshToken: null });
-      }
+    const userId =
+      req.user?.id ??
+      getUserIdFromToken(accessToken, process.env.JWT_SECRET as string) ??
+      getUserIdFromToken(refreshToken, process.env.JWT_REFRESH_SECRET as string);
+
+    if (userId !== null) {
+      await User.update({ refreshToken: null }, { where: { id: userId } });
     }
 
     res.clearCookie("refreshToken", cookieOptions);
