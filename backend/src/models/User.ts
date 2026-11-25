@@ -19,6 +19,7 @@ class User
   public failedLoginAttempts!: number;
   public lockedUntil!: Date | null;
   public passwordChangedAt!: Date | null;
+  public tokenVersion!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -81,6 +82,11 @@ User.init(
     passwordChangedAt: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    tokenVersion: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
   },
   {

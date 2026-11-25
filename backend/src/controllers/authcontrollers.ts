@@ -28,7 +28,7 @@ import {
   ForbiddenError,
   AppError,
 } from "../utils/AppError";
-import { Op } from "sequelize";
+import { Op, literal } from "sequelize";
 import { GoogleLoginRequestBody } from "../types/auth";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -44,9 +44,16 @@ const cookieOptions = {
   partitioned: isProduction,
 };
 
+const getTokenVersion = (value: unknown): number =>
+  typeof value === "number" ? value : 0;
+
 const generateAccessToken = (user: UserAttributes) => {
   return jwt.sign(
-    { id: user.id, email: user.email },
+    {
+      id: user.id,
+      email: user.email,
+      tokenVersion: getTokenVersion(user.tokenVersion),
+    },
     process.env.JWT_SECRET as string,
     { expiresIn: "60m" },
   );
@@ -54,16 +61,25 @@ const generateAccessToken = (user: UserAttributes) => {
 
 const generateRefreshToken = (user: UserAttributes) => {
   return jwt.sign(
-    { id: user.id, email: user.email },
+    {
+      id: user.id,
+      email: user.email,
+      tokenVersion: getTokenVersion(user.tokenVersion),
+    },
     process.env.JWT_REFRESH_SECRET as string,
-    { expiresIn: "7d" },
+    {
+      expiresIn: "7d",
+      jwtid: crypto.randomBytes(16).toString("hex"),
+    },
   );
 };
 
-const getUserIdFromToken = (
+type TokenIdentity = { id: number; tokenVersion: number };
+
+const readTokenIdentity = (
   token: string | undefined,
   secret: string,
-): number | null => {
+): TokenIdentity | null => {
   if (!token) {
     return null;
   }
@@ -71,11 +87,26 @@ const getUserIdFromToken = (
   try {
     const decoded = jwt.verify(token, secret, {
       ignoreExpiration: true,
-    }) as { id?: unknown };
-    return typeof decoded.id === "number" ? decoded.id : null;
+    }) as { id?: unknown; tokenVersion?: unknown };
+
+    if (typeof decoded.id !== "number") {
+      return null;
+    }
+
+    return {
+      id: decoded.id,
+      tokenVersion: getTokenVersion(decoded.tokenVersion),
+    };
   } catch {
     return null;
   }
+};
+
+const revokeAllSessions = async (userId: number): Promise<void> => {
+  await User.update(
+    { refreshToken: null, tokenVersion: literal("tokenVersion + 1") },
+    { where: { id: userId } },
+  );
 };
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
@@ -290,24 +321,49 @@ export const refreshAccessToken = async (
       throw new UnauthorizedError("No refresh token provided");
     }
 
-    let decoded: { id: number; email: string };
+    let decoded: { id: number; email: string; tokenVersion?: unknown };
     try {
       decoded = jwt.verify(
         refreshToken,
         process.env.JWT_REFRESH_SECRET as string,
-      ) as { id: number; email: string };
+      ) as { id: number; email: string; tokenVersion?: unknown };
     } catch {
       throw new ForbiddenError("Refresh token expired or invalid");
     }
 
+    const tokenVersion = getTokenVersion(decoded.tokenVersion);
     const user = await User.findByPk(decoded.id);
 
-    if (!user || user.refreshToken !== refreshToken) {
+    if (!user) {
       throw new ForbiddenError("Invalid refresh token");
     }
 
     const plainUserData = user.get({ plain: true }) as UserAttributes;
+
+    if (
+      user.refreshToken !== refreshToken ||
+      getTokenVersion(user.tokenVersion) !== tokenVersion
+    ) {
+      await revokeAllSessions(decoded.id);
+      throw new ForbiddenError("Invalid refresh token");
+    }
+
     const newAccessToken = generateAccessToken(plainUserData);
+    const newRefreshToken = generateRefreshToken(plainUserData);
+
+    const [updated] = await User.update(
+      { refreshToken: newRefreshToken },
+      { where: { id: decoded.id, refreshToken, tokenVersion } },
+    );
+
+    if (updated === 0) {
+      throw new ForbiddenError("Invalid refresh token");
+    }
+
+    res.cookie("refreshToken", newRefreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({
       success: true,
@@ -336,13 +392,40 @@ export const logoutUser = async (
       : undefined;
     const refreshToken = req.cookies?.refreshToken;
 
-    const userId =
-      req.user?.id ??
-      getUserIdFromToken(accessToken, process.env.JWT_SECRET as string) ??
-      getUserIdFromToken(refreshToken, process.env.JWT_REFRESH_SECRET as string);
+    const accessIdentity: TokenIdentity | null =
+      req.user?.id !== undefined
+        ? {
+            id: req.user.id,
+            tokenVersion: getTokenVersion(req.user.tokenVersion),
+          }
+        : readTokenIdentity(accessToken, process.env.JWT_SECRET as string);
 
-    if (userId !== null) {
-      await User.update({ refreshToken: null }, { where: { id: userId } });
+    let identity = accessIdentity;
+
+    if (!identity && refreshToken) {
+      const refreshIdentity = readTokenIdentity(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET as string,
+      );
+
+      if (refreshIdentity) {
+        const user = await User.findByPk(refreshIdentity.id);
+
+        if (
+          user &&
+          user.refreshToken === refreshToken &&
+          getTokenVersion(user.tokenVersion) === refreshIdentity.tokenVersion
+        ) {
+          identity = refreshIdentity;
+        }
+      }
+    }
+
+    if (identity) {
+      await User.update(
+        { refreshToken: null, tokenVersion: literal("tokenVersion + 1") },
+        { where: { id: identity.id, tokenVersion: identity.tokenVersion } },
+      );
     }
 
     res.clearCookie("refreshToken", cookieOptions);
@@ -541,6 +624,7 @@ export const resetPassword = async (
       resetPasswordToken: null,
       resetPasswordExpires: null,
       refreshToken: null,
+      tokenVersion: literal("tokenVersion + 1"),
       passwordChangedAt: new Date(),
     });
 

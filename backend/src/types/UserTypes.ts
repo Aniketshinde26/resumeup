@@ -16,6 +16,7 @@ export interface UserAttributes {
   resetPasswordRequestedAt: Date | null;
   failedLoginAttempts: number;
   lockedUntil: Date | null;
+  tokenVersion: number;
 }
 
 export interface UserCreationAttributes extends Optional<
@@ -32,6 +33,7 @@ export interface UserCreationAttributes extends Optional<
   | "resetPasswordRequestedAt"
   | "failedLoginAttempts"
   | "lockedUntil"
+  | "tokenVersion"
 > {}
 
 export interface UserCreateRequest {
