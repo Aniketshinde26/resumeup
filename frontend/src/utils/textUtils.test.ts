@@ -13,4 +13,8 @@ describe("textUtils", () => {
   it("limits words without leaving trailing spaces", () => {
     expect(limitWords("one two three", 3)).toBe("one two three");
   });
+
+  it("limits words to the requested count", () => {
+    expect(limitWords("one two three four", 2)).toBe("one two");
+  });
 });
