@@ -32,11 +32,32 @@ const DATE_OR_YEAR_PATTERN =
   /^\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\d|3[01]))?)?$/;
 const PHONE_PATTERN = /^\+?[0-9\s().-]+$/;
 
-const isDateLike = (value: string): boolean =>
-  /^(present|current)$/i.test(value) || DATE_OR_YEAR_PATTERN.test(value);
+const isDateLike = (value: string): boolean => {
+  if (/^(present|current)$/i.test(value)) {
+    return true;
+  }
+
+  if (!DATE_OR_YEAR_PATTERN.test(value)) {
+    return false;
+  }
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return true;
+  }
+
+  return isCalendarDate(value);
+};
 
 const isPhoneLike = (value: string): boolean =>
   PHONE_PATTERN.test(value) && value.replace(/\D/g, "").length >= 7;
+
+const isCalendarDate = (value: string): boolean => {
+  const date = new Date(`${value}T00:00:00.000Z`);
+
+  return (
+    !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value
+  );
+};
 
 export const phoneField = z
   .string()

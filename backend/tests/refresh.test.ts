@@ -1,6 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { type SignOptions } from "jsonwebtoken";
 import crypto from "crypto";
 import { literal } from "sequelize";
 import { ForbiddenError, UnauthorizedError } from "../src/utils/AppError";
@@ -18,7 +18,8 @@ vi.mock("../src/models/User", () => ({
   },
 }));
 
-type RefreshController = typeof import("../src/controllers/authcontrollers")["refreshAccessToken"];
+type RefreshController =
+  (typeof import("../src/controllers/authcontrollers"))["refreshAccessToken"];
 
 describe("refreshAccessToken", () => {
   let refreshAccessToken: RefreshController;
@@ -26,9 +27,8 @@ describe("refreshAccessToken", () => {
   beforeAll(async () => {
     process.env.JWT_SECRET = "test-access-secret";
     process.env.JWT_REFRESH_SECRET = "test-refresh-secret";
-    refreshAccessToken = (
-      await import("../src/controllers/authcontrollers")
-    ).refreshAccessToken;
+    refreshAccessToken = (await import("../src/controllers/authcontrollers"))
+      .refreshAccessToken;
   });
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe("refreshAccessToken", () => {
   const refreshTokenFor = (
     id: number,
     tokenVersion = 0,
-    expiresIn: string | number = "7d",
+    expiresIn: SignOptions["expiresIn"] = "7d",
   ) =>
     jwt.sign(
       { id, email: "user@example.com", tokenVersion },

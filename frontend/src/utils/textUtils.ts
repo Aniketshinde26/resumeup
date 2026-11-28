@@ -19,5 +19,5 @@ export const limitWords = (text: string, max: number): string => {
     }
     out += tok;
   }
-  return out;
+  return out.trimEnd();
 };
