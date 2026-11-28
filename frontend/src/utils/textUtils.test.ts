@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { countWords, limitChars } from "./textUtils";
+import { countWords, limitChars, limitWords } from "./textUtils";
 
 describe("textUtils", () => {
   it("counts words", () => {
@@ -9,5 +9,8 @@ describe("textUtils", () => {
 
   it("limits characters", () => {
     expect(limitChars("abcdef", 3)).toBe("abc");
+  });
+  it("limits words without leaving trailing spaces", () => {
+    expect(limitWords("one two three", 3)).toBe("one two three");
   });
 });

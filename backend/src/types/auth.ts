@@ -3,11 +3,13 @@ import { Request } from "express";
 export interface JwtUser {
   id: number;
   email: string;
+  tokenVersion?: number;
 }
 
 export interface JwtPayload {
   id: number;
   email: string;
+  tokenVersion?: number;
 }
 
 export interface AuthRequest extends Request {
